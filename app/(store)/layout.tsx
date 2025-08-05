@@ -20,7 +20,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Ezio Kids - Playful, Sustainable Kidswear",
   description:
-    "Shop Ezio Kids for bright, eco-friendly, and durable children’s clothing. Discover our new arrivals and best sellers!",
+    "Shop Ezio Kids for bright, eco-friendly, and durable children's clothing. Discover our new arrivals and best sellers!",
   icons: {
     icon: [
       {

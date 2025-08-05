@@ -74,11 +74,14 @@ export default function BestSeller() {
         {/* DESKTOP GRID */}
         <ul role="list" className="hidden lg:grid grid-cols-4 gap-8 mt-10">
           {bestSellers.map((item) => (
-            <li key={item.id} className="bg-white rounded-lg shadow-sm">
+            <li
+              key={item.id}
+              className="bg-white rounded-lg shadow-sm hover:scale-[98%] transition-transform duration-300"
+            >
               <Link
                 href={`/products/${item.id}`}
                 aria-label={`View ${item.name}`}
-                className="block h-full hover:scale-[98%] transition-transform duration-300"
+                className="block h-full"
               >
                 <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
                   <Image

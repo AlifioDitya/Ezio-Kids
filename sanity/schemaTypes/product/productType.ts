@@ -46,6 +46,12 @@ export default defineType({
       type: "text",
       validation: (Rule) => Rule.min(10).max(500),
     }),
+    defineField({
+      name: "arrivalDate",
+      title: "Arrival Date",
+      type: "datetime",
+      description: "When the product will be available for sale",
+    }),
 
     // PRICING & TAGS
     defineField({

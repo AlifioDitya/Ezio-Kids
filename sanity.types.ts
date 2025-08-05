@@ -13,20 +13,123 @@
  */
 
 // Source: schema.json
-export type Post = {
+export type LandingPage = {
   _id: string;
-  _type: "post";
+  _type: "landingPage";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
   slug?: Slug;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
+  hero?: HeroSection;
+};
+
+export type HeroSection = {
+  _type: "heroSection";
+  heading?: string;
+  subheading?: string;
+  backgroundImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
   };
+  cta?: {
+    label?: string;
+    href?: string;
+  };
+};
+
+export type Sale = {
+  _id: string;
+  _type: "sale";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  discountAmount?: number;
+  couponCode?: string;
+  validFrom?: string;
+  validUntil?: string;
+  isActive?: boolean;
+};
+
+export type Order = {
+  _id: string;
+  _type: "order";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  orderNumber?: string;
+  checkoutSessionId?: string;
+  customerId?: string;
+  customerName?: string;
+  paymentIntentId?: string;
+  products?: Array<{
+    product?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "product";
+    };
+    quantity?: number;
+    _key: string;
+  }>;
+  totalPrice?: number;
+  amountDiscounted?: number;
+  status?: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
+  orderDate?: string;
+};
+
+export type Collection = {
+  _id: string;
+  _type: "collection";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  Name?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type Tag = {
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type Product = {
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
   mainImage?: {
     asset?: {
       _ref: string;
@@ -40,6 +143,16 @@ export type Post = {
     alt?: string;
     _type: "image";
   };
+  description?: string;
+  arrivalDate?: string;
+  price?: number;
+  tags?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "tag";
+  }>;
   categories?: Array<{
     _ref: string;
     _type: "reference";
@@ -47,25 +160,41 @@ export type Post = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  publishedAt?: string;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-    listItem?: "bullet";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
+  collections?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
     _key: string;
-  } | {
+    [internalGroqTypeReferenceTo]?: "collection";
+  }>;
+  variants?: Array<{
+    size?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "size";
+    };
+    color?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "color";
+    };
+    stock?: number;
+    _type: "variant";
+    _key: string;
+  }>;
+};
+
+export type Color = {
+  _id: string;
+  _type: "color";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  swatch?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -77,59 +206,18 @@ export type Post = {
     crop?: SanityImageCrop;
     alt?: string;
     _type: "image";
-    _key: string;
-  }>;
-};
-
-export type Author = {
-  _id: string;
-  _type: "author";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
   };
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
 };
 
-export type Category = {
+export type Size = {
   _id: string;
-  _type: "category";
+  _type: "size";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
+  label?: string;
+  order?: number;
   slug?: Slug;
-  description?: string;
 };
 
 export type BlockContent = Array<{
@@ -282,5 +370,26 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Post | Author | Category | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = LandingPage | HeroSection | Sale | Order | Collection | Category | Tag | Product | Color | Size | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/lib/landingPage/getLandingPageContent.ts
+// Variable: LANDING_PAGE_QUERY
+// Query: *[_type == "landingPage" && _id == "landingPageSingleton"][0]
+export type LANDING_PAGE_QUERYResult = {
+  _id: string;
+  _type: "landingPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  hero?: HeroSection;
+} | null;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    "*[_type == \"landingPage\" && _id == \"landingPageSingleton\"][0]": LANDING_PAGE_QUERYResult;
+  }
+}
