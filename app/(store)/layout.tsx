@@ -1,9 +1,12 @@
 import Footer from "@/components/layouts/Footer";
 import HeaderWithSale from "@/components/layouts/HeaderWithSale";
+import { DisableDraftMode } from "@/components/sanity/disableDraftMode";
 import { SanityLive } from "@/sanity/lib/live";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { VisualEditing } from "next-sanity";
 import { Poppins, Quicksand } from "next/font/google";
+import { draftMode } from "next/headers";
 import "../globals.css";
 
 const quicksand = Quicksand({
@@ -32,7 +35,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -43,6 +46,13 @@ export default function RootLayout({
         <body
           className={`${quicksand.variable} ${poppins.variable} antialiased`}
         >
+          {(await draftMode()).isEnabled && (
+            <>
+              <DisableDraftMode />
+              <VisualEditing />
+            </>
+          )}
+
           <HeaderWithSale />
           {children}
           <Footer />

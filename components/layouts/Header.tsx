@@ -41,8 +41,8 @@ export default function Header() {
             {open ? <VscClose /> : <CiMenuBurger className="text-xl" />}
           </button>
 
-          <div className="absolute inset-x-0 flex justify-center cursor-pointer">
-            <Link href="/" aria-label="Home">
+          <div className="flex flex-1 justify-center ml-18">
+            <Link href="/" aria-label="Home" className="pointer-events-auto">
               <Image src={Logo} alt="Ezio Kids" className="h-6 w-auto" />
             </Link>
           </div>
