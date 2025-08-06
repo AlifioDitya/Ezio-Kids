@@ -12,8 +12,21 @@ export default defineType({
       name: "label",
       title: "Size Label",
       type: "string",
-      description: "e.g. XS, S, M, L, XL, 6-12m",
+      description: "e.g. 0-3 m, 3-6 m, 2T, 3T, etc.",
       validation: (Rule) => Rule.required().min(1).max(20),
+    }),
+    defineField({
+      name: "ageGroup",
+      title: "Age Group",
+      type: "string",
+      options: {
+        list: [
+          { title: "Baby", value: "baby" },
+          { title: "Toddler", value: "toddler" },
+          { title: "Child", value: "child" },
+          { title: "Youth", value: "youth" },
+        ],
+      },
     }),
     defineField({
       name: "order",

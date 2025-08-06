@@ -1,5 +1,6 @@
 import Footer from "@/components/layouts/Footer";
 import Header from "@/components/layouts/Header";
+import { SanityLive } from "@/sanity/lib/live";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Poppins, Quicksand } from "next/font/google";
@@ -45,6 +46,8 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+
+          <SanityLive />
         </body>
       </html>
     </ClerkProvider>

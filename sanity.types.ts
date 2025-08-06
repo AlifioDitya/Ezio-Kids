@@ -89,28 +89,6 @@ export type Order = {
   orderDate?: string;
 };
 
-export type Collection = {
-  _id: string;
-  _type: "collection";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  description?: string;
-};
-
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  Name?: string;
-  slug?: Slug;
-  description?: string;
-};
-
 export type Tag = {
   _id: string;
   _type: "tag";
@@ -130,6 +108,26 @@ export type Product = {
   _rev: string;
   name?: string;
   slug?: Slug;
+  gender?: "everyone" | "girls" | "boys";
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  collection?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "collection";
+  };
+  tags?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "tag";
+  }>;
   mainImage?: {
     asset?: {
       _ref: string;
@@ -143,31 +141,26 @@ export type Product = {
     alt?: string;
     _type: "image";
   };
+  additionalImages?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
   description?: string;
+  careInstructions?: string;
   arrivalDate?: string;
   price?: number;
-  tags?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "tag";
-  }>;
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  collections?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "collection";
-  }>;
   variants?: Array<{
+    sku?: string;
     size?: {
       _ref: string;
       _type: "reference";
@@ -180,6 +173,7 @@ export type Product = {
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "color";
     };
+    priceOverride?: number;
     stock?: number;
     _type: "variant";
     _key: string;
@@ -216,41 +210,67 @@ export type Size = {
   _updatedAt: string;
   _rev: string;
   label?: string;
+  ageGroup?: "baby" | "toddler" | "child" | "youth";
   order?: number;
   slug?: Slug;
 };
 
-export type BlockContent = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
-    _key: string;
-  }>;
-  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet";
-  markDefs?: Array<{
-    href?: string;
-    _type: "link";
-    _key: string;
-  }>;
-  level?: number;
-  _type: "block";
-  _key: string;
-} | {
-  asset?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-  };
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  alt?: string;
-  _type: "image";
-  _key: string;
-}>;
+export type Collection = {
+  _id: string;
+  _type: "collection";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  Name?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type BlockContent = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+>;
 
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
@@ -370,8 +390,59 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = LandingPage | HeroSection | Sale | Order | Collection | Category | Tag | Product | Color | Size | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes =
+  | LandingPage
+  | HeroSection
+  | Sale
+  | Order
+  | Tag
+  | Product
+  | Color
+  | Size
+  | Collection
+  | Category
+  | BlockContent
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | Slug
+  | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/lib/collectionsPage/getAllCategories.tsx
+// Variable: GET_ALL_CATEGORIES_QUERY
+// Query: *[_type == "category"] | order(order asc)
+export type GET_ALL_CATEGORIES_QUERYResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  Name?: string;
+  slug?: Slug;
+  description?: string;
+}>;
+
+// Source: ./sanity/lib/collectionsPage/getAllSizes.tsx
+// Variable: GET_ALL_SIZE_QUERY
+// Query: *[_type == "size"] | order(order asc)
+export type GET_ALL_SIZE_QUERYResult = Array<{
+  _id: string;
+  _type: "size";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  label?: string;
+  ageGroup?: "baby" | "child" | "toddler" | "youth";
+  order?: number;
+  slug?: Slug;
+}>;
+
 // Source: ./sanity/lib/landingPage/getLandingPageContent.ts
 // Variable: LANDING_PAGE_QUERY
 // Query: *[_type == "landingPage" && _id == "landingPageSingleton"][0]
@@ -390,6 +461,8 @@ export type LANDING_PAGE_QUERYResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"landingPage\" && _id == \"landingPageSingleton\"][0]": LANDING_PAGE_QUERYResult;
+    '*[_type == "category"] | order(order asc)': GET_ALL_CATEGORIES_QUERYResult;
+    '*[_type == "size"] | order(order asc)': GET_ALL_SIZE_QUERYResult;
+    '*[_type == "landingPage" && _id == "landingPageSingleton"][0]': LANDING_PAGE_QUERYResult;
   }
 }

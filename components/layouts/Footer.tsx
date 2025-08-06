@@ -53,7 +53,7 @@ export default function Footer() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <footer className="bg-slate-50 text-gray-800">
+    <footer className="bg-slate-50 text-gray-800 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-24 py-16">
         {/* Split: tagline + menus */}
         <div className="flex flex-col md:flex-row md:space-x-16">

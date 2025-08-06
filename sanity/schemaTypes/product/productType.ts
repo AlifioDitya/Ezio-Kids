@@ -7,9 +7,8 @@ export default defineType({
   title: "Product",
   type: "document",
   icon: IoShirtOutline,
-
   fields: [
-    // BASIC INFO
+    // — BASIC INFO —
     defineField({
       name: "name",
       title: "Name",
@@ -24,7 +23,42 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // IMAGES & DESCRIPTION
+    // — CATEGORIZATION —
+    defineField({
+      name: "gender",
+      title: "Gender",
+      type: "string",
+      options: {
+        list: [
+          { title: "Everyone", value: "everyone" },
+          { title: "Girls", value: "girls" },
+          { title: "Boys", value: "boys" },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "reference",
+      to: [{ type: "category" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "collection",
+      title: "Collection",
+      type: "reference",
+      to: [{ type: "collection" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "tag" }] })],
+    }),
+
+    // — IMAGES & DESCRIPTION —
     defineField({
       name: "mainImage",
       title: "Main Image",
@@ -41,67 +75,55 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "additionalImages",
+      title: "Additional Images",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt Text",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
       name: "description",
       title: "Description",
       type: "text",
       validation: (Rule) => Rule.min(10).max(500),
     }),
     defineField({
+      name: "careInstructions",
+      title: "Care Instructions",
+      type: "text",
+      description: "E.g. machine wash cold, tumble dry low",
+    }),
+
+    // — AVAILABILITY & PRICING —
+    defineField({
       name: "arrivalDate",
       title: "Arrival Date",
       type: "datetime",
       description: "When the product will be available for sale",
     }),
-
-    // PRICING & TAGS
     defineField({
       name: "price",
       title: "Price (IDR)",
       type: "number",
       validation: (Rule) => Rule.required().min(0),
     }),
-    defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "tag" }],
-        }),
-      ],
-    }),
 
-    // TAXONOMIES
-    defineField({
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "category" }],
-        }),
-      ],
-      validation: (Rule) => Rule.required().min(1),
-    }),
-    defineField({
-      name: "collections",
-      title: "Collections",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "collection" }],
-        }),
-      ],
-      validation: (Rule) => Rule.required().min(1),
-    }),
-
-    // VARIANTS: size × color → stock
+    // — VARIANTS: SIZE × COLOR → STOCK —
     defineField({
       name: "variants",
-      title: "Variants",
+      title: "Variants (Size x Color)",
       type: "array",
       of: [
         defineArrayMember({
@@ -109,6 +131,13 @@ export default defineType({
           name: "variant",
           title: "Variant",
           fields: [
+            defineField({
+              name: "sku",
+              title: "SKU",
+              type: "string",
+              description: "Stock Keeping Unit / identifier",
+              validation: (Rule) => Rule.required().min(1),
+            }),
             defineField({
               name: "size",
               title: "Size",
@@ -124,8 +153,15 @@ export default defineType({
               validation: (Rule) => Rule.required(),
             }),
             defineField({
+              name: "priceOverride",
+              title: "Price Override (IDR)",
+              type: "number",
+              description: "If this variant has a different price",
+              validation: (Rule) => Rule.min(0),
+            }),
+            defineField({
               name: "stock",
-              title: "Stock",
+              title: "Stock Quantity",
               type: "number",
               initialValue: 0,
               validation: (Rule) => Rule.required().min(0),
@@ -133,14 +169,16 @@ export default defineType({
           ],
           preview: {
             select: {
-              sizeLabel: "size.label",
+              size: "size.label",
               colorName: "color.name",
+              colorImage: "color.swatch",
               stock: "stock",
             },
-            prepare({ sizeLabel, colorName, stock }) {
+            prepare({ size, colorName, colorImage, stock }) {
               return {
-                title: `${sizeLabel} / ${colorName}`,
+                title: `${size} / ${colorName}`,
                 subtitle: `Stock: ${stock}`,
+                media: colorImage || null,
               };
             },
           },

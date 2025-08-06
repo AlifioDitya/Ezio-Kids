@@ -14,7 +14,7 @@ export default async function Home() {
     <>
       <main
         aria-label="Homepage content"
-        className="mt-16 w-full flex flex-col overflow-x-hidden bg-background"
+        className="w-full flex flex-col overflow-x-hidden bg-background"
       >
         <Hero content={landingPageContent.data.hero} />
         <BestSeller />

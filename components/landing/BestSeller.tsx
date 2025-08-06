@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { motion, type Easing, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -54,6 +55,44 @@ const bestSellers: BestSellerItem[] = [
   },
 ];
 
+// animation presets
+// one place to tweak your easing
+const EASE: Easing = [0.22, 1, 0.36, 1]; // roughly "easeOut"
+
+// variants with proper typing
+const sectionEnter: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE },
+  },
+};
+
+const gridContainer: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: EASE,
+      when: "beforeChildren",
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const gridItem: Variants = {
+  hidden: { opacity: 0, y: 16, scale: 0.98 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.45, ease: EASE },
+  },
+};
+
 export default function BestSeller() {
   return (
     <section
@@ -61,22 +100,43 @@ export default function BestSeller() {
       className="bg-rose-100 py-12"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2
+        {/* Heading */}
+        <motion.h2
           id="best-sellers-heading"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-10% 0px" }}
+          variants={sectionEnter}
           className="text-3xl font-bold text-gray-900"
         >
           Best Sellers
-        </h2>
-        <p className="mt-2 text-gray-700 font-semibold">
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
+          className="mt-2 text-gray-700 font-semibold"
+        >
           Our top picks loved by kids and parents alike!
-        </p>
+        </motion.p>
 
         {/* DESKTOP GRID */}
-        <ul role="list" className="hidden lg:grid grid-cols-4 gap-8 mt-10">
+        <motion.ul
+          role="list"
+          variants={gridContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-10% 0px" }}
+          className="hidden lg:grid grid-cols-4 gap-8 mt-10"
+        >
           {bestSellers.map((item) => (
-            <li
+            <motion.li
               key={item.id}
-              className="bg-white rounded-lg shadow-sm hover:scale-[98%] transition-transform duration-300"
+              variants={gridItem}
+              whileHover={{ y: -6, transition: { duration: 0.18 } }}
+              className="bg-white rounded-lg shadow-sm"
             >
               <Link
                 href={`/products/${item.id}`}
@@ -104,59 +164,58 @@ export default function BestSeller() {
                   </p>
                 </div>
               </Link>
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
-        {/* MOBILE & TABLET CAROUSEL */}
-        <div className="lg:hidden mt-10 relative">
+        {/* MOBILE & TABLET CAROUSEL (fade/slide in block, per-card stagger) */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={sectionEnter}
+          className="lg:hidden mt-10 relative"
+        >
           <Carousel opts={{ align: "start", loop: false }}>
             <CarouselPrevious
               aria-label="Previous best seller"
-              className="
-                absolute left-0 top-1/2 -translate-y-1/2
-                p-2 bg-white/80 hover:bg-rose-200
-                text-gray-900 hover:text-white
-                rounded-full z-10 cursor-pointer
-                border-none
-              "
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-rose-200 text-gray-900 hover:text-white rounded-full z-10 cursor-pointer border-none"
             >
               ←
             </CarouselPrevious>
 
             <CarouselContent className="flex">
-              {bestSellers.map((item) => (
+              {bestSellers.map((item, i) => (
                 <CarouselItem
                   key={item.id}
-                  className="
-                    flex-none
-                    basis-8/12 sm:basis-1/2 md:basis-1/3
-                    cursor-pointer
-                  "
+                  className="flex-none basis-8/12 sm:basis-1/2 md:basis-1/3 cursor-pointer"
                 >
-                  <div className="relative group h-full w-full">
+                  <motion.div
+                    initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.45,
+                      ease: "easeOut",
+                      delay: 0.06 * i,
+                    }}
+                    className="relative group h-full w-full"
+                  >
                     <Link
                       href={`/products/${item.id}`}
                       aria-label={`View ${item.name}`}
-                      className="
-                        relative flex flex-col h-full bg-white rounded-xl
-                        shadow-lg overflow-hidden
-                        transform transition-transform duration-300
-                        group-hover:-translate-y-2
-                      "
+                      className="relative flex flex-col h-full bg-white rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 group-hover:-translate-y-2"
                     >
                       {/* Variant badge */}
-                      <div
-                        className="
-                          absolute top-2 left-2
-                          bg-red-600 text-white text-xs font-semibold
-                          uppercase px-2 py-1
-                          rounded-full
-                          z-10
-                        "
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.1 + 0.06 * i }}
+                        className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold uppercase px-2 py-1 rounded-full z-10"
                       >
                         {item.variant}
-                      </div>
+                      </motion.div>
 
                       {/* Image + gradient overlay */}
                       <div className="relative aspect-[3/4] overflow-hidden">
@@ -164,20 +223,9 @@ export default function BestSeller() {
                           src={item.imageUrl}
                           alt={item.name}
                           fill
-                          className="
-                            object-cover
-                            transition-transform duration-500
-                            group-hover:scale-105
-                          "
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div
-                          className="
-                            absolute inset-0
-                            bg-gradient-to-t from-black/40 to-transparent
-                            opacity-0 group-hover:opacity-100
-                            transition-opacity duration-500
-                          "
-                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       </div>
 
                       {/* Text */}
@@ -191,35 +239,35 @@ export default function BestSeller() {
                         </p>
                       </div>
                     </Link>
-                  </div>
+                  </motion.div>
                 </CarouselItem>
               ))}
             </CarouselContent>
 
             <CarouselNext
               aria-label="Next best seller"
-              className="
-                absolute right-0 top-1/2 -translate-y-1/2
-                p-2 bg-white/80 hover:bg-rose-200
-                text-gray-900 hover:text-white
-                rounded-full z-10 cursor-pointer
-                border-none
-              "
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-rose-200 text-gray-900 hover:text-white rounded-full z-10 cursor-pointer border-none"
             >
               →
             </CarouselNext>
           </Carousel>
-        </div>
+        </motion.div>
 
         {/* CTA */}
-        <div className="mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
+          className="mt-8"
+        >
           <Link
             href="/collections/best-seller"
             className="inline-block px-8 py-3 bg-red-500/90 text-white font-semibold rounded-lg hover:bg-red-600/80 transition w-full sm:w-auto"
           >
             Snag the Faves!
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
