@@ -1,5 +1,5 @@
 // sanity/lib/products/getProductBySlug.ts
-import { defineQuery } from "next-sanity";
+import { defineQuery, PortableTextBlock } from "next-sanity";
 import { sanityFetch } from "../live";
 
 /** UI-friendly projection for PDP */
@@ -8,8 +8,8 @@ export type PDPProduct = {
   name?: string;
   slug?: string;
   gender?: "everyone" | "girls" | "boys";
-  description?: string;
-  careInstructions?: string;
+  description?: PortableTextBlock[];
+  careInstructions?: PortableTextBlock[];
   arrivalDate?: string;
   price?: number;
   mainImage?: unknown;

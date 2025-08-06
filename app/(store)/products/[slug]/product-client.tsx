@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
+import { PortableText } from "next-sanity";
 import * as React from "react";
 
 type Props = {
@@ -92,6 +93,8 @@ export default function ProductClient({ product, priceLabel }: Props) {
       qty,
     });
   };
+
+  const isInStock = variants.some((v) => (v.stock ?? 0) > 0);
 
   return (
     <div className="space-y-4">
@@ -225,14 +228,20 @@ export default function ProductClient({ product, priceLabel }: Props) {
         <Button
           className={cn(
             "flex-1 h-11 text-white text-base font-semibold",
-            canAddToCart
-              ? "bg-rose-400 hover:bg-rose-500"
-              : "bg-rose-300 cursor-not-allowed"
+            !isInStock
+              ? "bg-gray-300 cursor-not-allowed text-gray-500"
+              : canAddToCart
+                ? "bg-rose-500 hover:bg-rose-600 cursor-pointer"
+                : "bg-rose-300 cursor-not-allowed"
           )}
           onClick={addToCart}
-          disabled={!canAddToCart}
+          disabled={!canAddToCart || !isInStock}
         >
-          {hasSelectedSize ? "Add to Cart" : "Please Select a Size"}
+          {!isInStock
+            ? "Sorry, we're out of stock 😔"
+            : hasSelectedSize
+              ? "Add to Cart"
+              : "Please Select a Size"}
         </Button>
       </div>
 
@@ -240,13 +249,41 @@ export default function ProductClient({ product, priceLabel }: Props) {
       {product.description && (
         <>
           <Separator />
-          <div>
-            <p className="text-sm text-gray-700 whitespace-pre-line">
-              {product.description}
-            </p>
+          <div className="prose text-sm text-gray-700">
+            <PortableText value={product.description} />
           </div>
         </>
       )}
+      {/* Optional: care instructions */}
+      {Array.isArray(product.careInstructions) &&
+        product.careInstructions.length > 0 && (
+          <>
+            <Separator />
+            <div className="prose text-sm text-gray-700">
+              <h3 className="font-semibold mb-3">Care Instructions</h3>
+
+              <PortableText
+                value={product.careInstructions}
+                components={{
+                  list: {
+                    bullet: ({ children }) => (
+                      <ul className="list-disc pl-5 space-y-1">{children}</ul>
+                    ),
+                    number: ({ children }) => (
+                      <ol className="list-decimal pl-5 space-y-1">
+                        {children}
+                      </ol>
+                    ),
+                  },
+                  listItem: {
+                    bullet: ({ children }) => <li>{children}</li>,
+                    number: ({ children }) => <li>{children}</li>,
+                  },
+                }}
+              />
+            </div>
+          </>
+        )}
     </div>
   );
 }

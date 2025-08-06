@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { CiSearch, CiShoppingCart } from "react-icons/ci";
-import { HiMenu, HiX } from "react-icons/hi";
+import { CiMenuBurger, CiSearch, CiShoppingCart } from "react-icons/ci";
+import { VscClose } from "react-icons/vsc";
 
 const links = [
   { label: "Shop All", to: "/collections/shop-all" },
@@ -36,13 +36,15 @@ export default function Header() {
           <button
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((o) => !o)}
-            className="text-2xl text-gray-700"
+            className="text-2xl text-gray-700 cursor-pointer"
           >
-            {open ? <HiX /> : <HiMenu />}
+            {open ? <VscClose /> : <CiMenuBurger className="text-xl" />}
           </button>
 
-          <div className="absolute inset-x-0 flex justify-center pointer-events-none">
-            <Image src={Logo} alt="Ezio Kids" className="h-6 w-auto" />
+          <div className="absolute inset-x-0 flex justify-center cursor-pointer">
+            <Link href="/" aria-label="Home">
+              <Image src={Logo} alt="Ezio Kids" className="h-6 w-auto" />
+            </Link>
           </div>
 
           <div className="ml-auto flex items-center space-x-4">

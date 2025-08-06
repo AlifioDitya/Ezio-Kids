@@ -1,5 +1,5 @@
 import Footer from "@/components/layouts/Footer";
-import Header from "@/components/layouts/Header";
+import HeaderWithSale from "@/components/layouts/HeaderWithSale";
 import { SanityLive } from "@/sanity/lib/live";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -43,7 +43,7 @@ export default function RootLayout({
         <body
           className={`${quicksand.variable} ${poppins.variable} antialiased`}
         >
-          <Header />
+          <HeaderWithSale />
           {children}
           <Footer />
 

@@ -155,8 +155,68 @@ export type Product = {
     _type: "image";
     _key: string;
   }>;
-  description?: string;
-  careInstructions?: string;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  careInstructions?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
   arrivalDate?: string;
   price?: number;
   variants?: Array<{
@@ -418,6 +478,24 @@ export type GET_ALL_SIZE_QUERYResult = Array<{
   slug?: Slug;
 }>;
 
+// Source: ./sanity/lib/commerce/getActiveSale.tsx
+// Variable: GET_ACTIVE_SALE_QUERY
+// Query: *[_type == "sale" && isActive == true] | order(_createdAt desc)[0]
+export type GET_ACTIVE_SALE_QUERYResult = {
+  _id: string;
+  _type: "sale";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  discountAmount?: number;
+  couponCode?: string;
+  validFrom?: string;
+  validUntil?: string;
+  isActive?: boolean;
+} | null;
+
 // Source: ./sanity/lib/getById/getCategoryById.tsx
 // Variable: GET_CATEGORY_BY_ID_QUERY
 // Query: *[_type == "category" && _id in $ids]
@@ -428,6 +506,20 @@ export type GET_CATEGORY_BY_ID_QUERYResult = Array<{
   _updatedAt: string;
   _rev: string;
   Name?: string;
+  slug?: Slug;
+  description?: string;
+}>;
+
+// Source: ./sanity/lib/getById/getCollectionById.tsx
+// Variable: GET_COLLECTION_BY_ID_QUERY
+// Query: *[_type == "collection" && _id in $ids]
+export type GET_COLLECTION_BY_ID_QUERYResult = Array<{
+  _id: string;
+  _type: "collection";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
   slug?: Slug;
   description?: string;
 }>;
@@ -509,8 +601,68 @@ export type QUERYResult = {
   name: string | null;
   slug: string | null;
   gender: "boys" | "everyone" | "girls" | null;
-  description: string | null;
-  careInstructions: string | null;
+  description: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  careInstructions: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
   arrivalDate: string | null;
   price: number | null;
   mainImage: {
@@ -594,7 +746,9 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"category\"] | order(order asc)": GET_ALL_CATEGORIES_QUERYResult;
     "*[_type == \"size\"] | order(order asc)": GET_ALL_SIZE_QUERYResult;
+    "*[_type == \"sale\" && isActive == true] | order(_createdAt desc)[0]": GET_ACTIVE_SALE_QUERYResult;
     "*[_type == \"category\" && _id in $ids]": GET_CATEGORY_BY_ID_QUERYResult;
+    "*[_type == \"collection\" && _id in $ids]": GET_COLLECTION_BY_ID_QUERYResult;
     "*[_type == \"color\" && _id in $ids]": GET_COLOR_BY_ID_QUERYResult;
     "*[_type == \"size\" && _id in $ids]": GET_SIZE_BY_ID_QUERYResult;
     "*[_type == \"tag\" && _id in $ids]": GET_TAG_BY_ID_QUERYResult;

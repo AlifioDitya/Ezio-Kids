@@ -27,38 +27,48 @@ const products = [
 ];
 
 // smooth "easeOut" cubic-bezier to satisfy TS
-const EASE: Easing = [0.22, 1, 0.36, 1];
+const EASE: Easing = [0.16, 1, 0.3, 1]; // softer easeOut
 
+// section fades in slower, smaller lift
 const sectionEnter: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: EASE },
+    transition: { duration: 0, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
+// row uses a gentle spring and slower child stagger
 const rowEnter: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
-      ease: EASE,
       when: "beforeChildren",
-      staggerChildren: 0.06,
+      type: "spring",
+      stiffness: 60, // lower = softer
+      damping: 18, // higher = less bounce
+      mass: 0.7,
+      staggerChildren: 0.08, // slower stagger
     },
   },
 };
 
+// cards: tiny scale-in, gentle spring
 const cardItem: Variants = {
-  hidden: { opacity: 0, y: 16, scale: 0.98 },
+  hidden: { opacity: 0, y: 10, scale: 0.99 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.45, ease: EASE },
+    transition: {
+      type: "spring",
+      stiffness: 70,
+      damping: 16,
+      mass: 0.7,
+    },
   },
 };
 
@@ -119,8 +129,8 @@ export function NewArrival() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.04 * idx }}
-                className={`h-2 w-2 rounded-full transition-colors ${
+                transition={{ duration: 0.45, delay: 0.06 * idx, ease: EASE }}
+                className={`h-2 w-2 rounded-full transition-colors cursor-pointer ${
                   selectedSnap === idx ? "bg-gray-900" : "bg-gray-400"
                 }`}
               />
@@ -133,7 +143,7 @@ export function NewArrival() {
           variants={rowEnter}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-10% 0px" }}
+          viewport={{ once: true, margin: "60% 0px" }}
           className="relative"
         >
           <Carousel setApi={setApi} opts={{ align: "start", loop: false }}>

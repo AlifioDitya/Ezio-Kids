@@ -96,13 +96,12 @@ export default defineType({
     defineField({
       name: "description",
       title: "Description",
-      type: "text",
-      validation: (Rule) => Rule.min(10).max(500),
+      type: "blockContent",
     }),
     defineField({
       name: "careInstructions",
       title: "Care Instructions",
-      type: "text",
+      type: "blockContent",
       description: "E.g. machine wash cold, tumble dry low",
     }),
 
