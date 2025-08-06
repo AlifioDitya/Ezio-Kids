@@ -237,40 +237,37 @@ export type Category = {
   description?: string;
 };
 
-export type BlockContent = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-      listItem?: "bullet";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }
-  | {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: "image";
-      _key: string;
-    }
->;
+export type BlockContent = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+  listItem?: "bullet";
+  markDefs?: Array<{
+    href?: string;
+    _type: "link";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+} | {
+  asset?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  };
+  media?: unknown;
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  _type: "image";
+  _key: string;
+}>;
 
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
@@ -390,29 +387,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes =
-  | LandingPage
-  | HeroSection
-  | Sale
-  | Order
-  | Tag
-  | Product
-  | Color
-  | Size
-  | Collection
-  | Category
-  | BlockContent
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageHotspot
-  | SanityImageCrop
-  | SanityFileAsset
-  | SanityImageAsset
-  | SanityImageMetadata
-  | Geopoint
-  | Slug
-  | SanityAssetSourceData;
+export type AllSanitySchemaTypes = LandingPage | HeroSection | Sale | Order | Tag | Product | Color | Size | Collection | Category | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/collectionsPage/getAllCategories.tsx
 // Variable: GET_ALL_CATEGORIES_QUERY
@@ -443,6 +418,75 @@ export type GET_ALL_SIZE_QUERYResult = Array<{
   slug?: Slug;
 }>;
 
+// Source: ./sanity/lib/getById/getCategoryById.tsx
+// Variable: GET_CATEGORY_BY_ID_QUERY
+// Query: *[_type == "category" && _id in $ids]
+export type GET_CATEGORY_BY_ID_QUERYResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  Name?: string;
+  slug?: Slug;
+  description?: string;
+}>;
+
+// Source: ./sanity/lib/getById/getColorsById.tsx
+// Variable: GET_COLOR_BY_ID_QUERY
+// Query: *[_type == "color" && _id in $ids]
+export type GET_COLOR_BY_ID_QUERYResult = Array<{
+  _id: string;
+  _type: "color";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  swatch?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+}>;
+
+// Source: ./sanity/lib/getById/getSizeById.tsx
+// Variable: GET_SIZE_BY_ID_QUERY
+// Query: *[_type == "size" && _id in $ids]
+export type GET_SIZE_BY_ID_QUERYResult = Array<{
+  _id: string;
+  _type: "size";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  label?: string;
+  ageGroup?: "baby" | "child" | "toddler" | "youth";
+  order?: number;
+  slug?: Slug;
+}>;
+
+// Source: ./sanity/lib/getById/getTagById.tsx
+// Variable: GET_TAG_BY_ID_QUERY
+// Query: *[_type == "tag" && _id in $ids]
+export type GET_TAG_BY_ID_QUERYResult = Array<{
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+}>;
+
 // Source: ./sanity/lib/landingPage/getLandingPageContent.ts
 // Variable: LANDING_PAGE_QUERY
 // Query: *[_type == "landingPage" && _id == "landingPageSingleton"][0]
@@ -457,12 +501,104 @@ export type LANDING_PAGE_QUERYResult = {
   hero?: HeroSection;
 } | null;
 
+// Source: ./sanity/lib/productPage/getProductBySlug.tsx
+// Variable: QUERY
+// Query: *[_type == "product" && slug.current == $slug][0]{      _id,      name,      "slug": slug.current,      gender,      description,      careInstructions,      arrivalDate,      price,      mainImage,      additionalImages,      "category": category->{        _id,        "name": coalesce(Name, name),        "slug": slug.current      },      "collection": collection->{        _id,        name,        "slug": slug.current      },      "tags": tags[]->{        _id,        title,        "slug": slug.current      },      "variants": variants[]{        _key,        sku,        stock,        priceOverride,        "size": size->{          _id, label, "slug": slug.current, ageGroup, order        },        "color": color->{          _id, name, "slug": slug.current, swatch        }      }    }
+export type QUERYResult = {
+  _id: string;
+  name: string | null;
+  slug: string | null;
+  gender: "boys" | "everyone" | "girls" | null;
+  description: string | null;
+  careInstructions: string | null;
+  arrivalDate: string | null;
+  price: number | null;
+  mainImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  additionalImages: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  category: {
+    _id: string;
+    name: string | null;
+    slug: string | null;
+  } | null;
+  collection: {
+    _id: string;
+    name: string | null;
+    slug: string | null;
+  } | null;
+  tags: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+  }> | null;
+  variants: Array<{
+    _key: string;
+    sku: string | null;
+    stock: number | null;
+    priceOverride: number | null;
+    size: {
+      _id: string;
+      label: string | null;
+      slug: string | null;
+      ageGroup: "baby" | "child" | "toddler" | "youth" | null;
+      order: number | null;
+    } | null;
+    color: {
+      _id: string;
+      name: string | null;
+      slug: string | null;
+      swatch: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+    } | null;
+  }> | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "category"] | order(order asc)': GET_ALL_CATEGORIES_QUERYResult;
-    '*[_type == "size"] | order(order asc)': GET_ALL_SIZE_QUERYResult;
-    '*[_type == "landingPage" && _id == "landingPageSingleton"][0]': LANDING_PAGE_QUERYResult;
+    "*[_type == \"category\"] | order(order asc)": GET_ALL_CATEGORIES_QUERYResult;
+    "*[_type == \"size\"] | order(order asc)": GET_ALL_SIZE_QUERYResult;
+    "*[_type == \"category\" && _id in $ids]": GET_CATEGORY_BY_ID_QUERYResult;
+    "*[_type == \"color\" && _id in $ids]": GET_COLOR_BY_ID_QUERYResult;
+    "*[_type == \"size\" && _id in $ids]": GET_SIZE_BY_ID_QUERYResult;
+    "*[_type == \"tag\" && _id in $ids]": GET_TAG_BY_ID_QUERYResult;
+    "*[_type == \"landingPage\" && _id == \"landingPageSingleton\"][0]": LANDING_PAGE_QUERYResult;
+    "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      \"slug\": slug.current,\n      gender,\n      description,\n      careInstructions,\n      arrivalDate,\n      price,\n      mainImage,\n      additionalImages,\n      \"category\": category->{\n        _id,\n        \"name\": coalesce(Name, name),\n        \"slug\": slug.current\n      },\n      \"collection\": collection->{\n        _id,\n        name,\n        \"slug\": slug.current\n      },\n      \"tags\": tags[]->{\n        _id,\n        title,\n        \"slug\": slug.current\n      },\n      \"variants\": variants[]{\n        _key,\n        sku,\n        stock,\n        priceOverride,\n        \"size\": size->{\n          _id, label, \"slug\": slug.current, ageGroup, order\n        },\n        \"color\": color->{\n          _id, name, \"slug\": slug.current, swatch\n        }\n      }\n    }\n  ": QUERYResult;
   }
 }

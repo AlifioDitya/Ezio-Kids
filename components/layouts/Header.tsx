@@ -22,11 +22,11 @@ export default function Header() {
   const isHome = pathname === "/";
 
   const mobileNavClass = `lg:hidden ${
-    isHome ? "sticky top-0 z-50" : "relative"
-  } bg-white border-b`;
+    isHome ? "sticky top-0 z-50 border-b" : "relative border-none"
+  } bg-white`;
   const desktopNavClass = `hidden lg:flex ${
-    isHome ? "sticky top-0 z-50" : "relative"
-  } inset-x-0 h-16 items-center justify-between bg-white border-b px-12`;
+    isHome ? "sticky top-0 z-50 border-b" : "relative border-none"
+  } inset-x-0 h-16 items-center justify-between bg-white px-12`;
 
   return (
     <>

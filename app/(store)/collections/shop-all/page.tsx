@@ -20,20 +20,19 @@ export const metadata: Metadata = {
 export default async function ShopAllPage({
   searchParams,
 }: {
-  searchParams: { sort?: string; page?: string };
+  searchParams: Promise<{ sort?: string; page?: string }>;
 }) {
-  const sortKey = ["newest", "price-asc", "price-desc"].includes(
-    searchParams.sort ?? ""
-  )
-    ? (searchParams.sort as "newest" | "price-asc" | "price-desc")
+  const { sort, page } = await searchParams;
+  const sortKey = ["newest", "price-asc", "price-desc"].includes(sort ?? "")
+    ? (sort as "newest" | "price-asc" | "price-desc")
     : "newest";
 
-  const page = Number(searchParams.page ?? 1) || 1;
+  const pageNum = Number(page ?? 1) || 1;
 
   const [sizes, categories, products] = await Promise.all([
     getAllSizes(),
     getAllCategories(),
-    getAllProducts({ sort: sortKey, page }),
+    getAllProducts({ sort: sortKey, page: pageNum }),
   ]);
 
   return (
