@@ -7,7 +7,6 @@ export type PDPProduct = {
   _id: string;
   name?: string;
   slug?: string;
-  gender?: "everyone" | "girls" | "boys";
   description?: PortableTextBlock[];
   careInstructions?: PortableTextBlock[];
   arrivalDate?: string;
@@ -26,7 +25,7 @@ export type PDPProduct = {
       _id: string;
       label?: string;
       slug?: string;
-      ageGroup?: "baby" | "toddler" | "child" | "youth";
+      ageGroup?: "baby" | "toddler" | "child" | "teens";
       order?: number | null;
     } | null;
     color?: {

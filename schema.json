@@ -655,27 +655,6 @@
         },
         "optional": true
       },
-      "gender": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "everyone"
-            },
-            {
-              "type": "string",
-              "value": "girls"
-            },
-            {
-              "type": "string",
-              "value": "boys"
-            }
-          ]
-        },
-        "optional": true
-      },
       "category": {
         "type": "objectAttribute",
         "value": {
@@ -703,6 +682,23 @@
             }
           },
           "dereferencesTo": "category"
+        },
+        "optional": true
+      },
+      "sleeveLength": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "short"
+            },
+            {
+              "type": "string",
+              "value": "long"
+            }
+          ]
         },
         "optional": true
       },
@@ -1625,6 +1621,123 @@
         },
         "optional": true
       },
+      "trueColor": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "multi"
+            },
+            {
+              "type": "string",
+              "value": "black"
+            },
+            {
+              "type": "string",
+              "value": "white"
+            },
+            {
+              "type": "string",
+              "value": "gray"
+            },
+            {
+              "type": "string",
+              "value": "silver"
+            },
+            {
+              "type": "string",
+              "value": "beige"
+            },
+            {
+              "type": "string",
+              "value": "cream"
+            },
+            {
+              "type": "string",
+              "value": "brown"
+            },
+            {
+              "type": "string",
+              "value": "tan"
+            },
+            {
+              "type": "string",
+              "value": "navy"
+            },
+            {
+              "type": "string",
+              "value": "blue"
+            },
+            {
+              "type": "string",
+              "value": "light-blue"
+            },
+            {
+              "type": "string",
+              "value": "teal"
+            },
+            {
+              "type": "string",
+              "value": "turquoise"
+            },
+            {
+              "type": "string",
+              "value": "green"
+            },
+            {
+              "type": "string",
+              "value": "olive"
+            },
+            {
+              "type": "string",
+              "value": "lime"
+            },
+            {
+              "type": "string",
+              "value": "yellow"
+            },
+            {
+              "type": "string",
+              "value": "gold"
+            },
+            {
+              "type": "string",
+              "value": "orange"
+            },
+            {
+              "type": "string",
+              "value": "coral"
+            },
+            {
+              "type": "string",
+              "value": "red"
+            },
+            {
+              "type": "string",
+              "value": "burgundy"
+            },
+            {
+              "type": "string",
+              "value": "pink"
+            },
+            {
+              "type": "string",
+              "value": "magenta"
+            },
+            {
+              "type": "string",
+              "value": "purple"
+            },
+            {
+              "type": "string",
+              "value": "lavender"
+            }
+          ]
+        },
+        "optional": true
+      },
       "slug": {
         "type": "objectAttribute",
         "value": {
@@ -1772,7 +1885,7 @@
             },
             {
               "type": "string",
-              "value": "youth"
+              "value": "teens"
             }
           ]
         },

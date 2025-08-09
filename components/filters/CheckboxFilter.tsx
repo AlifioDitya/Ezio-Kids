@@ -126,6 +126,7 @@ export default function CheckboxFilter({
                 checked={checked}
                 onCheckedChange={() => !it.disabled && onToggle(it.value)}
                 disabled={it.disabled}
+                className="shadow-none cursor-pointer data-[state=checked]:bg-blue-main data-[state=checked]:border-blue-main data-[state=unchecked]:border-gray-300"
               />
               <span className="flex flex-col">
                 <span className={labelTextClass}>{it.label}</span>

@@ -110,13 +110,13 @@ export type Product = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  gender?: "everyone" | "girls" | "boys";
   category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
+  sleeveLength?: "short" | "long";
   collection?: {
     _ref: string;
     _type: "reference";
@@ -249,6 +249,7 @@ export type Color = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  trueColor?: "multi" | "black" | "white" | "gray" | "silver" | "beige" | "cream" | "brown" | "tan" | "navy" | "blue" | "light-blue" | "teal" | "turquoise" | "green" | "olive" | "lime" | "yellow" | "gold" | "orange" | "coral" | "red" | "burgundy" | "pink" | "magenta" | "purple" | "lavender";
   slug?: Slug;
   swatch?: {
     asset?: {
@@ -272,7 +273,7 @@ export type Size = {
   _updatedAt: string;
   _rev: string;
   label?: string;
-  ageGroup?: "baby" | "toddler" | "child" | "youth";
+  ageGroup?: "baby" | "toddler" | "child" | "teens";
   order?: number;
   slug?: Slug;
 };
@@ -475,7 +476,7 @@ export type GET_ALL_SIZE_QUERYResult = Array<{
   _updatedAt: string;
   _rev: string;
   label?: string;
-  ageGroup?: "baby" | "child" | "toddler" | "youth";
+  ageGroup?: "baby" | "child" | "teens" | "toddler";
   order?: number;
   slug?: Slug;
 }>;
@@ -536,6 +537,7 @@ export type GET_COLOR_BY_ID_QUERYResult = Array<{
   _updatedAt: string;
   _rev: string;
   name?: string;
+  trueColor?: "beige" | "black" | "blue" | "brown" | "burgundy" | "coral" | "cream" | "gold" | "gray" | "green" | "lavender" | "light-blue" | "lime" | "magenta" | "multi" | "navy" | "olive" | "orange" | "pink" | "purple" | "red" | "silver" | "tan" | "teal" | "turquoise" | "white" | "yellow";
   slug?: Slug;
   swatch?: {
     asset?: {
@@ -562,7 +564,7 @@ export type GET_SIZE_BY_ID_QUERYResult = Array<{
   _updatedAt: string;
   _rev: string;
   label?: string;
-  ageGroup?: "baby" | "child" | "toddler" | "youth";
+  ageGroup?: "baby" | "child" | "teens" | "toddler";
   order?: number;
   slug?: Slug;
 }>;
@@ -602,7 +604,7 @@ export type QUERYResult = {
   _id: string;
   name: string | null;
   slug: string | null;
-  gender: "boys" | "everyone" | "girls" | null;
+  gender: null;
   description: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -718,7 +720,7 @@ export type QUERYResult = {
       _id: string;
       label: string | null;
       slug: string | null;
-      ageGroup: "baby" | "child" | "toddler" | "youth" | null;
+      ageGroup: "baby" | "child" | "teens" | "toddler" | null;
       order: number | null;
     } | null;
     color: {

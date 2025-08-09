@@ -24,7 +24,7 @@ export default defineType({
           { title: "Baby", value: "baby" },
           { title: "Toddler", value: "toddler" },
           { title: "Child", value: "child" },
-          { title: "Youth", value: "youth" },
+          { title: "Teens", value: "teens" },
         ],
       },
     }),

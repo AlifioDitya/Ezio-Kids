@@ -3,8 +3,17 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Size } from "@/sanity.types";
+import type { Size } from "@/sanity.types";
 import * as React from "react";
+import { usePathname } from "next/navigation";
+
+type Age = NonNullable<Size["ageGroup"]>;
+type CollectionSlug =
+  | "shop-all"
+  | "new-arrival"
+  | "baby-toddler"
+  | "kids"
+  | "teens";
 
 export interface SizeFilterProps {
   /** All sizes from Sanity */
@@ -13,66 +22,91 @@ export interface SizeFilterProps {
   selectedSizes: string[];
   /** Toggle a size in/out of the selected list */
   onToggleSize: (sizeLabel: string) => void;
+  /**
+   * Optional: pass the current collections slug if you have it.
+   * If omitted, the component will auto-detect from the URL.
+   */
+  collectionSlug?: CollectionSlug;
 }
 
 export function SizeFilter({
   sizes,
   selectedSizes,
   onToggleSize,
+  collectionSlug,
 }: SizeFilterProps) {
-  // The groups in display order
-  const ageGroupOrder = React.useMemo<NonNullable<Size["ageGroup"]>[]>(
-    () => ["baby", "toddler", "child", "youth"],
+  const pathname = usePathname();
+
+  // Detect slug from /collections/[slug] if not passed
+  const detectedSlug = React.useMemo<CollectionSlug | undefined>(() => {
+    if (collectionSlug) return collectionSlug;
+    const m = pathname?.match(/\/collections\/([^/?#]+)/);
+    const s = (m?.[1] ?? "") as CollectionSlug;
+    return s || undefined;
+  }, [pathname, collectionSlug]);
+
+  // Full order (and labels)
+  const ageGroupOrder = React.useMemo<Age[]>(
+    () => ["baby", "toddler", "child", "teens"],
     []
   );
-
-  // Friendly headings
-  const ageGroupLabels: Record<NonNullable<Size["ageGroup"]>, string> = {
+  const ageGroupLabels: Record<Age, string> = {
     baby: "Baby",
     toddler: "Toddler",
     child: "Kids",
-    youth: "Youth",
+    teens: "Teens",
   };
+
+  // Map slug -> visible age groups
+  const visibleAgeGroups = React.useMemo<Age[] | null>(() => {
+    switch (detectedSlug) {
+      case "baby-toddler":
+        return ["baby", "toddler"];
+      case "kids":
+        return ["child"];
+      case "teens":
+        return ["teens"];
+      default:
+        return null; // show all for shop-all / new-arrival / unknown
+    }
+  }, [detectedSlug]);
 
   // Build a map: { baby: Size[], toddler: Size[], … }
   const grouped = React.useMemo(() => {
-    const map: Partial<Record<NonNullable<Size["ageGroup"]>, Size[]>> = {};
-
+    const map: Partial<Record<Age, Size[]>> = {};
     for (const s of sizes) {
-      // skip if no ageGroup or no label
       if (!s.ageGroup || !s.label) continue;
       if (!map[s.ageGroup]) map[s.ageGroup] = [];
       map[s.ageGroup]!.push(s);
     }
-
     // sort each group by order (fallback 0)
     for (const key of ageGroupOrder) {
       map[key]?.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     }
-
     return map;
   }, [sizes, ageGroupOrder]);
 
+  // Final list of groups to render
+  const groupsToRender = (visibleAgeGroups ?? ageGroupOrder).filter(
+    (g) => (grouped[g]?.length ?? 0) > 0
+  );
+
   return (
     <div>
-      {ageGroupOrder.map((groupKey) => {
-        const group = grouped[groupKey];
-        if (!group || group.length === 0) return null;
-
+      {groupsToRender.map((groupKey) => {
+        const group = grouped[groupKey]!;
         return (
           <div key={groupKey} className="mb-4 lg:mb-6">
-            {/* Group heading */}
-            <p className="text-xs font-semibold text-gray-500 mb-2 xl:text-base">
-              {ageGroupLabels[groupKey]}
-            </p>
+            {groupsToRender.length > 1 && (
+              <p className="text-xs font-semibold text-gray-500 mb-2 xl:text-base">
+                {ageGroupLabels[groupKey]}
+              </p>
+            )}
 
-            {/* Buttons */}
             <div className="flex flex-wrap gap-1">
               {group.map((sz) => {
-                // sz.label is now guaranteed non-null
-                const label = sz.label!;
+                const label = sz.label!; // guaranteed above
                 const isSelected = selectedSizes.includes(label);
-
                 return (
                   <Button
                     key={label}
@@ -80,7 +114,7 @@ export function SizeFilter({
                     size="sm"
                     className={cn(
                       "min-w-[3rem] justify-center shadow-none rounded-xs",
-                      isSelected && "bg-gray-900 text-white"
+                      isSelected && "bg-blue-main text-white"
                     )}
                     onClick={() => onToggleSize(label)}
                   >

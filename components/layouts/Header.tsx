@@ -10,9 +10,11 @@ import { CiMenuBurger, CiSearch, CiShoppingCart } from "react-icons/ci";
 import { VscClose } from "react-icons/vsc";
 
 const links = [
+  { label: "New Arrival", to: "/collections/new-arrival" },
   { label: "Shop All", to: "/collections/shop-all" },
-  { label: "Boys", to: "/collections/boys" },
-  { label: "Baby & Toddler", to: "/collections/baby" },
+  { label: "Baby & Toddler", to: "/collections/baby-toddler" },
+  { label: "Kids", to: "/collections/kids" },
+  { label: "Teens", to: "/collections/teens" },
 ] as const;
 
 export default function Header() {
@@ -75,7 +77,7 @@ export default function Header() {
         </div>
 
         {open && (
-          <div className="bg-white border-t">
+          <div className="bg-white border-t border-b">
             <div className="flex flex-col px-4 py-2 space-y-2">
               {links.map(({ label, to }) => (
                 <Link
@@ -114,7 +116,11 @@ export default function Header() {
             <li key={to} role="none">
               <Link
                 href={to}
-                className="text-gray-700 hover:text-red-600 transition font-semibold hover:underline hover:underline-offset-6"
+                className={`transition font-semibold hover:underline hover:underline-offset-6 ${
+                  label === "New Arrival"
+                    ? "text-red-600 font-bold"
+                    : "text-gray-700 hover:text-blue-main"
+                }`}
                 role="menuitem"
               >
                 {label}

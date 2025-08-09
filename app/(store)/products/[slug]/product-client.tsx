@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { PortableText } from "next-sanity";
 import * as React from "react";
+import { AlertTriangle } from "lucide-react";
 
 type Props = {
   product: PDPProduct;
@@ -21,7 +22,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
     [product.variants]
   );
 
-  // Build distinct option lists from variants
+  // Distinct option lists
   const colorOptions = React.useMemo(() => {
     const map = new Map<
       string,
@@ -48,22 +49,64 @@ export default function ProductClient({ product, priceLabel }: Props) {
     );
   }, [variants]);
 
-  // Selected options
-  const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
-    () => colorOptions[0]?._id ?? null
+  // Quick map for pretty size label in the notice
+  const sizeLabelById = React.useMemo(() => {
+    const m = new Map<string, string>();
+    for (const s of sizeOptions) {
+      if (s?._id && s?.label) m.set(s._id, s.label);
+    }
+    return m;
+  }, [sizeOptions]);
+
+  // Helpers to check stock
+  const colorHasAnyStock = React.useCallback(
+    (colorId: string) =>
+      variants.some((v) => v.color?._id === colorId && (v.stock ?? 0) > 0),
+    [variants]
   );
+
+  // Selected options
   const [selectedSizeId, setSelectedSizeId] = React.useState<string | null>(
     null
   );
-  const [qty, setQty] = React.useState(1);
 
-  const isSizeAvailable = (sizeId: string) =>
-    variants.some(
-      (v) =>
-        v.size?._id === sizeId &&
-        (!selectedColorId || v.color?._id === selectedColorId) &&
-        (v.stock ?? 0) > 0
-    );
+  // Pick first available color by default (fallback to first)
+  const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
+    () => {
+      const firstAvailable =
+        colorOptions.find((c) => (c?._id ? colorHasAnyStock(c._id) : false))
+          ?._id ??
+        colorOptions[0]?._id ??
+        null;
+      return firstAvailable;
+    }
+  );
+
+  // (re-create isSizeAvailable now that selectedColorId exists)
+  const _isSizeAvailable = React.useCallback(
+    (sizeId: string) =>
+      variants.some(
+        (v) =>
+          v.size?._id === sizeId &&
+          (!selectedColorId || v.color?._id === selectedColorId) &&
+          (v.stock ?? 0) > 0
+      ),
+    [variants, selectedColorId]
+  );
+
+  // Reset size if color changes
+  const onSelectColor = (id: string | null) => {
+    if (id !== selectedColorId && selectedSizeId) {
+      setSelectedSizeId(null);
+    }
+    setSelectedColorId(id);
+  };
+
+  // Compute color availability (global if no size selected; otherwise for that size)
+  const isColorAvailable = React.useCallback(
+    (colorId: string) => colorHasAnyStock(colorId),
+    [colorHasAnyStock]
+  );
 
   const activeVariant = React.useMemo(() => {
     return (
@@ -84,6 +127,9 @@ export default function ProductClient({ product, priceLabel }: Props) {
   const canAddToCart =
     !!hasSelectedSize && !!activeVariant && (activeVariant.stock ?? 0) > 0;
 
+  const [qty, setQty] = React.useState(1);
+  const isInStock = variants.some((v) => (v.stock ?? 0) > 0);
+
   const addToCart = () => {
     if (!activeVariant || !selectedSizeId) return;
     // TODO: wire to your cart
@@ -94,7 +140,10 @@ export default function ProductClient({ product, priceLabel }: Props) {
     });
   };
 
-  const isInStock = variants.some((v) => (v.stock ?? 0) > 0);
+  // Low stock logic: only show after size is selected and we have a concrete variant
+  const lowStockCount = activeVariant?.stock ?? 0;
+  const showLowStock =
+    hasSelectedSize && lowStockCount > 0 && lowStockCount < 10;
 
   return (
     <div className="space-y-4">
@@ -127,6 +176,9 @@ export default function ProductClient({ product, priceLabel }: Props) {
           <p className="mb-2 text-sm font-semibold text-gray-800">Color</p>
           <div className="flex flex-wrap gap-3">
             {colorOptions.map((c) => {
+              const id = c?._id ?? "";
+              const available = id ? isColorAvailable(id) : false;
+              const checked = selectedColorId === id;
               const swatchUrl = c?.swatch
                 ? imageUrl(c.swatch)
                     ?.width(80)
@@ -135,16 +187,21 @@ export default function ProductClient({ product, priceLabel }: Props) {
                     .auto("format")
                     .url()
                 : null;
-              const checked = selectedColorId === c?._id;
+
               return (
                 <button
-                  key={c?._id}
+                  key={id}
                   type="button"
-                  onClick={() => setSelectedColorId(c?._id ?? null)}
+                  onClick={() => available && onSelectColor(id)}
                   aria-pressed={checked}
+                  aria-disabled={!available}
+                  disabled={!available}
                   className={cn(
-                    "relative h-9 w-9 rounded-full border",
-                    checked ? "ring-2 ring-offset-2 ring-gray-900" : "ring-0"
+                    "relative h-9 w-9 rounded-full border overflow-hidden cursor-pointer",
+                    checked && "ring-2 ring-offset-2 ring-gray-900",
+                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    // automatic diagonal strike when disabled
+                    "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
                   )}
                   title={c?.name ?? ""}
                 >
@@ -176,20 +233,24 @@ export default function ProductClient({ product, priceLabel }: Props) {
           </div>
           <div className="flex flex-wrap gap-2">
             {sizeOptions.map((s) => {
-              const selected = selectedSizeId === s?._id;
-              const available = s?._id ? isSizeAvailable(s._id) : false;
+              const id = s?._id ?? "";
+              const available = id ? _isSizeAvailable(id) : false;
+              const selected = selectedSizeId === id;
+
               return (
                 <Button
-                  key={s?._id}
+                  key={id}
                   type="button"
                   variant={selected ? "default" : "outline"}
                   size="sm"
                   disabled={!available}
-                  onClick={() => setSelectedSizeId(s?._id ?? null)}
+                  onClick={() => available && setSelectedSizeId(id)}
                   className={cn(
-                    "min-w-[3.25rem] bg-white justify-center shadow-none cursor-pointer",
-                    selected && "bg-rose-600 hover:bg-rose-600",
-                    !available && "opacity-50 cursor-not-allowed"
+                    "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden cursor-pointer",
+                    selected && "bg-rose-600 hover:bg-rose-600 text-white",
+                    !available && "opacity-60 cursor-not-allowed",
+                    // automatic diagonal strike when disabled
+                    "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
                   )}
                 >
                   {s?.label}
@@ -197,6 +258,24 @@ export default function ProductClient({ product, priceLabel }: Props) {
               );
             })}
           </div>
+
+          {/* Low stock notice */}
+          {showLowStock && (
+            <div
+              role="status"
+              aria-live="polite"
+              className="mt-3 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900"
+            >
+              <AlertTriangle className="h-4 w-4" />
+              <span className="text-sm font-medium">
+                Only {lowStockCount} stock left
+                {selectedSizeId
+                  ? ` in size ${sizeLabelById.get(selectedSizeId) ?? "this size"}`
+                  : ""}{" "}
+                — grab it before it&apos;s gone!
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -204,7 +283,6 @@ export default function ProductClient({ product, priceLabel }: Props) {
 
       {/* Qty + ATC */}
       <div className="flex items-center gap-3">
-        {/* hide qty until size is chosen */}
         {hasSelectedSize && (
           <div className="inline-flex items-center border rounded-md">
             <Button
@@ -241,11 +319,11 @@ export default function ProductClient({ product, priceLabel }: Props) {
             ? "Sorry, we're out of stock 😔"
             : hasSelectedSize
               ? "Add to Cart"
-              : "Please Select a Size"}
+              : "Please Select an Available Size and Color"}
         </Button>
       </div>
 
-      {/* Optional: description */}
+      {/* Description */}
       {product.description && (
         <>
           <Separator />
@@ -254,14 +332,14 @@ export default function ProductClient({ product, priceLabel }: Props) {
           </div>
         </>
       )}
-      {/* Optional: care instructions */}
+
+      {/* Care instructions */}
       {Array.isArray(product.careInstructions) &&
         product.careInstructions.length > 0 && (
           <>
             <Separator />
             <div className="prose text-sm text-gray-700">
               <h3 className="font-semibold mb-3">Care Instructions</h3>
-
               <PortableText
                 value={product.careInstructions}
                 components={{

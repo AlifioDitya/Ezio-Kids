@@ -25,23 +25,22 @@ export default defineType({
 
     // — CATEGORIZATION —
     defineField({
-      name: "gender",
-      title: "Gender",
-      type: "string",
-      options: {
-        list: [
-          { title: "Everyone", value: "everyone" },
-          { title: "Girls", value: "girls" },
-          { title: "Boys", value: "boys" },
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "category",
       title: "Category",
       type: "reference",
       to: [{ type: "category" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "sleeveLength",
+      title: "Sleeve Length",
+      type: "string",
+      options: {
+        list: [
+          { title: "Short", value: "short" },
+          { title: "Long", value: "long" },
+        ],
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({

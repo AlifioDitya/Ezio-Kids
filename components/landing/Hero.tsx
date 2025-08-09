@@ -68,7 +68,7 @@ export default function Hero({ content }: HeroProps) {
 
   return (
     <section className="relative w-full overflow-hidden">
-      <div className="relative h-[60vh] md:h-[calc(100vh-30rem)] lg:h-[calc(100vh-18rem)] xl:h-[calc(100vh-8rem)]">
+      <div className="relative h-[60vh] lg:h-[80vh] xl:h-[80vh]">
         {content.backgroundImage && (
           <div className="absolute inset-0">
             <Image
