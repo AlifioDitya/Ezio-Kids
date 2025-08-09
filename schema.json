@@ -184,6 +184,96 @@
             }
           },
           "optional": true
+        },
+        "textPositionMobile": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "top-left"
+              },
+              {
+                "type": "string",
+                "value": "top-center"
+              },
+              {
+                "type": "string",
+                "value": "top-right"
+              },
+              {
+                "type": "string",
+                "value": "middle-left"
+              },
+              {
+                "type": "string",
+                "value": "middle-center"
+              },
+              {
+                "type": "string",
+                "value": "middle-right"
+              },
+              {
+                "type": "string",
+                "value": "bottom-left"
+              },
+              {
+                "type": "string",
+                "value": "bottom-center"
+              },
+              {
+                "type": "string",
+                "value": "bottom-right"
+              }
+            ]
+          },
+          "optional": true
+        },
+        "textPositionDesktop": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "top-left"
+              },
+              {
+                "type": "string",
+                "value": "top-center"
+              },
+              {
+                "type": "string",
+                "value": "top-right"
+              },
+              {
+                "type": "string",
+                "value": "middle-left"
+              },
+              {
+                "type": "string",
+                "value": "middle-center"
+              },
+              {
+                "type": "string",
+                "value": "middle-right"
+              },
+              {
+                "type": "string",
+                "value": "bottom-left"
+              },
+              {
+                "type": "string",
+                "value": "bottom-center"
+              },
+              {
+                "type": "string",
+                "value": "bottom-right"
+              }
+            ]
+          },
+          "optional": true
         }
       }
     }

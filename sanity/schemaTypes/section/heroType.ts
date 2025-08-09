@@ -58,6 +58,50 @@ export default defineType({
       validation: (Rule) => Rule.required(),
       options: { collapsible: true },
     }),
+    defineField({
+      name: "textPositionMobile",
+      title: "Text Position (Mobile)",
+      type: "string",
+      description:
+        "Position of text on mobile and tablet devices. Defaults to Middle Center.",
+      options: {
+        list: [
+          { title: "Top Left", value: "top-left" },
+          { title: "Top Center", value: "top-center" },
+          { title: "Top Right", value: "top-right" },
+          { title: "Middle Left", value: "middle-left" },
+          { title: "Middle Center", value: "middle-center" },
+          { title: "Middle Right", value: "middle-right" },
+          { title: "Bottom Left", value: "bottom-left" },
+          { title: "Bottom Center", value: "bottom-center" },
+          { title: "Bottom Right", value: "bottom-right" },
+        ],
+      },
+      initialValue: "middle-center",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "textPositionDesktop",
+      title: "Text Position (Desktop)",
+      type: "string",
+      description:
+        "Position of text on desktop devices. Defaults to Bottom Left.",
+      options: {
+        list: [
+          { title: "Top Left", value: "top-left" },
+          { title: "Top Center", value: "top-center" },
+          { title: "Top Right", value: "top-right" },
+          { title: "Middle Left", value: "middle-left" },
+          { title: "Middle Center", value: "middle-center" },
+          { title: "Middle Right", value: "middle-right" },
+          { title: "Bottom Left", value: "bottom-left" },
+          { title: "Bottom Center", value: "bottom-center" },
+          { title: "Bottom Right", value: "bottom-right" },
+        ],
+      },
+      initialValue: "bottom-left",
+      validation: (Rule) => Rule.required(),
+    }),
   ],
   preview: {
     select: {

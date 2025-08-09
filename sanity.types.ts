@@ -45,6 +45,8 @@ export type HeroSection = {
     label?: string;
     href?: string;
   };
+  textPositionMobile?: "top-left" | "top-center" | "top-right" | "middle-left" | "middle-center" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right";
+  textPositionDesktop?: "top-left" | "top-center" | "top-right" | "middle-left" | "middle-center" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right";
 };
 
 export type Sale = {

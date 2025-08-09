@@ -11,7 +11,6 @@ import { VscClose } from "react-icons/vsc";
 
 const links = [
   { label: "Shop All", to: "/collections/shop-all" },
-  { label: "Girls", to: "/collections/girls" },
   { label: "Boys", to: "/collections/boys" },
   { label: "Baby & Toddler", to: "/collections/baby" },
 ] as const;

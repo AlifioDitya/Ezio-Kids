@@ -10,6 +10,7 @@ import {
 import { motion, type Easing, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
 interface BestSellerItem {
   id: string;
@@ -55,41 +56,41 @@ const bestSellers: BestSellerItem[] = [
   },
 ];
 
-// animation presets
-// one place to tweak your easing
-const EASE: Easing = [0.22, 1, 0.36, 1]; // roughly "easeOut"
+/** match the smooth feel */
+const EASE: Easing = [0.16, 1, 0.3, 1];
 
-// variants with proper typing
 const sectionEnter: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: EASE },
+    transition: { duration: 0.45, ease: EASE },
   },
 };
 
-const gridContainer: Variants = {
-  hidden: { opacity: 0, y: 16 },
+const rowEnter: Variants = {
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: EASE,
       when: "beforeChildren",
+      type: "spring",
+      stiffness: 60,
+      damping: 18,
+      mass: 0.7,
       staggerChildren: 0.08,
     },
   },
 };
 
-const gridItem: Variants = {
-  hidden: { opacity: 0, y: 16, scale: 0.98 },
+const cardItem: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.99 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.45, ease: EASE },
+    transition: { type: "spring", stiffness: 70, damping: 16, mass: 0.7 },
   },
 };
 
@@ -97,146 +98,175 @@ export default function BestSeller() {
   return (
     <section
       aria-labelledby="best-sellers-heading"
-      className="bg-rose-100 py-12"
+      className="relative overflow-hidden bg-rose-50/60 py-10 md:py-16"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Heading */}
-        <motion.h2
-          id="best-sellers-heading"
+      {/* backdrop gradients */}
+      <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] bg-[radial-gradient(65%_60%_at_50%_-20%,rgba(244,63,94,0.25),transparent),radial-gradient(40%_35%_at_10%_110%,rgba(99,102,241,0.18),transparent)]" />
+      {/* soft grid texture */}
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] bg-[linear-gradient(to_right,rgba(0,0,0,.8)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,.8)_1px,transparent_1px)] bg-[size:32px_32px]" />
+
+      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-10 text-center">
+        {/* Eyebrow + Heading */}
+        <motion.div
+          variants={sectionEnter}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-10% 0px" }}
-          variants={sectionEnter}
-          className="text-3xl font-bold text-gray-900"
-        >
-          Best Sellers
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-          className="mt-2 text-gray-700 font-semibold"
+          className="flex flex-col items-center gap-3"
         >
-          Our top picks loved by kids and parents alike!
-        </motion.p>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/50 bg-white/70 px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm backdrop-blur">
+            <Sparkles className="h-3.5 w-3.5" />
+            Shop Favourites
+          </span>
+
+          <h2
+            id="best-sellers-heading"
+            className="bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent font-extrabold leading-tight text-[clamp(22px,2.6vw,36px)]"
+          >
+            Best Sellers
+          </h2>
+
+          <p className="max-w-prose text-[clamp(13px,1.1vw,16px)] text-gray-700/90 font-medium">
+            Our top picks loved by kids and parents alike!
+          </p>
+        </motion.div>
 
         {/* DESKTOP GRID */}
         <motion.ul
           role="list"
-          variants={gridContainer}
+          variants={rowEnter}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-10% 0px" }}
-          className="hidden lg:grid grid-cols-4 gap-8 mt-10"
+          viewport={{ once: true, margin: "35% 0px" }}
+          className="hidden lg:grid grid-cols-4 gap-7 mt-10"
         >
           {bestSellers.map((item) => (
             <motion.li
               key={item.id}
-              variants={gridItem}
-              whileHover={{ y: -6, transition: { duration: 0.18 } }}
-              className="bg-white rounded-lg shadow-sm"
+              variants={cardItem}
+              className="group relative"
             >
-              <Link
-                href={`/products/${item.id}`}
-                aria-label={`View ${item.name}`}
-                className="block h-full"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="text-xs font-medium text-gray-500">
-                    {item.variant}
-                  </p>
-                  <h3 className="mt-1 text-lg font-semibold text-gray-900">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">{item.subtitle}</p>
-                  <p className="mt-2 text-base font-medium text-gray-900">
-                    {item.price}
-                  </p>
-                </div>
-              </Link>
+              <div className="perspective-[1200px]">
+                {/* gradient frame */}
+                <motion.div
+                  whileHover={{ rotateX: -2, rotateY: 2, y: -6 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 14,
+                    mass: 0.6,
+                  }}
+                  className="relative rounded-2xl p-[1px] bg-gradient-to-br from-rose-200 via-white to-indigo-200 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_20px_40px_-20px_rgba(0,0,0,0.25)]"
+                >
+                  <div className="rounded-2xl bg-white/80 backdrop-blur-sm overflow-hidden ring-1 ring-black/5">
+                    {/* Image */}
+                    <div className="relative aspect-[3/4]">
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        loading="lazy"
+                      />
+                      {/* image overlay */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      {/* badge */}
+                      <div className="absolute left-3 top-3 z-10 inline-flex items-center rounded-full bg-gradient-to-b from-rose-500 to-rose-600 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                        {item.variant}
+                      </div>
+                    </div>
+
+                    {/* Text */}
+                    <div className="p-4 text-left">
+                      <h3 className="text-[15px] font-semibold text-gray-900">
+                        {item.name}
+                      </h3>
+                      <p className="mt-0.5 text-sm text-gray-500">
+                        {item.subtitle}
+                      </p>
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-1 text-[12px] font-semibold text-rose-700">
+                          {item.price}
+                        </span>
+                        <Link
+                          href={`/products/${item.id}`}
+                          aria-label={`View ${item.name}`}
+                          className="text-sm font-semibold text-rose-700 hover:text-rose-800"
+                        >
+                          View →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
             </motion.li>
           ))}
         </motion.ul>
 
-        {/* MOBILE & TABLET CAROUSEL (fade/slide in block, per-card stagger) */}
+        {/* MOBILE/TABLET CAROUSEL */}
         <motion.div
+          variants={sectionEnter}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          variants={sectionEnter}
-          className="lg:hidden mt-10 relative"
+          className="lg:hidden mt-8 relative"
         >
+          {/* edge fades */}
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-rose-50 to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-rose-50 to-transparent" />
+
           <Carousel opts={{ align: "start", loop: false }}>
             <CarouselPrevious
               aria-label="Previous best seller"
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-rose-200 text-gray-900 hover:text-white rounded-full z-10 cursor-pointer border-none"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border-none bg-white/90 shadow hover:bg-rose-200 focus-visible:ring-2 focus-visible:ring-rose-500"
             >
-              ←
+              <ChevronLeft className="h-5 w-5 text-gray-900" />
             </CarouselPrevious>
 
-            <CarouselContent className="flex">
-              {bestSellers.map((item, i) => (
+            <CarouselContent role="list" className="-ml-4 flex">
+              {bestSellers.map((item) => (
                 <CarouselItem
                   key={item.id}
-                  className="flex-none basis-8/12 sm:basis-1/2 md:basis-1/3 cursor-pointer"
+                  role="listitem"
+                  className="pl-4 flex-none basis-8/12 sm:basis-1/2 md:basis-1/3"
                 >
                   <motion.div
-                    initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    variants={cardItem}
+                    initial="hidden"
+                    whileInView="show"
                     viewport={{ once: true }}
-                    transition={{
-                      duration: 0.45,
-                      ease: "easeOut",
-                      delay: 0.06 * i,
-                    }}
-                    className="relative group h-full w-full"
+                    className="group"
                   >
                     <Link
                       href={`/products/${item.id}`}
                       aria-label={`View ${item.name}`}
-                      className="relative flex flex-col h-full bg-white rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 group-hover:-translate-y-2"
+                      className="relative block rounded-2xl p-[1px] bg-gradient-to-br from-rose-200 via-white to-indigo-200 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_20px_40px_-20px_rgba(0,0,0,0.25)]"
                     >
-                      {/* Variant badge */}
-                      <motion.div
-                        initial={{ opacity: 0, y: -6 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.1 + 0.06 * i }}
-                        className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold uppercase px-2 py-1 rounded-full z-10"
-                      >
-                        {item.variant}
-                      </motion.div>
-
-                      {/* Image + gradient overlay */}
-                      <div className="relative aspect-[3/4] overflow-hidden">
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.name}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      </div>
-
-                      {/* Text */}
-                      <div className="p-4 flex flex-col gap-1">
-                        <h3 className="text-base font-semibold text-gray-900">
-                          {item.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">{item.subtitle}</p>
-                        <p className="mt-auto text-lg font-bold text-gray-900">
-                          {item.price}
-                        </p>
+                      <div className="rounded-2xl bg-white/85 backdrop-blur-sm overflow-hidden ring-1 ring-black/5">
+                        <div className="relative aspect-[3/4]">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          />
+                          <div className="absolute left-2.5 top-2.5 z-10 inline-flex items-center rounded-full bg-gradient-to-b from-rose-500 to-rose-600 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                            {item.variant}
+                          </div>
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        </div>
+                        <div className="p-4 text-left">
+                          <h3 className="text-[15px] font-semibold text-gray-900">
+                            {item.name}
+                          </h3>
+                          <p className="mt-0.5 text-sm text-gray-500">
+                            {item.subtitle}
+                          </p>
+                          <p className="mt-2 text-[15px] font-bold text-gray-900">
+                            {item.price}
+                          </p>
+                        </div>
                       </div>
                     </Link>
                   </motion.div>
@@ -246,24 +276,24 @@ export default function BestSeller() {
 
             <CarouselNext
               aria-label="Next best seller"
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-rose-200 text-gray-900 hover:text-white rounded-full z-10 cursor-pointer border-none"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border-none bg-white/90 shadow hover:bg-rose-200 focus-visible:ring-2 focus-visible:ring-rose-500"
             >
-              →
+              <ChevronRight className="h-5 w-5 text-gray-900" />
             </CarouselNext>
           </Carousel>
         </motion.div>
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={sectionEnter}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
-          transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-          className="mt-8"
+          className="mt-10"
         >
           <Link
             href="/collections/best-seller"
-            className="inline-block px-8 py-3 bg-red-500/90 text-white font-semibold rounded-lg hover:bg-red-600/80 transition w-full sm:w-auto"
+            className="inline-flex items-center justify-center rounded-xl bg-gradient-to-b from-rose-500 to-rose-600 px-8 py-3 font-semibold text-white shadow-lg shadow-rose-500/25 hover:brightness-110 transition w-full sm:w-auto"
           >
             Snag the Faves!
           </Link>
