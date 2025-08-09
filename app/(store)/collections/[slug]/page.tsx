@@ -25,30 +25,34 @@ export function generateStaticParams() {
 const TITLES: Record<Slug, { h1: string; title: string; description: string }> =
   {
     "shop-all": {
-      h1: "Shop All Products",
-      title: "Shop All - Ezio Kids",
+      h1: "All Collections",
+      title: "All Collections - Ezio Kids",
       description:
-        "Browse all our sustainable, playful kidswear—filter by color, size, or product type.",
+        "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
     },
     "new-arrival": {
-      h1: "New Arrivals",
+      h1: "New in Ezio Kids",
       title: "New Arrivals - Ezio Kids",
-      description: "Fresh drops and latest styles for your little ones.",
+      description:
+        "Be the first to shop our latest drops—fresh styles and trending looks for every age.",
     },
     "baby-toddler": {
-      h1: "Baby & Toddler",
-      title: "Baby & Toddler - Ezio Kids",
-      description: "Cozy, durable fits for ages 0-3.",
+      h1: "For Babies & Toddlers",
+      title: "Baby & Toddler Clothes - Ezio Kids",
+      description:
+        "Soft, durable, and adorable outfits for little ones aged 0-3. Explore gentle fabrics and playful prints.",
     },
     kids: {
-      h1: "Kids",
-      title: "Kids - Ezio Kids",
-      description: "Playproof styles for growing kids.",
+      h1: "For Kids",
+      title: "Kidswear - Ezio Kids",
+      description:
+        "From playground to party, shop comfy and cool styles for growing kids.",
     },
     teens: {
-      h1: "Teens",
-      title: "Teens - Ezio Kids",
-      description: "Confident looks for teens.",
+      h1: "For Teens",
+      title: "Teen Collection - Ezio Kids",
+      description:
+        "Confident, expressive looks for teens—find the latest trends and timeless essentials.",
     },
   };
 
@@ -73,6 +77,7 @@ type SearchParams = {
   cat?: string | string[];
   sleeve?: string | string[];
   tcolor?: string | string[];
+  tag?: string | string[];
 };
 
 const toArray = (v?: string | string[]) =>
@@ -107,6 +112,7 @@ export default async function CollectionsPage({
   const selectedCategories = toArray(searchParams.cat);
   const selectedSleeves = toArray(searchParams.sleeve);
   const selectedTrueColors = toArray(searchParams.tcolor);
+  const selectedTags = toArray(searchParams.tag);
 
   // derive age groups from slug
   const ageGroupsFromSlug: AgeGroup[] =
@@ -129,6 +135,7 @@ export default async function CollectionsPage({
     selectedCategories,
     selectedSleeves,
     selectedTrueColors,
+    selectedTags,
     ageGroupsFromSlug,
     arrivalsOnly,
   });
@@ -169,6 +176,7 @@ export default async function CollectionsPage({
               sizes={selectedSizes}
               categories={selectedCategories}
               sleeves={selectedSleeves}
+              tags={selectedTags}
               trueColors={selectedTrueColors}
               ageGroups={ageGroupsFromSlug}
               arrivalsOnly={arrivalsOnly}

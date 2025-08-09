@@ -13,6 +13,7 @@ export async function ProductsSection({
   sizes,
   categories,
   sleeves,
+  tags,
   trueColors,
   ageGroups,
   arrivalsOnly,
@@ -22,6 +23,7 @@ export async function ProductsSection({
   sizes: string[];
   categories: string[];
   sleeves: string[];
+  tags: string[];
   trueColors: string[];
   ageGroups: AgeGroup[];
   arrivalsOnly?: boolean;
@@ -32,7 +34,8 @@ export async function ProductsSection({
     sizes,
     categories,
     sleeves,
-    trueColors, // <-- pass through
+    tags,
+    trueColors,
     ageGroups,
     arrivalsOnly,
   });

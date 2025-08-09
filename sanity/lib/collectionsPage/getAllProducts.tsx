@@ -21,7 +21,7 @@ const QUERY = `
       count(variants[size->ageGroup in $ageGroups]) > 0
     ) &&
 
-    // ---- TRUE COLOR via variant color.trueColor ----
+    // ---- TRUE COLORS via variant color.trueColor ----
     (
       count($trueColors) == 0 ||
       count(variants[color->trueColor in $trueColors]) > 0
@@ -45,6 +45,12 @@ const QUERY = `
       sleeveLength in $sleeves
     ) &&
 
+    // ---- TAGS (by tag slug) ----
+    (
+      count($tags) == 0 ||
+      count(tags[@->slug.current in $tags]) > 0
+    ) &&
+
     // ---- NEW ARRIVALS window ----
     (
       $arrivalsOnly == false ||
@@ -58,6 +64,7 @@ const QUERY = `
     price,
     "slug": slug,
     mainImage,
+    "mainImageUrl": mainImage.asset->url,
     "tagInfo": tags[]->{ title, "slug": slug.current },
   },
 
@@ -90,6 +97,11 @@ const QUERY = `
     ) &&
 
     (
+      count($tags) == 0 ||
+      count(tags[@->slug.current in $tags]) > 0
+    ) &&
+
+    (
       $arrivalsOnly == false ||
       (defined(arrivalDate) && arrivalDate >= $since)
     )
@@ -105,10 +117,11 @@ export async function getAllProducts(
 
     // filters
     ageGroups?: AgeGroup[];
-    trueColors?: string[];
     sizes?: string[];
     categories?: string[];
     sleeves?: string[];
+    trueColors?: string[];
+    tags?: string[];
 
     // collections/new-arrival
     arrivalsOnly?: boolean;
@@ -124,7 +137,7 @@ export async function getAllProducts(
   const order = SORT[sort] ?? SORT.newest;
   const query = QUERY.replace("ORDER_CLAUSE", order);
 
-  const windowDays = Math.max(1, opts.arrivalsWindowDays ?? 60);
+  const windowDays = Math.max(1, opts.arrivalsWindowDays ?? 20);
   const since = new Date(Date.now() - windowDays * 86_400_000).toISOString();
 
   const res = await sanityFetch({
@@ -133,10 +146,11 @@ export async function getAllProducts(
       start,
       end,
       ageGroups: opts.ageGroups ?? [],
-      trueColors: opts.trueColors ?? [],
       sizes: opts.sizes ?? [],
       categories: opts.categories ?? [],
       sleeves: opts.sleeves ?? [],
+      trueColors: opts.trueColors ?? [],
+      tags: opts.tags ?? [],
       arrivalsOnly: Boolean(opts.arrivalsOnly),
       since,
     },

@@ -1,3 +1,4 @@
+// components/landing/NewArrivalClient.tsx
 "use client";
 
 import {
@@ -8,38 +9,20 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { imageUrl } from "@/lib/imageUrl";
+import { Product } from "@/sanity.types";
 import { motion, type Easing, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const products = [
-  { id: 1, title: "Sprint Tennis Skirt", price: "Rp80.000" },
-  { id: 2, title: "Playa Swim Trunk", price: "Rp120.000" },
-  { id: 3, title: "Safari Two Piece Swim", price: "Rp150.000" },
-  { id: 4, title: "Rise & Shine Romper", price: "Rp100.000" },
-  { id: 5, title: "Poolside Flutter Tank", price: "Rp100.000" },
-  { id: 6, title: "Sunny Day Dress", price: "Rp300.000" },
-  { id: 7, title: "Adventure Shorts", price: "Rp100.000" },
-  { id: 8, title: "Beachcomber Tee", price: "Rp100.000" },
-  { id: 9, title: "Explorer Cargo Pants", price: "Rp100.000" },
-  { id: 10, title: "Sunset Hoodie", price: "Rp100.000" },
-];
+const EASE: Easing = [0.16, 1, 0.3, 1];
 
-// smooth "easeOut" cubic-bezier to satisfy TS
-const EASE: Easing = [0.16, 1, 0.3, 1]; // softer easeOut
-
-// section fades in slower, smaller lift
 const sectionEnter: Variants = {
   hidden: { opacity: 0, y: 10 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0, ease: [0.16, 1, 0.3, 1] },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.0, ease: EASE } },
 };
 
-// row uses a gentle spring and slower child stagger
 const rowEnter: Variants = {
   hidden: { opacity: 0, y: 10 },
   show: {
@@ -48,48 +31,39 @@ const rowEnter: Variants = {
     transition: {
       when: "beforeChildren",
       type: "spring",
-      stiffness: 60, // lower = softer
-      damping: 18, // higher = less bounce
+      stiffness: 60,
+      damping: 18,
       mass: 0.7,
-      staggerChildren: 0.08, // slower stagger
+      staggerChildren: 0.08,
     },
   },
 };
 
-// cards: tiny scale-in, gentle spring
 const cardItem: Variants = {
   hidden: { opacity: 0, y: 10, scale: 0.99 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 70,
-      damping: 16,
-      mass: 0.7,
-    },
+    transition: { type: "spring", stiffness: 70, damping: 16, mass: 0.7 },
   },
 };
 
-export function NewArrival() {
+export default function NewArrivalClient({ items }: { items: Product[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedSnap, setSelectedSnap] = useState(0);
   const [snapCount, setSnapCount] = useState(0);
 
   useEffect(() => {
     if (!api) return;
-
     const onSelect = () => setSelectedSnap(api.selectedScrollSnap());
     const updateSnaps = () => {
       setSnapCount(api.scrollSnapList().length);
       setSelectedSnap(api.selectedScrollSnap());
     };
-
     updateSnaps();
     api.on("select", onSelect);
     api.on("reInit", updateSnaps);
-
     return () => {
       api.off("select", onSelect);
       api.off("reInit", updateSnaps);
@@ -98,13 +72,15 @@ export function NewArrival() {
 
   const scrollToSnap = (i: number) => api?.scrollTo(i);
 
+  if (!items?.length) return null;
+
   return (
     <section
       aria-labelledby="new-arrivals-heading"
       className="bg-indigo-50 py-8 md:py-12"
     >
       <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading + Dots */}
+        {/* Heading + dots */}
         <motion.div
           variants={sectionEnter}
           initial="hidden"
@@ -120,21 +96,22 @@ export function NewArrival() {
           </h2>
 
           <nav aria-label="New Arrivals pagination" className="flex space-x-2">
-            {Array.from({ length: snapCount }).map((_, idx) => (
-              <motion.button
-                key={idx}
-                onClick={() => scrollToSnap(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                aria-pressed={selectedSnap === idx}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: 0.06 * idx, ease: EASE }}
-                className={`h-2 w-2 rounded-full transition-colors cursor-pointer ${
-                  selectedSnap === idx ? "bg-gray-900" : "bg-gray-400"
-                }`}
-              />
-            ))}
+            {Array.from({ length: snapCount }).length > 1 &&
+              Array.from({ length: snapCount }).map((_, idx) => (
+                <motion.button
+                  key={idx}
+                  onClick={() => scrollToSnap(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  aria-pressed={selectedSnap === idx}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: 0.06 * idx, ease: EASE }}
+                  className={`h-2 w-2 rounded-full transition-colors cursor-pointer ${
+                    selectedSnap === idx ? "bg-gray-900" : "bg-gray-400"
+                  }`}
+                />
+              ))}
           </nav>
         </motion.div>
 
@@ -159,35 +136,49 @@ export function NewArrival() {
               aria-label="New Arrivals"
               className="-ml-4 flex"
             >
-              {products.map((prod) => (
-                <CarouselItem
-                  key={prod.id}
-                  role="listitem"
-                  className="flex-none basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 hover:scale-[98%] transition-transform duration-300 cursor-pointer"
-                >
-                  <motion.div variants={cardItem} className="h-full w-full">
-                    <Link
-                      href={`/products/${prod.id}`}
-                      className="flex flex-col h-full w-full gap-3"
-                    >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-md">
-                        <Image
-                          src="/images/placeholder-2.jpg"
-                          alt={prod.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <h3 className="text-base font-semibold text-gray-900">
-                          {prod.title}
-                        </h3>
-                        <p className="text-gray-700 text-sm">{prod.price}</p>
-                      </div>
-                    </Link>
-                  </motion.div>
-                </CarouselItem>
-              ))}
+              {items.map((item, idx) => {
+                const href = item.slug ? `/products/${item.slug}` : "#";
+                const imgSrc = item.mainImage
+                  ? (imageUrl(item.mainImage)?.url() ?? "")
+                  : "";
+                const price =
+                  typeof item.price === "number"
+                    ? `IDR ${item.price.toLocaleString("id-ID")}`
+                    : "—";
+                return (
+                  <CarouselItem
+                    key={idx}
+                    role="listitem"
+                    className="flex-none basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 hover:scale-[98%] transition-transform duration-300 cursor-pointer"
+                  >
+                    <motion.div variants={cardItem} className="h-full w-full">
+                      <Link
+                        href={href}
+                        className="flex flex-col h-full w-full gap-3"
+                      >
+                        <div className="relative aspect-[3/4] overflow-hidden rounded-md bg-white">
+                          {imgSrc ? (
+                            <Image
+                              src={imgSrc}
+                              alt={item.name || "Product image"}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-100" />
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <h3 className="text-base font-semibold text-gray-900">
+                            {item.name}
+                          </h3>
+                          <p className="text-gray-700 text-sm">{price}</p>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  </CarouselItem>
+                );
+              })}
             </CarouselContent>
 
             <CarouselNext

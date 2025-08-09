@@ -1,13 +1,16 @@
 "use client";
 
 import Logo from "@/public/images/ezio-kids-logo.svg";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CiMenuBurger, CiSearch, CiShoppingCart } from "react-icons/ci";
 import { VscClose } from "react-icons/vsc";
+const ClientUserMenu = dynamic(() => import("./ClientUserMenu"), {
+  ssr: false,
+});
 
 const links = [
   { label: "New Arrival", to: "/collections/new-arrival" },
@@ -49,16 +52,7 @@ export default function Header() {
           </div>
 
           <div className="ml-auto flex items-center space-x-4">
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <div className="text-gray-700 hover:text-red-600 transition cursor-pointer font-semibold">
-                  Sign In
-                </div>
-              </SignInButton>
-            </SignedOut>
+            <ClientUserMenu />
 
             <button
               aria-label="Search"
@@ -130,16 +124,7 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center space-x-6">
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <SignInButton mode="modal">
-              <div className="text-gray-700 hover:text-red-600 transition cursor-pointer font-semibold">
-                Sign In
-              </div>
-            </SignInButton>
-          </SignedOut>
+          <ClientUserMenu />
 
           <button
             aria-label="Search"

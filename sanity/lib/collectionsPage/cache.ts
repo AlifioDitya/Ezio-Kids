@@ -2,6 +2,7 @@
 import { cache } from "react";
 import { getAllSizes } from "./getAllSizes";
 import { getAllCategories } from "./getAllCategories";
+import { getAllTags } from "./getAllTags";
 
 // Wrap with React cache so repeated calls in the same process are instant.
 export const getAllSizesCached = cache(async () => {
@@ -11,5 +12,10 @@ export const getAllSizesCached = cache(async () => {
 
 export const getAllCategoriesCached = cache(async () => {
   const res = await getAllCategories();
+  return res.data;
+});
+
+export const getAllTagsCached = cache(async () => {
+  const res = await getAllTags();
   return res.data;
 });

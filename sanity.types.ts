@@ -481,6 +481,20 @@ export type GET_ALL_SIZE_QUERYResult = Array<{
   slug?: Slug;
 }>;
 
+// Source: ./sanity/lib/collectionsPage/getAllTags.tsx
+// Variable: GET_ALL_TAGS_QUERY
+// Query: *[_type == "tag"] | order(order asc)
+export type GET_ALL_TAGS_QUERYResult = Array<{
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+}>;
+
 // Source: ./sanity/lib/commerce/getActiveSale.tsx
 // Variable: GET_ACTIVE_SALE_QUERY
 // Query: *[_type == "sale" && isActive == true] | order(_createdAt desc)[0]
@@ -750,6 +764,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"category\"] | order(order asc)": GET_ALL_CATEGORIES_QUERYResult;
     "*[_type == \"size\"] | order(order asc)": GET_ALL_SIZE_QUERYResult;
+    "*[_type == \"tag\"] | order(order asc)": GET_ALL_TAGS_QUERYResult;
     "*[_type == \"sale\" && isActive == true] | order(_createdAt desc)[0]": GET_ACTIVE_SALE_QUERYResult;
     "*[_type == \"category\" && _id in $ids]": GET_CATEGORY_BY_ID_QUERYResult;
     "*[_type == \"collection\" && _id in $ids]": GET_COLLECTION_BY_ID_QUERYResult;

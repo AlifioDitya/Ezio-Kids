@@ -1,6 +1,6 @@
-import BestSeller from "@/components/landing/BestSeller";
+import BestSeller from "@/components/landing/BestSeller.server";
 import Hero from "@/components/landing/Hero";
-import { NewArrival } from "@/components/landing/NewArrival";
+import NewArrival from "@/components/landing/NewArrival.server";
 import { getLandingPageContent } from "@/sanity/lib/landingPage/getLandingPageContent";
 
 export default async function Home() {
@@ -18,7 +18,7 @@ export default async function Home() {
       >
         <Hero content={landingPageContent.data.hero} />
         <BestSeller />
-        <NewArrival />
+        <NewArrival limit={15} windowDays={60} />
       </main>
     </>
   );

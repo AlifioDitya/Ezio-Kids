@@ -10,7 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { ComboboxItem } from "@/components/ui/combobox";
-import type { Category, Size } from "@/sanity.types";
+import type { Category, Size, Tag } from "@/sanity.types";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import CategoryFilter from "./CategoryFilter";
@@ -26,10 +26,12 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { TRUE_COLOR_OPTIONS } from "@/app/constant";
+import TagFilter from "./TagFilter";
 
 interface FilterSidebarClientProps {
   sizes: Size[];
   categories: Category[];
+  tags: Tag[];
   currentSort: "newest" | "price-asc" | "price-desc";
   initialSelectedSizes?: string[];
   initialSelectedCategories?: string[];
@@ -57,6 +59,7 @@ const csv = (arr: string[]) => arr.filter(Boolean).join(",");
 export default function FilterSidebarClient({
   sizes,
   categories,
+  tags,
   currentSort,
 }: FilterSidebarClientProps) {
   const router = useRouter();
@@ -80,16 +83,21 @@ export default function FilterSidebarClient({
     () => (params.get("sleeve") ?? "").split(",").filter(Boolean),
     [params]
   );
+  const selectedTags = React.useMemo(
+    () => (params.get("tag") ?? "").split(",").filter(Boolean),
+    [params]
+  );
 
   const hasAnyFilter =
     selectedTrueColors.length ||
     selectedSizes.length ||
     selectedCategories.length ||
-    selectedSleeves.length;
+    selectedSleeves.length ||
+    selectedTags.length;
 
   // Helper: write arrays back to URL and reset page (stay on current route)
   const setParamList = React.useCallback(
-    (key: "tcolor" | "size" | "cat" | "sleeve", next: string[]) => {
+    (key: "tcolor" | "size" | "cat" | "sleeve" | "tag", next: string[]) => {
       startTransition(() => {
         const q = new URLSearchParams(params.toString());
         if (next.length) q.set(key, csv(next));
@@ -128,6 +136,8 @@ export default function FilterSidebarClient({
     setParamList("cat", toggle(selectedCategories, slug));
   const onToggleSleeve = (slug: string) =>
     setParamList("sleeve", toggle(selectedSleeves, slug));
+  const onToggleTag = (slug: string) =>
+    setParamList("tag", toggle(selectedTags, slug));
 
   // Clear all
   const clearAll = () => {
@@ -137,6 +147,7 @@ export default function FilterSidebarClient({
       q.delete("size");
       q.delete("cat");
       q.delete("sleeve");
+      q.delete("tag");
       q.delete("page");
       replaceWithPrefetch(router, startTransition)(q);
     });
@@ -150,6 +161,9 @@ export default function FilterSidebarClient({
     (({ short: "Short Sleeve", long: "Long Sleeve" }) as const)[
       v as "short" | "long"
     ] ?? v;
+
+  const tagLabel = (slug: string) =>
+    tags.find((t) => t.slug?.current === slug)?.title ?? slug;
 
   const trueColorLabel = (v: string) =>
     TRUE_COLOR_OPTIONS.find((o) => o.value === v)?.label ?? v;
@@ -174,6 +188,11 @@ export default function FilterSidebarClient({
       key: `sleeve:${sl}`,
       label: sleeveLabel(sl),
       onRemove: () => onToggleSleeve(sl),
+    })),
+    ...selectedTags.map((t) => ({
+      key: `tag:${t}`,
+      label: tagLabel(t),
+      onRemove: () => onToggleTag(t),
     })),
   ];
 
@@ -318,6 +337,24 @@ export default function FilterSidebarClient({
             <SleeveLengthFilter
               selectedSlugs={selectedSleeves}
               onToggle={onToggleSleeve}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Separator />
+
+      {/* Tags */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="tags">
+          <AccordionTrigger className="font-semibold xl:text-lg">
+            Tags
+          </AccordionTrigger>
+          <AccordionContent>
+            <TagFilter
+              tags={tags}
+              selectedSlugs={selectedTags}
+              onToggle={onToggleTag}
             />
           </AccordionContent>
         </AccordionItem>
