@@ -1,6 +1,6 @@
 // components/landing/BestSeller.server.tsx
-import { getAllProducts } from "@/sanity/lib/collectionsPage/getAllProducts";
-import BestSellerClient from "./BestSellerClient";
+import { getProducts } from "@/sanity/lib/collectionsPage/getProducts";
+import BestSellerClient from "./BestSeller.client";
 
 type ResultItem = {
   _id: string;
@@ -13,7 +13,7 @@ type ResultItem = {
 
 export default async function BestSeller({ limit = 8 }: { limit?: number }) {
   // Only products tagged "best-seller"
-  const res = await getAllProducts({
+  const res = await getProducts({
     sort: "newest",
     page: 1,
     pageSize: limit,

@@ -122,4 +122,21 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+
+  button,
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  [role="button"] {
+    @apply cursor-pointer;
+  }
+
+  /* keep the proper cursor when disabled */
+  button:disabled,
+  [type="button"]:disabled,
+  [type="submit"]:disabled,
+  [type="reset"]:disabled,
+  [role="button"][aria-disabled="true"] {
+    @apply cursor-not-allowed;
+  }
 }

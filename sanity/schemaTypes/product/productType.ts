@@ -195,7 +195,7 @@ export default defineType({
     prepare({ title, media, price }) {
       const subtitle =
         typeof price === "number"
-          ? `IDR ${price.toLocaleString()}`
+          ? `Rp ${price.toLocaleString()}`
           : "Price not set";
       return { title, subtitle, media };
     },

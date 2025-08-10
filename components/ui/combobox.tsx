@@ -64,7 +64,7 @@ export function Combobox({
           aria-expanded={open}
           className={cn(
             widthClassName,
-            "justify-between rounded-xs bg-white shadow-none cursor-pointer text-xs xl:text-base"
+            "justify-between rounded-xs bg-white shadow-none text-xs xl:text-base"
           )}
           disabled={disabled}
         >

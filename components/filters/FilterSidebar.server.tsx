@@ -1,12 +1,12 @@
-// components/filters/SidebarServer.tsx
-import FilterSidebarClient from "@/components/filters/FilterSidebarClient";
+// components/filters/FilterSidebar.server.tsx
+import FilterSidebarClient from "@/components/filters/FilterSidebar.client";
 import {
   getAllCategoriesCached,
   getAllSizesCached,
   getAllTagsCached,
 } from "@/sanity/lib/collectionsPage/cache";
 
-export default async function SidebarServer({
+export default async function FilterSidebar({
   currentSort,
 }: {
   currentSort: "newest" | "price-asc" | "price-desc";

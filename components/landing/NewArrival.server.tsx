@@ -1,6 +1,6 @@
 // components/landing/NewArrival.server.tsx
-import { getAllProducts } from "@/sanity/lib/collectionsPage/getAllProducts";
-import NewArrivalClient from "./NewArrivalClient";
+import { getProducts } from "@/sanity/lib/collectionsPage/getProducts";
+import NewArrivalClient from "./NewArrival.client";
 import { Product } from "@/sanity.types";
 
 export default async function NewArrival({
@@ -10,7 +10,7 @@ export default async function NewArrival({
   limit?: number;
   windowDays?: number;
 }) {
-  const res = await getAllProducts({
+  const res = await getProducts({
     sort: "newest",
     page: 1,
     pageSize: limit,

@@ -10,7 +10,7 @@ export default function ClientUserMenu() {
       </SignedIn>
       <SignedOut>
         <SignInButton mode="modal">
-          <div className="text-gray-700 hover:text-red-600 transition cursor-pointer font-semibold">
+          <div className="text-gray-700 hover:text-red-600 transition font-semibold">
             Sign In
           </div>
         </SignInButton>

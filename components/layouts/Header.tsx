@@ -1,3 +1,4 @@
+// components/layouts/Header.tsx
 "use client";
 
 import Logo from "@/public/images/ezio-kids-logo.svg";
@@ -5,87 +6,119 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { CiMenuBurger, CiSearch, CiShoppingCart } from "react-icons/ci";
-import { VscClose } from "react-icons/vsc";
+import { CiMenuBurger, CiSearch } from "react-icons/ci";
+import BasketOpenButton from "../basket/BasketOpenButton";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { NAV_LINKS } from "@/app/constant";
+import { useEffect, useRef } from "react";
+
 const ClientUserMenu = dynamic(() => import("./ClientUserMenu"), {
   ssr: false,
 });
 
-const links = [
-  { label: "New Arrival", to: "/collections/new-arrival" },
-  { label: "Shop All", to: "/collections/shop-all" },
-  { label: "Baby & Toddler", to: "/collections/baby-toddler" },
-  { label: "Kids", to: "/collections/kids" },
-  { label: "Teens", to: "/collections/teens" },
-] as const;
-
 export default function Header() {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  const mobileNavClass = `lg:hidden ${
-    isHome ? "sticky top-0 z-50 border-b" : "relative border-none"
-  } bg-white`;
-  const desktopNavClass = `hidden lg:flex ${
-    isHome ? "sticky top-0 z-50 border-b" : "relative border-none"
-  } inset-x-0 h-16 items-center justify-between bg-white px-12`;
+  const headerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const setVar = () =>
+      document.documentElement.style.setProperty(
+        "--header-h",
+        `${el.offsetHeight}px`
+      );
+    setVar();
+    // update if it ever changes size
+    const ro = new ResizeObserver(setVar);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const mobileNavClass = `lg:hidden ${isHome ? "sticky top-0 z-50 border-b" : "relative border-none"} bg-white`;
+  const desktopNavClass = `hidden lg:flex ${isHome ? "sticky top-0 z-50 border-b" : "relative border-none"} inset-x-0 h-16 items-center justify-between bg-white px-12`;
 
   return (
     <>
       {/* MOBILE */}
       <nav aria-label="Mobile navigation" className={mobileNavClass}>
         <div className="relative flex items-center h-16 px-4">
-          <button
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((o) => !o)}
-            className="text-2xl text-gray-700 cursor-pointer"
-          >
-            {open ? <VscClose /> : <CiMenuBurger className="text-xl" />}
-          </button>
+          {/* Top drawer trigger */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button aria-label="Open menu" className="text-2xl text-gray-700">
+                <CiMenuBurger className="text-xl" />
+              </button>
+            </SheetTrigger>
 
+            <SheetContent
+              side="bottom"
+              className="w-full p-0 border-none bg-white/95 backdrop-blur-md rounded-t-2xl shadow-xl pb-8"
+            >
+              <SheetHeader className="px-7 pt-4.5 pb-0">
+                <div className="flex items-center justify-between">
+                  <SheetTitle className="font-bold text-lg">Menu</SheetTitle>
+                </div>
+              </SheetHeader>
+
+              <Separator />
+
+              {/* Nav list */}
+              <nav aria-label="Mobile site links" className="px-4 py-3">
+                <ul className="space-y-1.5">
+                  {NAV_LINKS.map(({ label, to }) => {
+                    const active = pathname === to;
+                    return (
+                      <li key={to}>
+                        <SheetClose asChild>
+                          <Link
+                            href={to}
+                            className={[
+                              "block w-full rounded-xl px-4 py-3.5 text-[15px] font-semibold transition min-h-12",
+                              active
+                                ? "bg-gradient-to-r from-blue-100 via-blue-200 to-sky-200 border-[1px] border-blue-300 text-blue-800 shadow-md"
+                                : "bg-white/80 text-gray-900 hover:bg-blue-50 border",
+                            ].join(" ")}
+                          >
+                            {label}
+                          </Link>
+                        </SheetClose>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+            </SheetContent>
+          </Sheet>
+
+          {/* Center logo */}
           <div className="flex flex-1 justify-center ml-18">
             <Link href="/" aria-label="Home" className="pointer-events-auto">
               <Image src={Logo} alt="Ezio Kids" className="h-6 w-auto" />
             </Link>
           </div>
 
+          {/* Right controls */}
           <div className="ml-auto flex items-center space-x-4">
             <ClientUserMenu />
-
             <button
               aria-label="Search"
               className="text-xl text-gray-600 hover:text-gray-800 transition"
             >
               <CiSearch />
             </button>
-            <Link
-              href="/cart"
-              aria-label="Cart"
-              className="text-xl text-gray-600 hover:text-gray-800 transition"
-            >
-              <CiShoppingCart />
-            </Link>
+            <BasketOpenButton />
           </div>
         </div>
-
-        {open && (
-          <div className="bg-white border-t border-b">
-            <div className="flex flex-col px-4 py-2 space-y-2">
-              {links.map(({ label, to }) => (
-                <Link
-                  key={to}
-                  href={to}
-                  className="flex items-center justify-between w-full py-2 text-left text-gray-700 hover:text-red-600 transition font-semibold"
-                  onClick={() => setOpen(false)}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* DESKTOP */}
@@ -95,7 +128,7 @@ export default function Header() {
             <Image
               src={Logo}
               alt="Ezio Kids"
-              className="object-contain hover:scale-105 transition cursor-pointer"
+              className="object-contain hover:scale-105 transition"
               height={24}
               priority={isHome}
             />
@@ -106,7 +139,7 @@ export default function Header() {
           role="menubar"
           className="flex items-center justify-center space-x-10 ml-10"
         >
-          {links.map(({ label, to }) => (
+          {NAV_LINKS.map(({ label, to }) => (
             <li key={to} role="none">
               <Link
                 href={to}
@@ -125,20 +158,13 @@ export default function Header() {
 
         <div className="flex items-center space-x-6">
           <ClientUserMenu />
-
           <button
             aria-label="Search"
-            className="text-2xl text-gray-600 hover:text-gray-800 transition cursor-pointer"
+            className="text-2xl text-gray-600 hover:text-gray-800 transition"
           >
             <CiSearch />
           </button>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="text-2xl text-gray-600 hover:text-gray-800 transition"
-          >
-            <CiShoppingCart />
-          </Link>
+          <BasketOpenButton />
         </div>
       </nav>
     </>

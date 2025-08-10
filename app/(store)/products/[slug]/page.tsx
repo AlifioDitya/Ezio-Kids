@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/carousel";
 
 function formatIDR(n: number | null) {
-  if (typeof n !== "number") return "IDR 0";
+  if (typeof n !== "number") return "Rp 0";
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -62,13 +62,7 @@ export default async function ProductPage({
 
                 <CarouselContent className="-ml-2">
                   {images.map((img, idx) => {
-                    const url =
-                      imageUrl(img)
-                        ?.width(1200)
-                        .height(1500)
-                        .fit("crop")
-                        .auto("format")
-                        .url() ?? "";
+                    const url = imageUrl(img)?.url() ?? "";
                     return (
                       <CarouselItem key={idx} className="pl-2 basis-full">
                         <div className="relative w-full aspect-[4/5] overflow-hidden rounded-lg bg-gray-50">

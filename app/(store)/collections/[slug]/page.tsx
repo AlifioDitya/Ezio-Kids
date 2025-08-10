@@ -4,57 +4,15 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { notFound } from "next/navigation";
 import { ProductsSection } from "@/components/layouts/ProductsSection";
-import { AgeGroup } from "@/app/constant";
-import SidebarServer from "@/components/filters/SidebarServer";
+import { AgeGroup, ALLOWED_SLUGS, Slug, TITLES } from "@/app/constant";
+import FilterSidebar from "@/components/filters/FilterSidebar.server";
 import SidebarSkeleton from "@/components/filters/SidebarSkeleton";
-
-export const ALLOWED_SLUGS = [
-  "shop-all",
-  "new-arrival",
-  "baby-toddler",
-  "kids",
-  "teens",
-] as const;
-type Slug = (typeof ALLOWED_SLUGS)[number];
+import FilterMobile from "@/components/filters/FilterMobile.server";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
   return ALLOWED_SLUGS.map((slug) => ({ slug }));
 }
-
-const TITLES: Record<Slug, { h1: string; title: string; description: string }> =
-  {
-    "shop-all": {
-      h1: "All Collections",
-      title: "All Collections - Ezio Kids",
-      description:
-        "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
-    },
-    "new-arrival": {
-      h1: "New in Ezio Kids",
-      title: "New Arrivals - Ezio Kids",
-      description:
-        "Be the first to shop our latest drops—fresh styles and trending looks for every age.",
-    },
-    "baby-toddler": {
-      h1: "For Babies & Toddlers",
-      title: "Baby & Toddler Clothes - Ezio Kids",
-      description:
-        "Soft, durable, and adorable outfits for little ones aged 0-3. Explore gentle fabrics and playful prints.",
-    },
-    kids: {
-      h1: "For Kids",
-      title: "Kidswear - Ezio Kids",
-      description:
-        "From playground to party, shop comfy and cool styles for growing kids.",
-    },
-    teens: {
-      h1: "For Teens",
-      title: "Teen Collection - Ezio Kids",
-      description:
-        "Confident, expressive looks for teens—find the latest trends and timeless essentials.",
-    },
-  };
 
 export function generateMetadata({
   params,
@@ -144,22 +102,45 @@ export default async function CollectionsPage({
 
   return (
     <main className="overflow-x-hidden bg-white">
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-row gap-8 py-6">
-        {/* Sidebar (streams immediately) */}
-        <Suspense fallback={<SidebarSkeleton />}>
-          <SidebarServer currentSort={sortKey} />
-        </Suspense>
+      {/* make the wrapper a column on mobile, row on desktop */}
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-col sm:flex-row gap-4 sm:gap-8 py-6">
+        {/* Sidebar: desktop/tablet only */}
+        <aside className="hidden sm:block shrink-0">
+          <Suspense fallback={<SidebarSkeleton />}>
+            <FilterSidebar currentSort={sortKey} />
+          </Suspense>
+        </aside>
 
-        {/* Grid */}
-        <section className="flex flex-col flex-1">
-          <h1 className="text-2xl xl:text-3xl font-bold mb-4 xl:mb-6">
+        {/* Content */}
+        <section className="flex-1 flex flex-col min-w-0">
+          {/* Title */}
+          <h1 className="text-2xl xl:text-3xl font-bold mb-3 sm:mb-6">
             {titleBlock.h1}
           </h1>
 
+          {/* Mobile filter bar */}
+          <div
+            className="
+              sm:hidden
+              -mx-6                   /* full-bleed edge */
+              bg-white/80
+              backdrop-blur
+              supports-[backdrop-filter]:bg-white/60
+              border-y
+            "
+          >
+            <div className="px-6 py-4">
+              <Suspense fallback={<div className="h-10" />}>
+                <FilterMobile currentSort={sortKey} />
+              </Suspense>
+            </div>
+          </div>
+
+          {/* Products grid */}
           <Suspense
             key={suspenseKey}
             fallback={
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-4">
                 {Array.from({ length: 9 }).map((_, i) => (
                   <div key={i} className="space-y-2">
                     <Skeleton className="aspect-4/5 w-full rounded-sm" />
@@ -170,17 +151,20 @@ export default async function CollectionsPage({
               </div>
             }
           >
-            <ProductsSection
-              sortKey={sortKey}
-              pageNum={pageNum}
-              sizes={selectedSizes}
-              categories={selectedCategories}
-              sleeves={selectedSleeves}
-              tags={selectedTags}
-              trueColors={selectedTrueColors}
-              ageGroups={ageGroupsFromSlug}
-              arrivalsOnly={arrivalsOnly}
-            />
+            <div className="mt-4">
+              <ProductsSection
+                sortKey={sortKey}
+                pageNum={pageNum}
+                sizes={selectedSizes}
+                categories={selectedCategories}
+                sleeves={selectedSleeves}
+                tags={selectedTags}
+                trueColors={selectedTrueColors}
+                ageGroups={ageGroupsFromSlug}
+                arrivalsOnly={arrivalsOnly}
+                basePath={`/collections/${slug}`}
+              />
+            </div>
           </Suspense>
         </section>
       </div>

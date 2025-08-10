@@ -66,7 +66,7 @@ export default defineType({
             prepare(select) {
               return {
                 title: `${select.product} x ${select.quantity}`,
-                subtitle: `IDR ${select.price}`,
+                subtitle: `Rp ${select.price}`,
                 media: select.image,
               };
             },

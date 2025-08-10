@@ -4,12 +4,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import useBasketStore from "@/store/store";
+import useBasketUiStore from "@/store/basket-ui";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { PortableText } from "next-sanity";
 import * as React from "react";
 import { AlertTriangle } from "lucide-react";
+import { isSanityImage } from "@/app/util/utils";
 
 type Props = {
   product: PDPProduct;
@@ -120,7 +123,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
 
   const displayPrice =
     activeVariant?.priceOverride != null
-      ? `IDR ${Math.round(activeVariant.priceOverride).toLocaleString("id-ID")}`
+      ? `Rp ${Math.round(activeVariant.priceOverride).toLocaleString("id-ID")}`
       : priceLabel;
 
   const hasSelectedSize = Boolean(selectedSizeId);
@@ -130,14 +133,38 @@ export default function ProductClient({ product, priceLabel }: Props) {
   const [qty, setQty] = React.useState(1);
   const isInStock = variants.some((v) => (v.stock ?? 0) > 0);
 
+  const addItem = useBasketStore((s) => s.addItem);
+  const openCart = useBasketUiStore((s) => s.open);
+
   const addToCart = () => {
     if (!activeVariant || !selectedSizeId) return;
-    // TODO: wire to your cart
-    console.log("Add", {
-      productId: product._id,
+
+    const unitPrice =
+      typeof activeVariant.priceOverride === "number"
+        ? activeVariant.priceOverride
+        : typeof product.price === "number"
+          ? product.price
+          : 0;
+
+    addItem({
+      product: {
+        _id: product._id,
+        slug: product.slug,
+        name: product.name ?? "",
+        mainImage: isSanityImage(product.mainImage)
+          ? product.mainImage
+          : undefined,
+      },
+      unitPrice,
       variantKey: activeVariant._key,
-      qty,
+      sizeId: selectedSizeId,
+      colorId: activeVariant.color?._id,
+      sizeLabel: sizeLabelById.get(selectedSizeId) ?? undefined,
+      colorName: activeVariant.color?.name ?? undefined,
     });
+
+    openCart();
+    setQty(1);
   };
 
   // Low stock logic: only show after size is selected and we have a concrete variant
@@ -197,7 +224,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
                   aria-disabled={!available}
                   disabled={!available}
                   className={cn(
-                    "relative h-9 w-9 rounded-full border overflow-hidden cursor-pointer",
+                    "relative h-9 w-9 rounded-full border overflow-hidden",
                     checked && "ring-2 ring-offset-2 ring-gray-900",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                     // automatic diagonal strike when disabled
@@ -246,7 +273,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
                   disabled={!available}
                   onClick={() => available && setSelectedSizeId(id)}
                   className={cn(
-                    "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden cursor-pointer",
+                    "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden",
                     selected && "bg-rose-600 hover:bg-rose-600 text-white",
                     !available && "opacity-60 cursor-not-allowed",
                     // automatic diagonal strike when disabled
@@ -309,7 +336,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
             !isInStock
               ? "bg-gray-300 cursor-not-allowed text-gray-500"
               : canAddToCart
-                ? "bg-rose-500 hover:bg-rose-600 cursor-pointer"
+                ? "bg-rose-500 hover:bg-rose-600"
                 : "bg-rose-300 cursor-not-allowed"
           )}
           onClick={addToCart}

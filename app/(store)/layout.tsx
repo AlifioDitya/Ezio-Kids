@@ -8,6 +8,7 @@ import { VisualEditing } from "next-sanity";
 import { Poppins, Quicksand } from "next/font/google";
 import { draftMode } from "next/headers";
 import "../globals.css";
+import BasketSheet from "@/components/basket/BasketSheet";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -56,6 +57,8 @@ export default async function RootLayout({
           <HeaderWithSale />
           {children}
           <Footer />
+
+          <BasketSheet />
 
           <SanityLive />
         </body>

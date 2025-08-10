@@ -1,3 +1,57 @@
+export const NAV_LINKS = [
+  { label: "New Arrival", to: "/collections/new-arrival" },
+  { label: "Shop All", to: "/collections/shop-all" },
+  { label: "Baby & Toddler", to: "/collections/baby-toddler" },
+  { label: "Kids", to: "/collections/kids" },
+  { label: "Teens", to: "/collections/teens" },
+] as const;
+
+export const ALLOWED_SLUGS = [
+  "shop-all",
+  "new-arrival",
+  "baby-toddler",
+  "kids",
+  "teens",
+] as const;
+
+export type Slug = (typeof ALLOWED_SLUGS)[number];
+
+export const TITLES: Record<
+  Slug,
+  { h1: string; title: string; description: string }
+> = {
+  "shop-all": {
+    h1: "All Collections",
+    title: "All Collections - Ezio Kids",
+    description:
+      "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
+  },
+  "new-arrival": {
+    h1: "New in Ezio Kids",
+    title: "New Arrivals - Ezio Kids",
+    description:
+      "Be the first to shop our latest drops—fresh styles and trending looks for every age.",
+  },
+  "baby-toddler": {
+    h1: "For Babies & Toddlers",
+    title: "Baby & Toddler Clothes - Ezio Kids",
+    description:
+      "Soft, durable, and adorable outfits for little ones aged 0-3. Explore gentle fabrics and playful prints.",
+  },
+  kids: {
+    h1: "For Kids",
+    title: "Kidswear - Ezio Kids",
+    description:
+      "From playground to party, shop comfy and cool styles for growing kids.",
+  },
+  teens: {
+    h1: "For Teens",
+    title: "Teen Collection - Ezio Kids",
+    description:
+      "Confident, expressive looks for teens—find the latest trends and timeless essentials.",
+  },
+};
+
 /** Base color options — keep in sync with your schema list */
 export const TRUE_COLOR_OPTIONS: {
   label: string;

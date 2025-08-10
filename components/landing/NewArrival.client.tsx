@@ -1,4 +1,4 @@
-// components/landing/NewArrivalClient.tsx
+// components/landing/NewArrival.client.tsx
 "use client";
 
 import {
@@ -107,7 +107,7 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: 0.06 * idx, ease: EASE }}
-                  className={`h-2 w-2 rounded-full transition-colors cursor-pointer ${
+                  className={`h-2 w-2 rounded-full transition-colors ${
                     selectedSnap === idx ? "bg-gray-900" : "bg-gray-400"
                   }`}
                 />
@@ -126,7 +126,7 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
           <Carousel setApi={setApi} opts={{ align: "start", loop: false }}>
             <CarouselPrevious
               aria-label="Previous slide"
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-indigo-200 text-gray-900 hover:text-white rounded-full z-10 cursor-pointer border-none"
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-indigo-200 text-gray-900 hover:text-white rounded-full z-10 border-none"
             >
               ←
             </CarouselPrevious>
@@ -143,7 +143,7 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
                   : "";
                 const price =
                   typeof item.price === "number"
-                    ? `IDR ${item.price.toLocaleString("id-ID")}`
+                    ? `Rp ${item.price.toLocaleString("id-ID")}`
                     : "—";
                 return (
                   <CarouselItem

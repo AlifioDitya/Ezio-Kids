@@ -1,4 +1,4 @@
-// components/filters/FilterSidebarClient.tsx
+// components/filters/FilterSidebar.client.tsx
 "use client";
 
 import { SizeFilter } from "@/components/filters/SizeFilter";
@@ -222,7 +222,7 @@ export default function FilterSidebarClient({
                 type="button"
                 onClick={clearAll}
                 disabled={!hasAnyFilter || isPending}
-                className="text-sm text-gray-600 hover:text-gray-900 underline disabled:opacity-40 cursor-pointer"
+                className="text-sm text-gray-600 hover:text-gray-900 underline disabled:opacity-40"
               >
                 Clear All
               </button>

@@ -1,4 +1,4 @@
-// components/landing/BestSellerClient.tsx
+// components/landing/BestSeller.client.tsx
 "use client";
 
 import {
@@ -111,7 +111,7 @@ export default function BestSellerClient({ items }: { items: Item[] }) {
               : "";
             const price =
               typeof item.price === "number"
-                ? `IDR ${item.price.toLocaleString("id-ID")}`
+                ? `Rp ${item.price.toLocaleString("id-ID")}`
                 : "—";
 
             return (
@@ -207,7 +207,7 @@ export default function BestSellerClient({ items }: { items: Item[] }) {
                   : "";
                 const price =
                   typeof item.price === "number"
-                    ? `IDR ${item.price.toLocaleString("id-ID")}`
+                    ? `Rp ${item.price.toLocaleString("id-ID")}`
                     : "—";
 
                 return (

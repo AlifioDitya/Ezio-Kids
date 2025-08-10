@@ -109,7 +109,7 @@ const QUERY = `
 }
 `.trim();
 
-export async function getAllProducts(
+export async function getProducts(
   opts: {
     sort?: SortKey;
     page?: number;
