@@ -122,7 +122,7 @@ export default async function CollectionsPage({
         {/* Content */}
         <section className="flex-1 flex flex-col min-w-0">
           {/* Title */}
-          <h1 className="text-2xl xl:text-3xl font-bold mb-3 sm:mb-6">
+          <h1 className="text-2xl xl:text-3xl font-bold mb-3 sm:mb-2">
             {titleBlock.h1}
           </h1>
 
