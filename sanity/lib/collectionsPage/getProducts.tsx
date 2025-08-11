@@ -1,4 +1,4 @@
-// sanity/lib/collectionsPage/getAllProducts.ts
+// sanity/lib/collectionsPage/getProducts.ts
 import { sanityFetch } from "../live";
 
 export type SortKey = "newest" | "price-asc" | "price-desc";
@@ -14,6 +14,19 @@ const QUERY = `
 {
   "items": *[
     _type == "product" &&
+
+    // ---- TEXT SEARCH (case-insensitive) ----
+    (
+      !defined($search) || $search == "" ||
+      name match $search ||
+      slug.current match $search ||
+      category->Name match $search ||
+      category->slug.current match $search ||
+      count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
+      count(variants[
+        color->name match $search || size->label match $search
+      ]) > 0
+    ) &&
 
     // ---- AGE GROUP via variant size ----
     (
@@ -72,6 +85,18 @@ const QUERY = `
     _type == "product" &&
 
     (
+      !defined($search) || $search == "" ||
+      name match $search ||
+      slug.current match $search ||
+      category->Name match $search ||
+      category->slug.current match $search ||
+      count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
+      count(variants[
+        color->name match $search || size->label match $search
+      ]) > 0
+    ) &&
+
+    (
       count($ageGroups) == 0 ||
       count(variants[size->ageGroup in $ageGroups]) > 0
     ) &&
@@ -126,6 +151,9 @@ export async function getProducts(
     // collections/new-arrival
     arrivalsOnly?: boolean;
     arrivalsWindowDays?: number;
+
+    // search query
+    search?: string;
   } = {}
 ) {
   const sort = opts.sort ?? "newest";
@@ -140,6 +168,10 @@ export async function getProducts(
   const windowDays = Math.max(1, opts.arrivalsWindowDays ?? 20);
   const since = new Date(Date.now() - windowDays * 86_400_000).toISOString();
 
+  // GROQ match expects a wildcard pattern (e.g. "*mick*")
+  const searchPattern =
+    opts.search && opts.search.trim() ? `*${opts.search.trim()}*` : "";
+
   const res = await sanityFetch({
     query,
     params: {
@@ -153,6 +185,7 @@ export async function getProducts(
       tags: opts.tags ?? [],
       arrivalsOnly: Boolean(opts.arrivalsOnly),
       since,
+      search: searchPattern,
     },
   });
 

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CiMenuBurger, CiSearch } from "react-icons/ci";
+import { CiMenuBurger } from "react-icons/ci";
 import BasketOpenButton from "../basket/BasketOpenButton";
 import {
   Sheet,
@@ -19,6 +19,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { NAV_LINKS } from "@/app/constant";
 import { useEffect, useRef } from "react";
+import SearchOpenButton from "../search/SearchOpenButton";
+import SearchDrawer from "../search/SearchDrawer";
 
 const ClientUserMenu = dynamic(() => import("./ClientUserMenu"), {
   ssr: false,
@@ -49,6 +51,9 @@ export default function Header() {
 
   return (
     <>
+      {/* Search Drawer */}
+      <SearchDrawer />
+
       {/* MOBILE */}
       <nav aria-label="Mobile navigation" className={mobileNavClass}>
         <div className="relative flex items-center h-16 px-4">
@@ -110,12 +115,7 @@ export default function Header() {
           {/* Right controls */}
           <div className="ml-auto flex items-center space-x-4">
             <ClientUserMenu />
-            <button
-              aria-label="Search"
-              className="text-xl text-gray-600 hover:text-gray-800 transition"
-            >
-              <CiSearch />
-            </button>
+            <SearchOpenButton />
             <BasketOpenButton />
           </div>
         </div>
@@ -158,12 +158,7 @@ export default function Header() {
 
         <div className="flex items-center space-x-6">
           <ClientUserMenu />
-          <button
-            aria-label="Search"
-            className="text-2xl text-gray-600 hover:text-gray-800 transition"
-          >
-            <CiSearch />
-          </button>
+          <SearchOpenButton />
           <BasketOpenButton />
         </div>
       </nav>

@@ -17,7 +17,8 @@ export async function ProductsSection({
   trueColors,
   ageGroups,
   arrivalsOnly,
-  basePath, // <-- add this
+  basePath,
+  search,
 }: {
   sortKey: "newest" | "price-asc" | "price-desc";
   pageNum: number;
@@ -28,7 +29,8 @@ export async function ProductsSection({
   trueColors: string[];
   ageGroups: AgeGroup[];
   arrivalsOnly?: boolean;
-  basePath: string; // <-- add this
+  basePath: string;
+  search?: string;
 }) {
   const products = await getProducts({
     sort: sortKey,
@@ -40,6 +42,7 @@ export async function ProductsSection({
     trueColors,
     ageGroups,
     arrivalsOnly,
+    search,
   });
 
   // Empty state

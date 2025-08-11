@@ -36,6 +36,7 @@ type SearchParams = {
   sleeve?: string | string[];
   tcolor?: string | string[];
   tag?: string | string[];
+  q?: string | string[];
 };
 
 const toArray = (v?: string | string[]) =>
@@ -51,6 +52,12 @@ export default async function CollectionsPage({
 }) {
   const slug = params.slug;
   if (!ALLOWED_SLUGS.includes(slug)) notFound();
+
+  // search
+  const searchRaw = Array.isArray(searchParams.q)
+    ? searchParams.q[0]
+    : searchParams.q;
+  const searchQ = (searchRaw ?? "").trim();
 
   // sort & paging
   const sortRaw = Array.isArray(searchParams.sort)
@@ -96,6 +103,7 @@ export default async function CollectionsPage({
     selectedTags,
     ageGroupsFromSlug,
     arrivalsOnly,
+    searchQ,
   });
 
   const titleBlock = TITLES[slug];
@@ -163,6 +171,7 @@ export default async function CollectionsPage({
                 ageGroups={ageGroupsFromSlug}
                 arrivalsOnly={arrivalsOnly}
                 basePath={`/collections/${slug}`}
+                search={searchQ}
               />
             </div>
           </Suspense>
