@@ -15,6 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import WishlistFloaty from "../wishlist/WishlistFloaty";
 
 export async function ProductsSection({
   sortKey,
@@ -121,6 +122,13 @@ export async function ProductsSection({
               className="group block overflow-hidden self-start"
             >
               <div className="relative aspect-4/5 overflow-hidden rounded-sm w-full">
+                <WishlistFloaty
+                  productId={p._id}
+                  slug={p.slug?.current || undefined}
+                  name={p.name}
+                  mainImage={p.mainImage}
+                  unitPrice={typeof p.price === "number" ? p.price : 0}
+                />
                 {p.mainImage && (
                   <Image
                     src={imageUrl(p.mainImage)?.url() || ""}

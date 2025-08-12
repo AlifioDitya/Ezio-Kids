@@ -1,72 +1,67 @@
-// store/wishlist.ts
-"use client";
-
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import type { Product } from "@/sanity.types";
 
-type WishItem = {
-  productId: string;
-  variantKey?: string | null;
-  name?: string | null;
-  price?: number | null;
-  image?: unknown; // keep whatever you already use (sanity image, url, etc.)
+export type WishlistProduct = {
+  _id: string;
+  slug?: string; // canonical string for /products/[slug]
+  name?: string;
+  mainImage?: Product["mainImage"]; // keep the Sanity image shape
 };
 
-type WishlistState = {
-  items: WishItem[];
-  add: (item: WishItem) => void;
-  remove: (productId: string, variantKey?: string | null) => void;
-  clear: () => void;
+export interface WishlistItem {
+  product: WishlistProduct;
+  quantity: number;
+  unitPrice: number; // always use this for totals
+  variantKey?: string; // unique key for color x size variant
+  sizeId?: string;
+  colorId?: string;
+  sizeLabel?: string; // for display, no re-fetch needed
+  colorName?: string; // for display
+}
 
-  // hydration guard to avoid SSR/CSR mismatch
-  hasHydrated: boolean;
-  setHasHydrated: (v: boolean) => void;
-};
+interface WishlistState {
+  items: WishlistItem[];
 
-// IMPORTANT:
-// - create the store ONCE at module scope (singleton)
-// - use `skipHydration: true` and trigger rehydrate in the component
-export const useWishlistStore = create<WishlistState>()(
+  addItem: (item: Omit<WishlistItem, "quantity">) => void;
+  removeItem: (productId: string, variantKey?: string) => void;
+  clearWishlist: () => void;
+
+  totalItems: () => number;
+}
+
+const byLine = (a: WishlistItem, productId: string, variantKey?: string) =>
+  a.product._id === productId && a.variantKey === (variantKey ?? a.variantKey);
+
+const useWishlistStore = create<WishlistState>()(
   persist(
     (set, get) => ({
       items: [],
-      add: (item) => {
-        const key = (i: WishItem) =>
-          `${i.productId}::${i.variantKey ?? "base"}`;
-        const map = new Map(get().items.map((i) => [key(i), i]));
-        map.set(key(item), item);
-        set({ items: Array.from(map.values()) });
-      },
-      remove: (productId, variantKey = null) => {
-        set({
-          items: get().items.filter(
-            (i) =>
-              !(
-                i.productId === productId &&
-                (i.variantKey ?? null) === (variantKey ?? null)
-              )
-          ),
-        });
-      },
-      clear: () => set({ items: [] }),
 
-      hasHydrated: false,
-      setHasHydrated: (v) => set({ hasHydrated: v }),
+      addItem: (item) =>
+        set((state) => {
+          const idx = state.items.findIndex((i) =>
+            byLine(i, item.product._id, item.variantKey)
+          );
+          if (idx >= 0) {
+            const next = [...state.items];
+            next[idx] = { ...next[idx], quantity: next[idx].quantity + 1 };
+            return { items: next };
+          }
+          return { items: [...state.items, { ...item, quantity: 1 }] };
+        }),
+
+      removeItem: (productId, variantKey) =>
+        set((state) => ({
+          items: state.items.filter((i) => !byLine(i, productId, variantKey)),
+        })),
+
+      clearWishlist: () => set({ items: [] }),
+
+      totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
     }),
-    {
-      name: "wishlist-v1",
-      storage: createJSONStorage(() => {
-        if (typeof window === "undefined") {
-          throw new Error("localStorage is not available");
-        }
-        return window.localStorage;
-      }),
-      skipHydration: true, // ← don’t read storage during SSR render
-      partialize: (s) => ({ items: s.items }), // don’t persist methods/flags
-      onRehydrateStorage: () => (state) => {
-        // called after storage is read on the client
-        state?.setHasHydrated(true);
-      },
-    }
+    { name: "Wishlist-storage" }
   )
 );
+
+export default useWishlistStore;

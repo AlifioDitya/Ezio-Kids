@@ -13,6 +13,7 @@ import { PortableText } from "next-sanity";
 import * as React from "react";
 import { AlertTriangle } from "lucide-react";
 import { isSanityImage } from "@/app/util/utils";
+import WishlistFloaty from "@/components/wishlist/WishlistFloaty";
 
 type Props = {
   product: PDPProduct;
@@ -189,9 +190,24 @@ export default function ProductClient({ product, priceLabel }: Props) {
         </div>
 
         {/* Title */}
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-          {product.name}
-        </h1>
+        <div className="flex items-center gap-2 w-full justify-between">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+            {product.name}
+          </h1>
+          <WishlistFloaty
+            productId={product._id}
+            slug={product.slug}
+            name={product.name}
+            mainImage={
+              isSanityImage(product.mainImage) ? product.mainImage : undefined
+            }
+            unitPrice={typeof product.price === "number" ? product.price : 0}
+            variantKey={activeVariant?._key}
+            shadow={false}
+            emptyColor="#111827"
+            className="relative pb-4"
+          />
+        </div>
 
         {/* Price */}
         <p className="text-base font-semibold text-gray-900">{displayPrice}</p>

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CiMenuBurger } from "react-icons/ci";
+import { CiHeart, CiMenuBurger } from "react-icons/ci";
 import BasketOpenButton from "../basket/BasketOpenButton";
 import {
   Sheet,
@@ -115,6 +115,9 @@ export default function Header() {
           {/* Right controls */}
           <div className="ml-auto flex items-center space-x-4">
             <ClientUserMenu />
+            <Link href="/wishlist" aria-label="Wishlist">
+              <CiHeart className="text-2xl text-gray-700 hover:text-red-600 transition" />
+            </Link>
             <SearchOpenButton />
             <BasketOpenButton />
           </div>
@@ -158,6 +161,9 @@ export default function Header() {
 
         <div className="flex items-center space-x-6">
           <ClientUserMenu />
+          <Link href="/wishlist" aria-label="Wishlist">
+            <CiHeart className="text-2xl text-gray-700 hover:text-red-600 transition" />
+          </Link>
           <SearchOpenButton />
           <BasketOpenButton />
         </div>
