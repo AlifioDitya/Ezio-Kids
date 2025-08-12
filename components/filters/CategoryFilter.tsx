@@ -23,7 +23,7 @@ export default function CategoryFilter({
       if (!slug) return null;
       return {
         value: slug,
-        label: c.Name ?? slug,
+        label: c.name ?? slug,
       };
     })
     .filter(Boolean) as CheckboxItem[];

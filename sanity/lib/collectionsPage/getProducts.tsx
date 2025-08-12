@@ -20,7 +20,7 @@ const QUERY = `
       !defined($search) || $search == "" ||
       name match $search ||
       slug.current match $search ||
-      category->Name match $search ||
+      category->name match $search ||
       category->slug.current match $search ||
       count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
       count(variants[
@@ -88,7 +88,7 @@ const QUERY = `
       !defined($search) || $search == "" ||
       name match $search ||
       slug.current match $search ||
-      category->Name match $search ||
+      category->name match $search ||
       category->slug.current match $search ||
       count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
       count(variants[
@@ -158,7 +158,7 @@ export async function getProducts(
 ) {
   const sort = opts.sort ?? "newest";
   const page = Math.max(1, opts.page ?? 1);
-  const pageSize = Math.min(48, Math.max(1, opts.pageSize ?? 24));
+  const pageSize = Math.min(48, Math.max(1, opts.pageSize ?? 48));
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
 

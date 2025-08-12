@@ -8,6 +8,7 @@ import {
   FaPercent,
   FaRulerHorizontal,
   FaShoppingCart,
+  FaStar,
   FaTag,
   FaThLarge,
   FaTshirt,
@@ -42,6 +43,15 @@ export const structure: StructureResolver = (S) =>
                 .title("Sizes")
                 .icon(FaRulerHorizontal),
               S.documentTypeListItem("tag").title("Tags").icon(FaTag),
+              S.listItem()
+                .title("Popular Products")
+                .icon(FaStar)
+                .schemaType("popular")
+                .child(
+                  S.document()
+                    .schemaType("popular")
+                    .documentId("popularProductsSingleton")
+                ),
             ])
         ),
 

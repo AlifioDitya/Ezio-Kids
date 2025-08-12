@@ -4,7 +4,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import useBasketStore from "@/store/store";
+import useBasketStore from "@/store/basket";
 import useBasketUiStore from "@/store/basket-ui";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";

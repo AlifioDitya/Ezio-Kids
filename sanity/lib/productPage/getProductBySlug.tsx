@@ -54,7 +54,7 @@ export async function getProductBySlug(slug: string) {
       additionalImages,
       "category": category->{
         _id,
-        "name": coalesce(Name, name),
+        name,
         "slug": slug.current
       },
       "collection": collection->{

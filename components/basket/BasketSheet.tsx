@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import useBasketUiStore from "@/store/basket-ui";
-import useBasketStore from "@/store/store";
+import useBasketStore from "@/store/basket";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

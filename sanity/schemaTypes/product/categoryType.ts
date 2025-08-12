@@ -8,7 +8,7 @@ export const categoryType = defineType({
   icon: TbCategory,
   fields: [
     defineField({
-      name: "Name",
+      name: "name",
       title: "Category Name",
       type: "string",
     }),

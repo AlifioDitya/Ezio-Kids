@@ -53,6 +53,8 @@ export default defineType({
     defineField({
       name: "tags",
       title: "Tags",
+      description:
+        "It is best to limit each products to 2-3 tags to improve searchability.",
       type: "array",
       of: [defineArrayMember({ type: "reference", to: [{ type: "tag" }] })],
     }),

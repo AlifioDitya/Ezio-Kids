@@ -1,7 +1,7 @@
 "use client";
 
 import useBasketUiStore from "@/store/basket-ui";
-import useBasketStore from "@/store/store";
+import useBasketStore from "@/store/basket";
 import { CiShoppingCart } from "react-icons/ci";
 import { useEffect, useState } from "react";
 

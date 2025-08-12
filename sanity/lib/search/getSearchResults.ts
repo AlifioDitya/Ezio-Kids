@@ -23,7 +23,7 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
     (
       name match $q || 
       lower(name) match lower($q) ||
-      category->Name match $q ||
+      category->name match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
     )
   ] | order(_score desc, _createdAt desc) [0...$limit]{
@@ -41,7 +41,7 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
     (
       name match $q || 
       lower(name) match lower($q) ||
-      category->Name match $q ||
+      category->name match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
     )
   ]),
@@ -49,7 +49,7 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
   // primitive suggestions: tag titles + category names containing query
   "suggestions": array::unique([
     ...*[_type=="tag" && (title match $q || slug.current match $q)][0...10].title,
-    ...*[_type=="category" && (Name match $q || slug.current match $q)][0...10].Name
+    ...*[_type=="category" && (name match $q || slug.current match $q)][0...10].name
   ])
 }
 `;

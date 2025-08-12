@@ -155,7 +155,7 @@ export default function FilterSidebarClient({
 
   // ----- Active filter badges -----
   const categoryLabel = (slug: string) =>
-    categories.find((c) => c.slug?.current === slug)?.Name ?? slug;
+    categories.find((c) => c.slug?.current === slug)?.name ?? slug;
 
   const sleeveLabel = (v: string) =>
     (({ short: "Short Sleeve", long: "Long Sleeve" }) as const)[

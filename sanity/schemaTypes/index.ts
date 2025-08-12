@@ -11,6 +11,7 @@ import productType from "./product/productType";
 import sizeType from "./product/sizeType";
 import tagType from "./product/tagType";
 import heroType from "./section/heroType";
+import popularType from "./product/popularType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -25,5 +26,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     salesType,
     landingPageType,
     heroType,
+    popularType,
   ],
 };

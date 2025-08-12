@@ -41,6 +41,22 @@ export default function SearchDrawer() {
   const [res, setRes] = React.useState<ApiResult | null>(null);
   const router = useRouter();
   const controllerRef = React.useRef<AbortController | null>(null);
+  const [popular, setPopular] = React.useState<
+    { title: string; slug?: string }[]
+  >([]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
+      const r = await fetch("/api/popular", { cache: "no-store" });
+      const j = await r.json();
+      if (!cancelled) setPopular(Array.isArray(j?.tags) ? j.tags : []);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
 
   // Debounce fetch
   React.useEffect(() => {
@@ -108,7 +124,7 @@ export default function SearchDrawer() {
         side="top"
         className={cn(
           "fixed inset-x-0 top-0 z-[60] w-full max-w-none border-b p-0",
-          "h-[100dvh] bg-white flex flex-col" // ← flex column so content can scroll
+          "h-[100dvh] bg-white flex flex-col"
         )}
       >
         {/* Header */}
@@ -210,21 +226,31 @@ export default function SearchDrawer() {
 
                 <Card title="Popular" icon={<TrendingUp className="h-4 w-4" />}>
                   <div className="flex flex-wrap gap-2">
-                    {[
-                      "dress",
-                      "tee",
-                      "shorts",
-                      "new-arrival",
-                      "best-seller",
-                    ].map((t) => (
-                      <button
-                        key={t}
-                        onClick={() => setQ(t)}
-                        className="rounded-full bg-rose-50 text-rose-700 px-3 py-1 text-sm hover:bg-rose-100"
-                      >
-                        {t}
-                      </button>
-                    ))}
+                    {(popular.length
+                      ? popular
+                      : [
+                          { title: "dress-shirt" },
+                          { title: "tee" },
+                          { title: "shorts" },
+                          { title: "new-arrival" },
+                          { title: "best-seller" },
+                        ]
+                    )
+                      .slice(0, 7)
+                      .map((t) => {
+                        const key = t.slug ?? t.title;
+                        const label = t.title ?? t.slug ?? "";
+                        const queryVal = t.slug ?? t.title ?? "";
+                        return (
+                          <button
+                            key={key}
+                            onClick={() => setQ(queryVal)}
+                            className="rounded-full bg-rose-50 text-rose-700 px-3 py-1 text-sm hover:bg-rose-100"
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
                   </div>
                 </Card>
               </div>

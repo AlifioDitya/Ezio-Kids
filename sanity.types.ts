@@ -13,6 +13,29 @@
  */
 
 // Source: schema.json
+export type Popular = {
+  _id: string;
+  _type: "popular";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  tags?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "tag";
+  }>;
+  categories?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+};
+
 export type LandingPage = {
   _id: string;
   _type: "landingPage";
@@ -295,7 +318,7 @@ export type Category = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  Name?: string;
+  name?: string;
   slug?: Slug;
   description?: string;
 };
@@ -450,7 +473,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = LandingPage | HeroSection | Sale | Order | Tag | Product | Color | Size | Collection | Category | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Popular | LandingPage | HeroSection | Sale | Order | Tag | Product | Color | Size | Collection | Category | BlockContent | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/collectionsPage/getAllCategories.tsx
 // Variable: GET_ALL_CATEGORIES_QUERY
@@ -461,7 +484,7 @@ export type GET_ALL_CATEGORIES_QUERYResult = Array<{
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  Name?: string;
+  name?: string;
   slug?: Slug;
   description?: string;
 }>;
@@ -522,7 +545,7 @@ export type GET_CATEGORY_BY_ID_QUERYResult = Array<{
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  Name?: string;
+  name?: string;
   slug?: Slug;
   description?: string;
 }>;
@@ -613,7 +636,7 @@ export type LANDING_PAGE_QUERYResult = {
 
 // Source: ./sanity/lib/productPage/getProductBySlug.tsx
 // Variable: QUERY
-// Query: *[_type == "product" && slug.current == $slug][0]{      _id,      name,      "slug": slug.current,      gender,      description,      careInstructions,      arrivalDate,      price,      mainImage,      additionalImages,      "category": category->{        _id,        "name": coalesce(Name, name),        "slug": slug.current      },      "collection": collection->{        _id,        name,        "slug": slug.current      },      "tags": tags[]->{        _id,        title,        "slug": slug.current      },      "variants": variants[]{        _key,        sku,        stock,        priceOverride,        "size": size->{          _id, label, "slug": slug.current, ageGroup, order        },        "color": color->{          _id, name, "slug": slug.current, swatch        }      }    }
+// Query: *[_type == "product" && slug.current == $slug][0]{      _id,      name,      "slug": slug.current,      gender,      description,      careInstructions,      arrivalDate,      price,      mainImage,      additionalImages,      "category": category->{        _id,        name,        "slug": slug.current      },      "collection": collection->{        _id,        name,        "slug": slug.current      },      "tags": tags[]->{        _id,        title,        "slug": slug.current      },      "variants": variants[]{        _key,        sku,        stock,        priceOverride,        "size": size->{          _id, label, "slug": slug.current, ageGroup, order        },        "color": color->{          _id, name, "slug": slug.current, swatch        }      }    }
 export type QUERYResult = {
   _id: string;
   name: string | null;
@@ -772,6 +795,6 @@ declare module "@sanity/client" {
     "*[_type == \"size\" && _id in $ids]": GET_SIZE_BY_ID_QUERYResult;
     "*[_type == \"tag\" && _id in $ids]": GET_TAG_BY_ID_QUERYResult;
     "*[_type == \"landingPage\" && _id == \"landingPageSingleton\"][0]": LANDING_PAGE_QUERYResult;
-    "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      \"slug\": slug.current,\n      gender,\n      description,\n      careInstructions,\n      arrivalDate,\n      price,\n      mainImage,\n      additionalImages,\n      \"category\": category->{\n        _id,\n        \"name\": coalesce(Name, name),\n        \"slug\": slug.current\n      },\n      \"collection\": collection->{\n        _id,\n        name,\n        \"slug\": slug.current\n      },\n      \"tags\": tags[]->{\n        _id,\n        title,\n        \"slug\": slug.current\n      },\n      \"variants\": variants[]{\n        _key,\n        sku,\n        stock,\n        priceOverride,\n        \"size\": size->{\n          _id, label, \"slug\": slug.current, ageGroup, order\n        },\n        \"color\": color->{\n          _id, name, \"slug\": slug.current, swatch\n        }\n      }\n    }\n  ": QUERYResult;
+    "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      \"slug\": slug.current,\n      gender,\n      description,\n      careInstructions,\n      arrivalDate,\n      price,\n      mainImage,\n      additionalImages,\n      \"category\": category->{\n        _id,\n        name,\n        \"slug\": slug.current\n      },\n      \"collection\": collection->{\n        _id,\n        name,\n        \"slug\": slug.current\n      },\n      \"tags\": tags[]->{\n        _id,\n        title,\n        \"slug\": slug.current\n      },\n      \"variants\": variants[]{\n        _key,\n        sku,\n        stock,\n        priceOverride,\n        \"size\": size->{\n          _id, label, \"slug\": slug.current, ageGroup, order\n        },\n        \"color\": color->{\n          _id, name, \"slug\": slug.current, swatch\n        }\n      }\n    }\n  ": QUERYResult;
   }
 }
