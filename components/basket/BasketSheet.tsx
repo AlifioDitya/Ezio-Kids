@@ -15,6 +15,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { imageUrl } from "@/lib/imageUrl";
 import { Plus, Minus, X } from "lucide-react";
+import { SignInButton, useAuth } from "@clerk/nextjs";
 
 export default function BasketSheet() {
   const { isOpen, close } = useBasketUiStore();
@@ -30,6 +31,7 @@ export default function BasketSheet() {
   const empty = items.length === 0;
   const total = getTotalPrice();
   const formattedTotal = `Rp ${Math.round(total).toLocaleString("id-ID")}`;
+  const { isSignedIn } = useAuth();
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => (open ? undefined : close())}>
@@ -172,11 +174,19 @@ export default function BasketSheet() {
                 >
                   Clear
                 </Button>
-                <Link className="flex-1" href="/checkout" onClick={close}>
-                  <Button className="w-full bg-rose-500 hover:bg-rose-600 text-white">
-                    Checkout
-                  </Button>
-                </Link>
+                {isSignedIn ? (
+                  <Link className="flex-1" href="/checkout" onClick={close}>
+                    <Button className="w-full bg-rose-500 hover:bg-rose-600 text-white">
+                      Checkout
+                    </Button>
+                  </Link>
+                ) : (
+                  <SignInButton mode="modal">
+                    <Button className="w-1/2 bg-rose-500 hover:bg-rose-600 text-white">
+                      Sign in to Checkout
+                    </Button>
+                  </SignInButton>
+                )}
               </div>
             </div>
           </SheetFooter>

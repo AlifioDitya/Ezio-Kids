@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { imageUrl } from "@/lib/imageUrl";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Search, TrendingUp, History, X } from "lucide-react";
 import Logo from "@/public/images/ezio-kids-logo.svg";
+import ProductTile from "../common/ProductTile";
 
 type ApiResult = {
   q: string;
@@ -248,60 +248,21 @@ export default function SearchDrawer() {
                       const href = p.slug?.current
                         ? `/products/${p.slug.current}`
                         : "#";
-                      const url = p.mainImage
-                        ? imageUrl(p.mainImage)
-                            ?.width(600)
-                            .height(750)
-                            .fit("crop")
-                            .auto("format")
-                            .url()
-                        : "";
-
                       return (
                         <li key={p._id}>
-                          <Link
+                          <ProductTile
                             href={href}
-                            className="group block rounded-2xl border bg-white overflow-hidden hover:shadow-md transition"
+                            name={p.name ?? "Untitled"}
+                            price={p.price ?? null}
+                            image={p.mainImage}
+                            tags={p.tagInfo}
+                            tagLimit={2}
+                            variant="plain"
                             onClick={() => {
                               if (q.trim()) addRecent(q);
                               closeAndReset();
                             }}
-                          >
-                            <div className="relative w-full aspect-[4/5] bg-gray-100">
-                              {url ? (
-                                <Image
-                                  src={url}
-                                  alt={p.name ?? "Product"}
-                                  fill
-                                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                                />
-                              ) : null}
-                            </div>
-
-                            <div className="p-3">
-                              <div className="line-clamp-2 text-sm font-semibold text-gray-900">
-                                {p.name ?? "Untitled"}
-                              </div>
-                              <div className="mt-1 text-xs text-gray-600">
-                                {typeof p.price === "number"
-                                  ? `Rp ${Math.round(p.price).toLocaleString("id-ID")}`
-                                  : "—"}
-                              </div>
-
-                              {p.tagInfo?.length ? (
-                                <div className="mt-2 flex flex-wrap gap-1.5">
-                                  {p.tagInfo.slice(0, 3).map((t, i) => (
-                                    <span
-                                      key={`${t.slug ?? t.title ?? i}`}
-                                      className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-700"
-                                    >
-                                      {t.title}
-                                    </span>
-                                  ))}
-                                </div>
-                              ) : null}
-                            </div>
-                          </Link>
+                          />
                         </li>
                       );
                     })}

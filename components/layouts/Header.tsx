@@ -108,7 +108,7 @@ export default function Header() {
           {/* Center logo */}
           <div className="flex flex-1 justify-center ml-18">
             <Link href="/" aria-label="Home" className="pointer-events-auto">
-              <Image src={Logo} alt="Ezio Kids" className="h-6 w-auto" />
+              <Image src={Logo} alt="Ezio Kids" className="h-5 w-auto" />
             </Link>
           </div>
 

@@ -88,9 +88,9 @@ export default function Hero({ content }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           className={[
-            // fluid paddings so spacing scales on big screens
+            // responsive paddings using Tailwind breakpoints
             "absolute inset-0 flex flex-col",
-            "px-[clamp(16px,5vw,96px)] py-[clamp(16px,6vw,96px)]",
+            "px-4 py-4 sm:px-8 sm:py-8 lg:px-24 lg:py-24",
             mobilePositionClass(content.textPositionMobile ?? "middle-center"),
             desktopPositionClass(content.textPositionDesktop ?? "bottom-left"),
           ].join(" ")}
@@ -105,7 +105,7 @@ export default function Hero({ content }: HeroProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.25 }}
-            className="mt-[clamp(8px,1.2vw,16px)] text-white/90 text-[clamp(14px,1.2vw,20px)] max-w-[min(90vw,60ch)]"
+            className="mt-4 md:mt-6 text-white/90 text-lg md:text-xl lg:text-2xl md:max-w-3/4"
           >
             {content.subheading}
           </motion.p>
@@ -119,10 +119,10 @@ export default function Hero({ content }: HeroProps) {
             <Link
               href={ctaHref}
               prefetch
-              className="mt-[clamp(16px,2vw,24px)] inline-block bg-white text-red-600 font-bold
-                         text-[clamp(14px,1vw,18px)]
-                         py-[clamp(10px,1.2vw,14px)] px-[clamp(16px,2vw,28px)]
-                         rounded-xl shadow-lg hover:bg-red-50 transition hover:scale-105 duration-200"
+              className="mt-8 inline-block bg-white text-red-600 font-bold
+                   text-base md:text-lg lg:text-xl
+                   py-2 md:py-3 px-4 md:px-16
+                   rounded-md transition hover:scale-105 duration-200 shadow-none"
             >
               {content?.cta?.label || "Learn More"}
             </Link>

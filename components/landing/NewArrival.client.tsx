@@ -88,12 +88,18 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
           viewport={{ once: true }}
           className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-3"
         >
-          <h2
-            id="new-arrivals-heading"
-            className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 text-center"
-          >
-            New Arrivals for Your Little Ones
-          </h2>
+          <div className="flex flex-col mb-3 items-center sm:items-start text-center sm:text-left">
+            <h2
+              id="new-arrivals-heading"
+              className="text-3xl md:text-4xl font-bold text-gray-900"
+            >
+              New Arrivals for Your Little Ones
+            </h2>
+            <p className="mt-4 text-slate-500 text-lg md:text-xl font-semibold">
+              Discover the latest styles and trends for kids, just arrived in
+              our collection.
+            </p>
+          </div>
 
           <nav aria-label="New Arrivals pagination" className="flex space-x-2">
             {Array.from({ length: snapCount }).length > 1 &&
@@ -149,14 +155,14 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
                   <CarouselItem
                     key={idx}
                     role="listitem"
-                    className="flex-none basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 hover:scale-[98%] transition-transform duration-300 cursor-pointer"
+                    className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 hover:scale-[98%] transition-transform duration-300 cursor-pointer"
                   >
                     <motion.div variants={cardItem} className="h-full w-full">
                       <Link
                         href={href}
                         className="flex flex-col h-full w-full gap-3"
                       >
-                        <div className="relative aspect-[3/4] overflow-hidden rounded-md bg-white">
+                        <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-white">
                           {imgSrc ? (
                             <Image
                               src={imgSrc}
@@ -169,7 +175,7 @@ export default function NewArrivalClient({ items }: { items: Product[] }) {
                           )}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <h3 className="text-base font-semibold text-gray-900">
+                          <h3 className="text-base font-semibold text-gray-900 truncate">
                             {item.name}
                           </h3>
                           <p className="text-gray-700 text-sm">{price}</p>
