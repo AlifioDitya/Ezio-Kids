@@ -149,9 +149,7 @@ function WishlistCard({
       className="h-full"
     >
       <Link href={href} className="group block overflow-hidden self-start">
-        {/* image (same: relative aspect-4/5, rounded, no card bg) */}
-        <div className="relative aspect-4/5 overflow-hidden rounded-sm w-full">
-          {/* Heart floaty (toggles wishlist) — no bubble background */}
+        <div className="relative aspect-square overflow-hidden rounded-sm w-full">
           <WishlistFloaty
             productId={product._id}
             slug={product.slug}
