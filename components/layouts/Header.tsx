@@ -1,30 +1,24 @@
 // components/layouts/Header.tsx
 "use client";
 
-import Logo from "@/public/images/ezio-kids-logo.svg";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { CiHeart, CiMenuBurger } from "react-icons/ci";
-import BasketOpenButton from "../basket/BasketOpenButton";
+import { NAV_LINKS } from "@/app/constant";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
-import { NAV_LINKS } from "@/app/constant";
+import Logo from "@/public/images/ezio-kids-logo.svg";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import SearchOpenButton from "../search/SearchOpenButton";
+import { CiMenuBurger } from "react-icons/ci";
 import SearchDrawer from "../search/SearchDrawer";
-
-const ClientUserMenu = dynamic(() => import("./ClientUserMenu"), {
-  ssr: false,
-});
+import SearchOpenButton from "../search/SearchOpenButton";
 
 export default function Header() {
   const pathname = usePathname();
@@ -114,12 +108,8 @@ export default function Header() {
 
           {/* Right controls */}
           <div className="ml-auto flex items-center space-x-4">
-            <ClientUserMenu />
-            <Link href="/wishlist" aria-label="Wishlist">
-              <CiHeart className="text-2xl text-gray-700 hover:text-red-600 transition" />
-            </Link>
+            {/* ClientUserMenu removed */}
             <SearchOpenButton />
-            <BasketOpenButton />
           </div>
         </div>
       </nav>
@@ -160,12 +150,8 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center space-x-6">
-          <ClientUserMenu />
-          <Link href="/wishlist" aria-label="Wishlist">
-            <CiHeart className="text-2xl text-gray-700 hover:text-red-600 transition" />
-          </Link>
+          {/* ClientUserMenu removed */}
           <SearchOpenButton />
-          <BasketOpenButton />
         </div>
       </nav>
     </>

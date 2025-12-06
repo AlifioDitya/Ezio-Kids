@@ -21,6 +21,14 @@ export default defineType({
       validation: (Rule) => Rule.required().min(10).max(200),
     }),
     defineField({
+      name: "backgroundVideo",
+      title: "Background Video",
+      type: "file",
+      options: { accept: "video/mp4,video/webm,video/ogg" },
+      description:
+        "Optional video background. Takes precedence over the image if provided.",
+    }),
+    defineField({
       name: "backgroundImage",
       title: "Background Image",
       type: "image",

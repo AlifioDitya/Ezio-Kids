@@ -4,16 +4,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import useBasketStore from "@/store/basket";
-import useBasketUiStore from "@/store/basket-ui";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
-import { PortableText } from "next-sanity";
-import * as React from "react";
 import { AlertTriangle } from "lucide-react";
-import { isSanityImage } from "@/app/util/utils";
-import WishlistFloaty from "@/components/wishlist/WishlistFloaty";
+import { PortableText } from "next-sanity";
+import Link from "next/link";
+import * as React from "react";
 
 type Props = {
   product: PDPProduct;
@@ -128,45 +125,6 @@ export default function ProductClient({ product, priceLabel }: Props) {
       : priceLabel;
 
   const hasSelectedSize = Boolean(selectedSizeId);
-  const canAddToCart =
-    !!hasSelectedSize && !!activeVariant && (activeVariant.stock ?? 0) > 0;
-
-  const [qty, setQty] = React.useState(1);
-  const isInStock = variants.some((v) => (v.stock ?? 0) > 0);
-
-  const addItem = useBasketStore((s) => s.addItem);
-  const openCart = useBasketUiStore((s) => s.open);
-
-  const addToCart = () => {
-    if (!activeVariant || !selectedSizeId) return;
-
-    const unitPrice =
-      typeof activeVariant.priceOverride === "number"
-        ? activeVariant.priceOverride
-        : typeof product.price === "number"
-          ? product.price
-          : 0;
-
-    addItem({
-      product: {
-        _id: product._id,
-        slug: product.slug,
-        name: product.name ?? "",
-        mainImage: isSanityImage(product.mainImage)
-          ? product.mainImage
-          : undefined,
-      },
-      unitPrice,
-      variantKey: activeVariant._key,
-      sizeId: selectedSizeId,
-      colorId: activeVariant.color?._id,
-      sizeLabel: sizeLabelById.get(selectedSizeId) ?? undefined,
-      colorName: activeVariant.color?.name ?? undefined,
-    });
-
-    openCart();
-    setQty(1);
-  };
 
   // Low stock logic: only show after size is selected and we have a concrete variant
   const lowStockCount = activeVariant?.stock ?? 0;
@@ -194,19 +152,6 @@ export default function ProductClient({ product, priceLabel }: Props) {
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">
             {product.name}
           </h1>
-          <WishlistFloaty
-            productId={product._id}
-            slug={product.slug}
-            name={product.name}
-            mainImage={
-              isSanityImage(product.mainImage) ? product.mainImage : undefined
-            }
-            unitPrice={typeof product.price === "number" ? product.price : 0}
-            variantKey={activeVariant?._key}
-            shadow={false}
-            emptyColor="#111827"
-            className="relative pb-4"
-          />
         </div>
 
         {/* Price */}
@@ -324,46 +269,13 @@ export default function ProductClient({ product, priceLabel }: Props) {
 
       <Separator />
 
-      {/* Qty + ATC */}
+      {/* Contact Us CTA */}
       <div className="flex items-center gap-3">
-        {hasSelectedSize && (
-          <div className="inline-flex items-center border rounded-md">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-            >
-              −
-            </Button>
-            <span className="w-10 text-center">{qty}</span>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setQty((q) => q + 1)}
-            >
-              +
-            </Button>
-          </div>
-        )}
-
-        <Button
-          className={cn(
-            "flex-1 h-11 text-white text-base font-semibold",
-            !isInStock
-              ? "bg-gray-300 cursor-not-allowed text-gray-500"
-              : canAddToCart
-                ? "bg-rose-500 hover:bg-rose-600"
-                : "bg-rose-300 cursor-not-allowed"
-          )}
-          onClick={addToCart}
-          disabled={!canAddToCart || !isInStock}
-        >
-          {!isInStock
-            ? "Sorry, we're out of stock 😔"
-            : hasSelectedSize
-              ? "Add to Cart"
-              : "Please Select an Available Size and Color"}
-        </Button>
+        <Link href="mailto:hello@eziokids.com" className="flex-1">
+          <Button className="w-full h-11 text-white text-base font-semibold bg-rose-500 hover:bg-rose-600">
+            Contact Us to Order
+          </Button>
+        </Link>
       </div>
 
       {/* Description */}

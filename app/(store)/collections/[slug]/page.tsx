@@ -1,30 +1,31 @@
 // app/collections/[slug]/page.tsx
-import type { Metadata } from "next";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { notFound } from "next/navigation";
-import { ProductsSection } from "@/components/layouts/ProductsSection";
 import { AgeGroup, ALLOWED_SLUGS, Slug, TITLES } from "@/app/constant";
+import FilterMobile from "@/components/filters/FilterMobile.server";
 import FilterSidebar from "@/components/filters/FilterSidebar.server";
 import SidebarSkeleton from "@/components/filters/SidebarSkeleton";
-import FilterMobile from "@/components/filters/FilterMobile.server";
+import { ProductsSection } from "@/components/layouts/ProductsSection";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
   return ALLOWED_SLUGS.map((slug) => ({ slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: Slug };
-}): Metadata {
-  const meta = TITLES[params.slug];
+  params: Promise<{ slug: Slug }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const meta = TITLES[slug];
   if (!meta) return {};
   return {
     title: meta.title,
     description: meta.description,
-    alternates: { canonical: `/collections/${params.slug}` },
+    alternates: { canonical: `/collections/${slug}` },
   };
 }
 
@@ -43,13 +44,12 @@ const toArray = (v?: string | string[]) =>
   !v ? [] : Array.isArray(v) ? v : v.split(",").filter(Boolean);
 const ARRIVALS_DEFAULT = { arrivalsOnly: true } as const;
 
-export default async function CollectionsPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: Slug };
-  searchParams: SearchParams;
+export default async function CollectionsPage(props: {
+  params: Promise<{ slug: Slug }>;
+  searchParams: Promise<SearchParams>;
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const slug = params.slug;
   if (!ALLOWED_SLUGS.includes(slug)) notFound();
 

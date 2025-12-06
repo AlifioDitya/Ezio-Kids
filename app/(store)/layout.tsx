@@ -2,22 +2,20 @@ import Footer from "@/components/layouts/Footer";
 import HeaderWithSale from "@/components/layouts/HeaderWithSale";
 import { DisableDraftMode } from "@/components/sanity/disableDraftMode";
 import { SanityLive } from "@/sanity/lib/live";
-import { ClerkProvider } from "@clerk/nextjs";
+
 import type { Metadata } from "next";
-import { VisualEditing } from "next-sanity";
-import { Poppins, Quicksand } from "next/font/google";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import { draftMode } from "next/headers";
 import "../globals.css";
-import BasketSheet from "@/components/basket/BasketSheet";
 
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas-neue",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400"],
 });
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
@@ -42,15 +40,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider dynamic>
+    <>
       <html lang="en">
         <body
-          className={`${quicksand.variable} ${poppins.variable} antialiased`}
+          className={`${manrope.variable} ${bebasNeue.variable} antialiased`}
         >
           {(await draftMode()).isEnabled && (
             <>
               <DisableDraftMode />
-              <VisualEditing />
             </>
           )}
 
@@ -58,11 +55,9 @@ export default async function RootLayout({
           {children}
           <Footer />
 
-          <BasketSheet />
-
           <SanityLive />
         </body>
       </html>
-    </ClerkProvider>
+    </>
   );
 }

@@ -27,13 +27,12 @@ function formatIDR(n: number | null) {
   }).format(n);
 }
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function ProductPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
   type ProductImage = SanityImageSource & { alt?: string };
 
+  const params = await props.params;
   const product = await getProductBySlug(params.slug);
   if (!product) return notFound();
 
