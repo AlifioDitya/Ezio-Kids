@@ -54,7 +54,7 @@ const desktopPositionClass = (position?: string): string => {
     case "middle-left":
       return "lg:items-start lg:justify-center lg:text-left";
     case "middle-center":
-      return "lg:items-center lg:justify-center lg:text-center";
+      return "lg:items-center lg:justify-center lg:text-center mt-12";
     case "middle-right":
       return "lg:items-end lg:justify-center lg:text-right";
     case "bottom-left":
@@ -109,13 +109,13 @@ export default function Hero({ content }: HeroProps) {
           className={[
             // responsive paddings using Tailwind breakpoints
             "absolute inset-0 flex flex-col",
-            "px-4 py-4 sm:px-8 sm:py-8 lg:px-24 lg:py-24",
+            "px-8 py-4 lg:px-24 lg:py-24",
             mobilePositionClass(content.textPositionMobile ?? "middle-center"),
             desktopPositionClass(content.textPositionDesktop ?? "bottom-left"),
           ].join(" ")}
         >
           {/* Fluid heading size */}
-          <h1 className="font-bebas text-white leading-none text-[clamp(48px,6vw,96px)] tracking-wide drop-shadow-lg">
+          <h1 className="font-bebas text-white leading-none text-4xl sm:text-5xl lg:text-7xl tracking-wide drop-shadow-lg">
             {content.heading}
           </h1>
 
@@ -124,7 +124,7 @@ export default function Hero({ content }: HeroProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.25 }}
-            className="mt-4 md:mt-6 text-white/90 font-sans text-lg md:text-xl md:max-w-3/4 font-semibold drop-shadow-md"
+            className="mt-3 text-white/90 font-sans text-sm md:text-xl md:max-w-3/4 font-semibold drop-shadow-md"
           >
             {content.subheading}
           </motion.p>
@@ -138,7 +138,7 @@ export default function Hero({ content }: HeroProps) {
             <Link
               href={ctaHref}
               prefetch
-              className="group relative mt-8 inline-block text-white font-sans uppercase font-bold
+              className="group relative mt-10 inline-block text-white font-sans uppercase font-bold
                    text-sm md:text-base tracking-wider
                    py-2
                    transition-all duration-300

@@ -1,15 +1,23 @@
 // components/search/SearchOpenButton.tsx
 "use client";
-import { CiSearch } from "react-icons/ci";
+import { cn } from "@/lib/utils";
 import useSearchUi from "@/store/search-ui";
+import { CiSearch } from "react-icons/ci";
 
-export default function SearchOpenButton() {
+interface Props {
+  className?: string;
+}
+
+export default function SearchOpenButton({ className }: Props) {
   const open = useSearchUi((s) => s.openDrawer);
   return (
     <button
       aria-label="Search"
       onClick={open}
-      className="text-2xl text-gray-600 hover:text-gray-800 transition"
+      className={cn(
+        "text-2xl transition",
+        className || "text-gray-600 hover:text-gray-800"
+      )}
     >
       <CiSearch />
     </button>

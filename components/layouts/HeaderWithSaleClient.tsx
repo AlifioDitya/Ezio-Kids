@@ -25,14 +25,14 @@ export default function HeaderWithSaleClient({ sale }: { sale: Sale | null }) {
       {sale ? (
         <div
           aria-live="polite"
-          className="w-full bg-orange-100 text-gray-700 text-center text-[10px] py-1 px-3"
+          className="w-full bg-orange-50/90 backdrop-blur text-orange-900/90 text-center text-[11px] font-medium tracking-wide py-1.5 px-3 border-b border-orange-100"
         >
           <span className="font-semibold">{sale.title}</span>
           {sale.discountAmount ? <> — {sale.discountAmount}% off</> : null}
           {sale.couponCode ? (
             <>
               {" — use code "}
-              <span className="font-mono font-semibold tracking-wide">
+              <span className="font-mono font-bold tracking-wider">
                 {sale.couponCode}
               </span>
             </>
