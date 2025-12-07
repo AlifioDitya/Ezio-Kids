@@ -117,7 +117,7 @@ export default function CheckboxFilter({
               key={it.value}
               htmlFor={id}
               className={cn(
-                "flex items-start gap-2 select-none",
+                "flex items-center gap-2 select-none",
                 it.disabled && "opacity-60 cursor-not-allowed"
               )}
             >

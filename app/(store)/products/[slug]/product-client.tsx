@@ -1,15 +1,18 @@
 // app/products/[slug]/product-client.tsx
 "use client";
 
+import SwipeImageStage from "@/components/common/SwipeImageStage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { imageUrl } from "@/lib/imageUrl";
-import { cn } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { AlertTriangle } from "lucide-react";
 import { PortableText } from "next-sanity";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 type Props = {
@@ -18,12 +21,16 @@ type Props = {
 };
 
 export default function ProductClient({ product, priceLabel }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 1. Initialize State from URL or Defaults
+  // ----------------------------------------
   const variants = React.useMemo(
     () => product.variants ?? [],
     [product.variants]
   );
 
-  // Distinct option lists
   const colorOptions = React.useMemo(() => {
     const map = new Map<
       string,
@@ -50,7 +57,6 @@ export default function ProductClient({ product, priceLabel }: Props) {
     );
   }, [variants]);
 
-  // Quick map for pretty size label in the notice
   const sizeLabelById = React.useMemo(() => {
     const m = new Map<string, string>();
     for (const s of sizeOptions) {
@@ -59,31 +65,104 @@ export default function ProductClient({ product, priceLabel }: Props) {
     return m;
   }, [sizeOptions]);
 
-  // Helpers to check stock
   const colorHasAnyStock = React.useCallback(
     (colorId: string) =>
       variants.some((v) => v.color?._id === colorId && (v.stock ?? 0) > 0),
     [variants]
   );
 
-  // Selected options
-  const [selectedSizeId, setSelectedSizeId] = React.useState<string | null>(
-    null
-  );
+  // Helper to find color ID by name or slug (for URL matching)
+  const findColorId = (val: string | null) => {
+    if (!val) return null;
+    const lower = val.toLowerCase();
+    return (
+      colorOptions.find(
+        (c) =>
+          c?.slug === lower ||
+          c?.name?.toLowerCase() === lower ||
+          c?._id === val
+      )?._id ?? null
+    );
+  };
 
-  // Pick first available color by default (fallback to first)
+  const findSizeId = (val: string | null) => {
+    if (!val) return null;
+    const lower = val.toLowerCase();
+    return (
+      sizeOptions.find(
+        (s) => s?.label?.toLowerCase() === lower || s?._id === val
+      )?._id ?? null
+    );
+  };
+
+  // State
   const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
     () => {
-      const firstAvailable =
+      const paramColor = searchParams.get("color");
+      if (paramColor) {
+        const found = findColorId(paramColor);
+        if (found) return found;
+      }
+      // Fallback
+      return (
         colorOptions.find((c) => (c?._id ? colorHasAnyStock(c._id) : false))
           ?._id ??
         colorOptions[0]?._id ??
-        null;
-      return firstAvailable;
+        null
+      );
     }
   );
 
-  // (re-create isSizeAvailable now that selectedColorId exists)
+  const [selectedSizeId, setSelectedSizeId] = React.useState<string | null>(
+    () => {
+      const paramSize = searchParams.get("size");
+      return findSizeId(paramSize);
+    }
+  );
+
+  // 2. State Sync with URL
+  // ----------------------
+  React.useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    const colorObj = colorOptions.find((c) => c?._id === selectedColorId);
+    const sizeObj = sizeOptions.find((s) => s?._id === selectedSizeId);
+
+    let changed = false;
+
+    if (colorObj?.slug) {
+      if (params.get("color") !== colorObj.slug) {
+        params.set("color", colorObj.slug);
+        changed = true;
+      }
+    } else if (params.has("color") && !selectedColorId) {
+      params.delete("color");
+      changed = true;
+    }
+
+    if (sizeObj?.label) {
+      if (params.get("size") !== sizeObj.label) {
+        params.set("size", sizeObj.label);
+        changed = true;
+      }
+    } else if (params.has("size") && !selectedSizeId) {
+      params.delete("size");
+      changed = true;
+    }
+
+    if (changed) {
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [
+    selectedColorId,
+    selectedSizeId,
+    colorOptions,
+    sizeOptions,
+    router,
+    searchParams,
+  ]);
+
+  // 3. Selection Logic
+  // ------------------
   const _isSizeAvailable = React.useCallback(
     (sizeId: string) =>
       variants.some(
@@ -95,15 +174,16 @@ export default function ProductClient({ product, priceLabel }: Props) {
     [variants, selectedColorId]
   );
 
-  // Reset size if color changes
   const onSelectColor = (id: string | null) => {
     if (id !== selectedColorId && selectedSizeId) {
+      // Check if size is still available in new color?
+      // Optional: Deselect size if not available.
+      // For now, consistent with previous logic:
       setSelectedSizeId(null);
     }
     setSelectedColorId(id);
   };
 
-  // Compute color availability (global if no size selected; otherwise for that size)
   const isColorAvailable = React.useCallback(
     (colorId: string) => colorHasAnyStock(colorId),
     [colorHasAnyStock]
@@ -121,202 +201,306 @@ export default function ProductClient({ product, priceLabel }: Props) {
 
   const displayPrice =
     activeVariant?.priceOverride != null
-      ? `Rp ${Math.round(activeVariant.priceOverride).toLocaleString("id-ID")}`
-      : priceLabel;
+      ? formatMoney(activeVariant.priceOverride, "IDR")
+      : priceLabel; // priceLabel is already formatted from server
 
   const hasSelectedSize = Boolean(selectedSizeId);
-
-  // Low stock logic: only show after size is selected and we have a concrete variant
   const lowStockCount = activeVariant?.stock ?? 0;
   const showLowStock =
     hasSelectedSize && lowStockCount > 0 && lowStockCount < 10;
 
+  // 4. Image Filtering Logic (Same as ProductCard)
+  // ----------------------------------------------
+  const imagesByColor = React.useMemo(() => {
+    const map = new Map<string, string[]>();
+
+    const allImages = [
+      product.mainImage,
+      ...(product.additionalImages ?? []),
+    ].filter((img): img is NonNullable<typeof product.mainImage> => !!img);
+
+    allImages.forEach((img) => {
+      // We need URL. In PDP `product`, these are SanityImage objects.
+      // We need to resolve them to URLs.
+      const url = imageUrl(img)?.url();
+      if (!url) return;
+
+      const alt = img.alt || "";
+      const parts = alt.split("-").map((s) => s.trim());
+      if (parts.length >= 2) {
+        const colorName = parts[parts.length - 1]; // "Light Green"
+        const key = colorName.toLowerCase();
+        if (!map.has(key)) map.set(key, []);
+        map.get(key)?.push(url);
+      } else {
+        if (!map.has("default")) map.set("default", []);
+        map.get("default")?.push(url);
+      }
+    });
+    return map;
+  }, [product]);
+
+  const filteredImageUrls = React.useMemo(() => {
+    // Current selected color name
+    const activeColorObj = colorOptions.find((c) => c?._id === selectedColorId);
+    const activeColorName = activeColorObj?.name?.toLowerCase();
+
+    if (activeColorName && imagesByColor.has(activeColorName)) {
+      return imagesByColor.get(activeColorName)!;
+    }
+
+    // Fallback logic
+    if (colorOptions.length === 0) {
+      return Array.from(imagesByColor.values()).flat();
+    }
+
+    return (
+      imagesByColor.get("default") ||
+      (product.mainImage ? [imageUrl(product.mainImage)?.url() ?? ""] : [])
+    ).filter(Boolean);
+  }, [imagesByColor, selectedColorId, colorOptions, product.mainImage]);
+
+  // If no images found (e.g. strict filtering returned empty), show at least main image
+  const finalImages =
+    filteredImageUrls.length > 0
+      ? filteredImageUrls
+      : product.mainImage
+        ? [imageUrl(product.mainImage)?.url() ?? ""]
+        : [];
+
+  // 5. Render
+  // ---------
   return (
-    <div className="space-y-4">
-      {/* Tags */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          {product.tags?.map((tag) => (
-            <Badge
-              key={tag._id}
-              className="text-xs font-medium"
-              variant="outline"
-            >
-              {tag.title}
-            </Badge>
-          ))}
-        </div>
-
-        {/* Title */}
-        <div className="flex items-center gap-2 w-full justify-between">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-            {product.name}
-          </h1>
-        </div>
-
-        {/* Price */}
-        <p className="text-base font-semibold text-gray-900">{displayPrice}</p>
-      </div>
-
-      {/* Colors */}
-      {colorOptions.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-semibold text-gray-800">Color</p>
-          <div className="flex flex-wrap gap-3">
-            {colorOptions.map((c) => {
-              const id = c?._id ?? "";
-              const available = id ? isColorAvailable(id) : false;
-              const checked = selectedColorId === id;
-              const swatchUrl = c?.swatch
-                ? imageUrl(c.swatch)
-                    ?.width(80)
-                    .height(80)
-                    .fit("crop")
-                    .auto("format")
-                    .url()
-                : null;
-
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => available && onSelectColor(id)}
-                  aria-pressed={checked}
-                  aria-disabled={!available}
-                  disabled={!available}
-                  className={cn(
-                    "relative h-9 w-9 rounded-full border overflow-hidden",
-                    checked && "ring-2 ring-offset-2 ring-gray-900",
-                    "disabled:opacity-50 disabled:cursor-not-allowed",
-                    // automatic diagonal strike when disabled
-                    "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
-                  )}
-                  title={c?.name ?? ""}
-                >
-                  <span
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      background: swatchUrl
-                        ? `url(${swatchUrl}) center/cover no-repeat`
-                        : "#e5e7eb",
-                    }}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <Separator />
-
-      {/* Sizes */}
-      {sizeOptions.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-gray-800">Size</p>
-            <button className="text-sm underline text-gray-600">
-              Size Guide
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {sizeOptions.map((s) => {
-              const id = s?._id ?? "";
-              const available = id ? _isSizeAvailable(id) : false;
-              const selected = selectedSizeId === id;
-
-              return (
-                <Button
-                  key={id}
-                  type="button"
-                  variant={selected ? "default" : "outline"}
-                  size="sm"
-                  disabled={!available}
-                  onClick={() => available && setSelectedSizeId(id)}
-                  className={cn(
-                    "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden",
-                    selected && "bg-rose-600 hover:bg-rose-600 text-white",
-                    !available && "opacity-60 cursor-not-allowed",
-                    // automatic diagonal strike when disabled
-                    "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
-                  )}
-                >
-                  {s?.label}
-                </Button>
-              );
-            })}
-          </div>
-
-          {/* Low stock notice */}
-          {showLowStock && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="mt-3 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900"
-            >
-              <AlertTriangle className="h-4 w-4" />
-              <span className="text-sm font-medium">
-                Only {lowStockCount} stock left
-                {selectedSizeId
-                  ? ` in size ${sizeLabelById.get(selectedSizeId) ?? "this size"}`
-                  : ""}{" "}
-                — grab it before it&apos;s gone!
-              </span>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* LEFT: Gallery */}
+      <section aria-label="Product images" className="grid gap-4">
+        {/* Mobile / Tablet: SwipeImageStage */}
+        <div className="lg:hidden relative aspect-[3/4] w-full bg-[#F2F2F2] rounded-lg overflow-hidden">
+          {finalImages.length > 0 ? (
+            <SwipeImageStage
+              images={finalImages} // Strings
+              alt={product.name ?? "Product Image"}
+              aspectClass="aspect-[3/4]"
+              showPager
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+              No image available
             </div>
           )}
         </div>
-      )}
 
-      <Separator />
+        {/* Desktop: 2-column image grid */}
+        <div className="hidden lg:grid grid-cols-2 gap-4">
+          {finalImages.map((url, idx) => (
+            <div
+              key={url + idx}
+              className="relative w-full aspect-[3/4] overflow-hidden rounded-lg bg-gray-50"
+            >
+              <Image
+                src={url}
+                alt={product.name ?? "Product image"}
+                fill
+                className="object-cover"
+                priority={idx === 0}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          ))}
+          {finalImages.length === 0 && (
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+              No image available
+            </div>
+          )}
+        </div>
+      </section>
 
-      {/* Contact Us CTA */}
-      <div className="flex items-center gap-3">
-        <Link href="mailto:hello@eziokids.com" className="flex-1">
-          <Button className="w-full h-11 text-white text-base font-semibold bg-rose-500 hover:bg-rose-600">
-            Contact Us to Order
-          </Button>
-        </Link>
-      </div>
-
-      {/* Description */}
-      {product.description && (
-        <>
-          <Separator />
-          <div className="prose text-sm text-gray-700">
-            <PortableText value={product.description} />
+      {/* RIGHT: Details */}
+      <section aria-label="Product details" className="space-y-4">
+        {/* Tags */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            {product.tags?.map((tag) => (
+              <Badge
+                key={tag._id}
+                className="text-xs font-medium"
+                variant="outline"
+              >
+                {tag.title}
+              </Badge>
+            ))}
           </div>
-        </>
-      )}
 
-      {/* Care instructions */}
-      {Array.isArray(product.careInstructions) &&
-        product.careInstructions.length > 0 && (
+          {/* Title */}
+          <div className="flex items-center gap-2 w-full justify-between">
+            <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
+              {product.name}
+            </h1>
+          </div>
+
+          {/* Price */}
+          <p className="text-base font-semibold text-gray-900">
+            {displayPrice}
+          </p>
+        </div>
+
+        {/* Colors */}
+        {colorOptions.length > 0 && (
+          <div>
+            <div className="flex flex-wrap gap-3">
+              {colorOptions.map((c) => {
+                const id = c?._id ?? "";
+                const available = id ? isColorAvailable(id) : false;
+                const checked = selectedColorId === id;
+                const swatchUrl = c?.swatch
+                  ? imageUrl(c.swatch)
+                      ?.width(80)
+                      .height(80)
+                      .fit("crop")
+                      .auto("format")
+                      .url()
+                  : null;
+
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => available && onSelectColor(id)}
+                    aria-pressed={checked}
+                    aria-disabled={!available}
+                    disabled={!available}
+                    className={cn(
+                      "relative h-6 w-6 rounded-full border overflow-hidden",
+                      checked && "ring-2 ring-offset-2 ring-gray-900",
+                      "disabled:opacity-50 disabled:cursor-not-allowed",
+                      "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
+                    )}
+                    title={c?.name ?? ""}
+                  >
+                    <span
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: swatchUrl
+                          ? `url(${swatchUrl}) center/cover no-repeat`
+                          : "#e5e7eb",
+                      }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <Separator />
+
+        {/* Sizes */}
+        {sizeOptions.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-gray-800">Size</p>
+              <button className="text-sm underline text-gray-600">
+                Size Guide
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {sizeOptions.map((s) => {
+                const id = s?._id ?? "";
+                const available = id ? _isSizeAvailable(id) : false;
+                const selected = selectedSizeId === id;
+
+                return (
+                  <Button
+                    key={id}
+                    type="button"
+                    variant={selected ? "default" : "outline"}
+                    size="sm"
+                    disabled={!available}
+                    onClick={() => available && setSelectedSizeId(id)}
+                    className={cn(
+                      "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden",
+                      selected && "bg-rose-600 hover:bg-rose-600 text-white",
+                      !available && "opacity-60 cursor-not-allowed",
+                      "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
+                    )}
+                  >
+                    {s?.label}
+                  </Button>
+                );
+              })}
+            </div>
+
+            {/* Low stock notice */}
+            {showLowStock && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mt-3 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900"
+              >
+                <AlertTriangle className="h-4 w-4" />
+                <span className="text-sm font-medium">
+                  Only {lowStockCount} stock left
+                  {selectedSizeId
+                    ? ` in size ${sizeLabelById.get(selectedSizeId) ?? "this size"}`
+                    : ""}{" "}
+                  — grab it before it&apos;s gone!
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        <Separator />
+
+        {/* Contact Us CTA */}
+        <div className="flex items-center gap-3">
+          <Link href="mailto:hello@eziokids.com" className="flex-1">
+            <Button className="w-full h-11 text-white text-base font-semibold bg-rose-500 hover:bg-rose-600">
+              Contact Us to Order
+            </Button>
+          </Link>
+        </div>
+
+        {/* Description */}
+        {product.description && (
           <>
             <Separator />
             <div className="prose text-sm text-gray-700">
-              <h3 className="font-semibold mb-3">Care Instructions</h3>
-              <PortableText
-                value={product.careInstructions}
-                components={{
-                  list: {
-                    bullet: ({ children }) => (
-                      <ul className="list-disc pl-5 space-y-1">{children}</ul>
-                    ),
-                    number: ({ children }) => (
-                      <ol className="list-decimal pl-5 space-y-1">
-                        {children}
-                      </ol>
-                    ),
-                  },
-                  listItem: {
-                    bullet: ({ children }) => <li>{children}</li>,
-                    number: ({ children }) => <li>{children}</li>,
-                  },
-                }}
-              />
+              <PortableText value={product.description} />
             </div>
           </>
         )}
+
+        {/* Care instructions */}
+        {Array.isArray(product.careInstructions) &&
+          product.careInstructions.length > 0 && (
+            <>
+              <Separator />
+              <div className="prose text-sm text-gray-700">
+                <h3 className="font-semibold mb-3">Care Instructions</h3>
+                <PortableText
+                  value={product.careInstructions}
+                  components={{
+                    list: {
+                      bullet: ({ children }) => (
+                        <ul className="list-disc pl-5 space-y-1">{children}</ul>
+                      ),
+                      number: ({ children }) => (
+                        <ol className="list-decimal pl-5 space-y-1">
+                          {children}
+                        </ol>
+                      ),
+                    },
+                    listItem: {
+                      bullet: ({ children }) => <li>{children}</li>,
+                      number: ({ children }) => <li>{children}</li>,
+                    },
+                  }}
+                />
+              </div>
+            </>
+          )}
+      </section>
     </div>
   );
 }

@@ -48,6 +48,7 @@ export default function SortDropdown({
         placeholder={placeholderText}
         widthClassName={widthClassName}
         disabled={disabled}
+        prefix="Sort by "
       />
     </div>
   );

@@ -23,7 +23,7 @@ export default function SleeveLengthFilter({
       items={SleeveLengths}
       selected={selectedSlugs}
       onToggle={onToggle}
-      size="md"
+      size="sm"
       gapClassName="space-y-3"
     />
   );

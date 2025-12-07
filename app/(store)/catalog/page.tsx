@@ -78,7 +78,10 @@ export default async function CatalogPage(props: {
   const titleBlock = TITLES["catalog"];
 
   return (
-    <main className="overflow-x-hidden bg-white">
+    <main className="overflow-x-hidden bg-white pb-16">
+      <h1 className="mt-4 px-6 text-base font-semibold mb-2 sm:mb-0 hidden sm:block">
+        {titleBlock.h1}
+      </h1>
       {/* make the wrapper a column on mobile, row on desktop */}
       <div className="w-full px-6 flex flex-col sm:flex-row gap-4 sm:gap-8 py-6">
         {/* Sidebar: desktop/tablet only */}
@@ -91,7 +94,7 @@ export default async function CatalogPage(props: {
         {/* Content */}
         <section className="flex-1 flex flex-col min-w-0">
           {/* Title */}
-          <h1 className="text-2xl xl:text-3xl font-bold mb-3 sm:mb-0 block sm:hidden">
+          <h1 className="text-lg font-semibold mb-3 sm:mb-0 block sm:hidden">
             {titleBlock.h1}
           </h1>
 
@@ -128,7 +131,7 @@ export default async function CatalogPage(props: {
               </div>
             }
           >
-            <div className="sm:mt-0 mt-4">
+            <div className="">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

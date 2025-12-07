@@ -1,4 +1,5 @@
 // sanity/lib/products/getProductBySlug.ts
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { defineQuery, PortableTextBlock } from "next-sanity";
 import { sanityFetch } from "../live";
 
@@ -11,8 +12,8 @@ export type PDPProduct = {
   careInstructions?: PortableTextBlock[];
   arrivalDate?: string;
   price?: number;
-  mainImage?: unknown;
-  additionalImages?: unknown[];
+  mainImage?: SanityImageSource & { alt?: string };
+  additionalImages?: (SanityImageSource & { alt?: string })[];
   category?: { _id: string; name?: string; slug?: string } | null;
   collection?: { _id: string; name?: string; slug?: string } | null;
   tags?: { _id: string; title?: string; slug?: string }[];
@@ -32,7 +33,7 @@ export type PDPProduct = {
       _id: string;
       name?: string;
       slug?: string;
-      swatch?: unknown;
+      swatch?: SanityImageSource;
     } | null;
   }[];
 };

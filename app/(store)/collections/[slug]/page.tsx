@@ -109,9 +109,12 @@ export default async function CollectionsPage(props: {
   const titleBlock = TITLES[slug];
 
   return (
-    <main className="overflow-x-hidden bg-white">
+    <main className="overflow-x-hidden bg-white pb-16">
+      <h1 className="mt-4 px-6 text-base font-semibold mb-2 sm:mb-0 hidden sm:block">
+        {titleBlock.h1}
+      </h1>
       {/* make the wrapper a column on mobile, row on desktop */}
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-col sm:flex-row gap-4 sm:gap-8 py-6">
+      <div className="w-full px-6 flex flex-col sm:flex-row gap-4 sm:gap-8 py-6">
         {/* Sidebar: desktop/tablet only */}
         <aside className="hidden sm:block shrink-0">
           <Suspense fallback={<SidebarSkeleton />}>
@@ -122,7 +125,7 @@ export default async function CollectionsPage(props: {
         {/* Content */}
         <section className="flex-1 flex flex-col min-w-0">
           {/* Title */}
-          <h1 className="text-2xl xl:text-3xl font-bold mb-3 sm:mb-2">
+          <h1 className="text-lg font-semibold mb-3 sm:mb-0 block sm:hidden">
             {titleBlock.h1}
           </h1>
 
@@ -159,7 +162,7 @@ export default async function CollectionsPage(props: {
               </div>
             }
           >
-            <div className="mt-4">
+            <div className="">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

@@ -4,8 +4,8 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Size } from "@/sanity.types";
-import * as React from "react";
 import { usePathname } from "next/navigation";
+import * as React from "react";
 
 type Age = NonNullable<Size["ageGroup"]>;
 type CollectionSlug =
@@ -96,7 +96,7 @@ export function SizeFilter({
       {groupsToRender.map((groupKey) => {
         const group = grouped[groupKey]!;
         return (
-          <div key={groupKey} className="mb-4 lg:mb-6">
+          <div key={groupKey} className="">
             {groupsToRender.length > 1 && (
               <p className="text-xs font-semibold text-gray-500 mb-2 xl:text-base">
                 {ageGroupLabels[groupKey]}
@@ -113,7 +113,7 @@ export function SizeFilter({
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
                     className={cn(
-                      "min-w-[3rem] justify-center shadow-none rounded-xs",
+                      "min-w-[2.5rem] text-xs justify-center shadow-none rounded-xs",
                       isSelected && "bg-blue-main text-white"
                     )}
                     onClick={() => onToggleSize(label)}

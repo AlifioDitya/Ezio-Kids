@@ -1,7 +1,7 @@
 // components/ui/combobox.tsx
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { HiOutlineChevronUpDown } from "react-icons/hi2";
 
 export interface ComboboxItem {
   value: string;
@@ -38,6 +39,7 @@ export interface ComboboxProps {
   widthClassName?: string;
   /** disable the combobox */
   disabled?: boolean;
+  prefix?: string;
 }
 
 export function Combobox({
@@ -47,6 +49,7 @@ export function Combobox({
   placeholder = "Select…",
   widthClassName = "w-[200px]",
   disabled = false,
+  prefix,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -64,12 +67,13 @@ export function Combobox({
           aria-expanded={open}
           className={cn(
             widthClassName,
-            "justify-between rounded-xs bg-white shadow-none text-xs xl:text-base"
+            "justify-between rounded-xs bg-white shadow-none text-xs"
           )}
           disabled={disabled}
         >
+          {prefix}
           {value ? selectedLabel : placeholder}
-          <ChevronsUpDown className="opacity-50" />
+          <HiOutlineChevronUpDown className="opacity-50 w-2 h-2" />
         </Button>
       </PopoverTrigger>
 
@@ -77,7 +81,7 @@ export function Combobox({
         <Command>
           <CommandInput
             placeholder={`Search ${placeholder.toLowerCase()}...`}
-            className="h-9"
+            className="h-9 text-xs"
           />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
@@ -90,6 +94,7 @@ export function Combobox({
                     onChange(currentValue);
                     setOpen(false);
                   }}
+                  className="text-xs"
                 >
                   {item.label}
                   <Check

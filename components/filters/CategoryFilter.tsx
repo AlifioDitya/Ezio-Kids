@@ -33,7 +33,7 @@ export default function CategoryFilter({
       items={items}
       selected={selectedSlugs}
       onToggle={onToggle}
-      size="md"
+      size="sm"
       gapClassName="space-y-3"
     />
   );

@@ -4,10 +4,9 @@
 import { NavItem } from "@/app/constant";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation"; // add this import
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { HiChevronRight } from "react-icons/hi2";
-import { PiHeartLight } from "react-icons/pi";
 import { VscChromeClose } from "react-icons/vsc";
 
 function MenuLink({
@@ -429,8 +428,18 @@ export default function SideMenu({ open, onClose, data }: Props) {
                     >
                       <nav
                         aria-label="Root categories"
-                        className="flex flex-col justify-between h-full"
+                        className="flex flex-col h-full"
                       >
+                        <div className="flex justify-start mb-7">
+                          <button
+                            onClick={handleClose}
+                            className="p-2 mt-2  text-gray-500 hover:text-black"
+                            aria-label="Close menu"
+                          >
+                            <VscChromeClose className="w-5 h-5" />
+                          </button>
+                        </div>
+
                         {/* Top scrollable block */}
                         <motion.ul
                           key={`root-list-${rootEpoch}`}
@@ -475,34 +484,6 @@ export default function SideMenu({ open, onClose, data }: Props) {
                             );
                           })}
                         </motion.ul>
-
-                        {/* Bottom pinned Wishlist */}
-                        <motion.div
-                          className="flex flex-col gap-1 fixed bottom-24 left-4"
-                          initial={{ opacity: 0, x: -24 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{
-                            type: "tween",
-                            duration: 0.4,
-                            ease: EASE,
-                            // start after the list has begun to animate
-                            delay: 0.2 + data.length * 0.1,
-                          }}
-                        >
-                          <MenuLink
-                            href="/wishlist"
-                            onNavigate={queueNav}
-                            className={[
-                              itemBase,
-                              "text-lg",
-                              "text-gray-900",
-                              "flex items-center gap-3 justify-start",
-                            ].join(" ")}
-                          >
-                            <PiHeartLight className="w-6 h-6 mt-px" />
-                            <span className={labelUnderline}>My Wishlist</span>
-                          </MenuLink>
-                        </motion.div>
                       </nav>
                     </motion.div>
                   )}
@@ -521,16 +502,24 @@ export default function SideMenu({ open, onClose, data }: Props) {
                         ease: EASE,
                       }}
                     >
-                      <div className="sticky top-0 z-10 flex items-center justify-between lg:border-b bg-white px-4 py-3">
+                      <div className="sticky top-0 z-10 flex items-center justify-between lg:border-b bg-white px-5 py-3 mt-4">
                         <button
                           onClick={goBack}
-                          className="flex items-center gap-3 rounded-md px-2 py-1 text-sm text-gray-700 hover:text-black"
+                          className="flex items-center gap-3 rounded-md px-2 py-1 text-sm text-gray-700 hover:text-black -ml-2"
                           aria-label="Back to root"
                         >
                           <ArrowLeft className="size-4 mt-0.5 lg:mt-0" />
                           <p className="text-lg lg:text-base font-medium">
                             {active?.label}
                           </p>
+                        </button>
+
+                        <button
+                          onClick={handleClose}
+                          className="p-2 -mr-2 text-gray-500 hover:text-black"
+                          aria-label="Close menu"
+                        >
+                          <VscChromeClose className="w-5 h-5" />
                         </button>
                       </div>
 

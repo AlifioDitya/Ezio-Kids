@@ -5,7 +5,7 @@ export type NavItem = {
 };
 
 export const NAV_LINKS: NavItem[] = [
-  { label: "Catalog", href: "/collections/catalog" },
+  { label: "Catalog", href: "/catalog" },
   {
     label: "Collar Types",
     children: [

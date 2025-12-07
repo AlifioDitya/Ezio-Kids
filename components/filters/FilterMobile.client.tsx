@@ -1,33 +1,33 @@
 "use client";
 
-import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import type { Category, Size, Tag } from "@/sanity.types";
 import { TRUE_COLOR_OPTIONS } from "@/app/constant";
 import { cn } from "@/lib/utils";
+import type { Category, Size, Tag } from "@/sanity.types";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
 
+import CategoryFilter from "@/components/filters/CategoryFilter";
+import { SizeFilter } from "@/components/filters/SizeFilter";
+import SleeveLengthFilter from "@/components/filters/SleeveLengthFilter";
+import SortDropdown from "@/components/filters/SortDropdown";
+import TagFilter from "@/components/filters/TagFilter";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import SortDropdown from "@/components/filters/SortDropdown";
-import { SizeFilter } from "@/components/filters/SizeFilter";
-import CategoryFilter from "@/components/filters/CategoryFilter";
-import SleeveLengthFilter from "@/components/filters/SleeveLengthFilter";
-import TagFilter from "@/components/filters/TagFilter";
-import { Badge } from "@/components/ui/badge";
-import { SlidersHorizontal } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { SlidersHorizontal } from "lucide-react";
 
 type Props = {
   sizes: Size[];
@@ -144,20 +144,6 @@ export default function FilterMobileClient({
   return (
     <>
       <div className="sm:hidden flex items-center gap-2">
-        <Button
-          onClick={() => setOpen(true)}
-          variant="outline"
-          className="flex items-center gap-2 rounded-xs shadow-none bg-white"
-        >
-          <SlidersHorizontal className="h-4 w-4 text-xs" />
-          Filters
-          {activeCount > 0 && (
-            <Badge className="ml-1 rounded-full px-2 py-0.5 text-[10px] bg-red-500 text-white h-5 w-5">
-              {activeCount}
-            </Badge>
-          )}
-        </Button>
-
         <div className="flex-1">
           <SortDropdown
             id="mobile-sort"
@@ -170,6 +156,20 @@ export default function FilterMobileClient({
             disabled={isPending}
           />
         </div>
+
+        <Button
+          onClick={() => setOpen(true)}
+          variant="outline"
+          className="flex items-center gap-2 rounded-xs shadow-none bg-white"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          <p className="text-xs">Filters</p>
+          {activeCount > 0 && (
+            <Badge className="rounded-full px-2 py-0.5 text-[10px] bg-red-500 text-white h-5 w-5">
+              {activeCount}
+            </Badge>
+          )}
+        </Button>
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -183,7 +183,7 @@ export default function FilterMobileClient({
           <div className="h-full overflow-y-auto px-5 py-4 space-y-6">
             {/* Color */}
             <div>
-              <p className="mb-3 text-sm font-semibold text-gray-800">Color</p>
+              <p className="mb-4 text-xs font-semibold text-gray-800">Color</p>
               <TooltipProvider delayDuration={150}>
                 <div className="flex flex-wrap gap-2">
                   {TRUE_COLOR_OPTIONS.map((opt) => {
@@ -207,7 +207,7 @@ export default function FilterMobileClient({
                           />
                         </TooltipTrigger>
                         <TooltipContent side="top">
-                          <span className="text-sm">{opt.label}</span>
+                          <span className="text-xs">{opt.label}</span>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -220,7 +220,7 @@ export default function FilterMobileClient({
 
             {/* Size */}
             <div>
-              <p className="mb-3 text-sm font-semibold text-gray-800">Size</p>
+              <p className="mb-3 text-xs font-semibold text-gray-800">Size</p>
               <SizeFilter
                 sizes={sizes}
                 selectedSizes={selectedSizes}
@@ -232,7 +232,7 @@ export default function FilterMobileClient({
 
             {/* Categories */}
             <div>
-              <p className="mb-3 text-sm font-semibold text-gray-800">
+              <p className="mb-3 text-xs font-semibold text-gray-800">
                 Categories
               </p>
               <CategoryFilter
@@ -246,7 +246,7 @@ export default function FilterMobileClient({
 
             {/* Sleeve */}
             <div>
-              <p className="mb-3 text-sm font-semibold text-gray-800">
+              <p className="mb-3 text-xs font-semibold text-gray-800">
                 Sleeve Length
               </p>
               <SleeveLengthFilter
@@ -259,7 +259,7 @@ export default function FilterMobileClient({
 
             {/* Tags */}
             <div>
-              <p className="mb-3 text-sm font-semibold text-gray-800">Tags</p>
+              <p className="mb-3 text-xs font-semibold text-gray-800">Tags</p>
               <TagFilter
                 tags={tags}
                 selectedSlugs={selectedTags}

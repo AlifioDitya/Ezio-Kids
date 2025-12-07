@@ -197,7 +197,7 @@ export default function FilterSidebarClient({
   ];
 
   return (
-    <aside className="hidden sm:flex w-48 gap-3 flex-col">
+    <aside className="hidden sm:flex w-48 gap-1 flex-col">
       {/* Sort */}
       <div className="flex flex-col gap-2 w-full">
         <SortDropdown
@@ -215,26 +215,26 @@ export default function FilterSidebarClient({
         {hasAnyFilter ? (
           <>
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-600">
+              <span className="text-xs font-semibold text-gray-600">
                 Active Filters
               </span>
               <button
                 type="button"
                 onClick={clearAll}
                 disabled={!hasAnyFilter || isPending}
-                className="text-sm text-gray-600 hover:text-gray-900 underline disabled:opacity-40"
+                className="text-xs text-gray-600 hover:text-gray-900 underline disabled:opacity-40"
               >
                 Clear All
               </button>
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-1 flex flex-wrap gap-2">
               {chips.map(({ key, label, onRemove }) => (
                 <Badge
                   key={key}
                   variant="secondary"
-                  className="rounded-full border border-gray-300 bg-white px-3 py-1 text-[12px] font-medium flex items-center"
+                  className="rounded-full border border-gray-300 bg-white px-2.5 py-1 text-[12px] font-medium flex items-center"
                 >
-                  <span className="truncate">{label}</span>
+                  <span className="truncate text-xs">{label}</span>
                   <button
                     type="button"
                     aria-label={`Remove ${label}`}
@@ -253,12 +253,12 @@ export default function FilterSidebarClient({
       {/* True Color filter */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="true-color">
-          <AccordionTrigger className="font-semibold xl:text-lg">
+          <AccordionTrigger className="font-semibold text-xs">
             Color
           </AccordionTrigger>
           <AccordionContent>
             <TooltipProvider delayDuration={150}>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 py-2 px-1.5">
                 {TRUE_COLOR_OPTIONS.map((opt) => {
                   const active = selectedTrueColors.includes(opt.value);
                   return (
@@ -272,13 +272,13 @@ export default function FilterSidebarClient({
                           className={cn(
                             "h-8 w-8 rounded-full border transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900",
                             "overflow-hidden",
-                            active ? "ring-2 ring-gray-900" : "hover:scale-105"
+                            active ? "ring-1 ring-gray-900" : "hover:scale-105"
                           )}
                           style={{ background: opt.css }}
                         />
                       </TooltipTrigger>
                       <TooltipContent side="top">
-                        <span className="text-sm">{opt.label}</span>
+                        <span className="text-xs">{opt.label}</span>
                       </TooltipContent>
                     </Tooltip>
                   );
@@ -294,7 +294,7 @@ export default function FilterSidebarClient({
       {/* Size */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="size">
-          <AccordionTrigger className="font-semibold xl:text-lg">
+          <AccordionTrigger className="font-semibold text-xs">
             Size
           </AccordionTrigger>
           <AccordionContent>
@@ -312,7 +312,7 @@ export default function FilterSidebarClient({
       {/* Categories */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="categories">
-          <AccordionTrigger className="font-semibold xl:text-lg">
+          <AccordionTrigger className="font-semibold text-xs">
             Categories
           </AccordionTrigger>
           <AccordionContent>
@@ -330,7 +330,7 @@ export default function FilterSidebarClient({
       {/* Sleeve */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="sleeve">
-          <AccordionTrigger className="font-semibold xl:text-lg">
+          <AccordionTrigger className="font-semibold text-xs">
             Sleeve Length
           </AccordionTrigger>
           <AccordionContent>
@@ -347,7 +347,7 @@ export default function FilterSidebarClient({
       {/* Tags */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="tags">
-          <AccordionTrigger className="font-semibold xl:text-lg">
+          <AccordionTrigger className="font-semibold text-xs">
             Tags
           </AccordionTrigger>
           <AccordionContent>
