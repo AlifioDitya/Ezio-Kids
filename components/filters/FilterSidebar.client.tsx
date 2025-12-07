@@ -1,6 +1,7 @@
 // components/filters/FilterSidebar.client.tsx
 "use client";
 
+import { TRUE_COLOR_OPTIONS } from "@/app/constant";
 import { SizeFilter } from "@/components/filters/SizeFilter";
 import SortDropdown from "@/components/filters/SortDropdown";
 import {
@@ -9,15 +10,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { ComboboxItem } from "@/components/ui/combobox";
-import type { Category, Size, Tag } from "@/sanity.types";
-import { useRouter, useSearchParams } from "next/navigation";
-import * as React from "react";
-import CategoryFilter from "./CategoryFilter";
-import SleeveLengthFilter from "./SleeveLengthFilter";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import type { ComboboxItem } from "@/components/ui/combobox";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -25,7 +20,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { TRUE_COLOR_OPTIONS } from "@/app/constant";
+import type { Category, Size, Tag } from "@/sanity.types";
+import { X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import CategoryFilter from "./CategoryFilter";
+import SleeveLengthFilter from "./SleeveLengthFilter";
 import TagFilter from "./TagFilter";
 
 interface FilterSidebarClientProps {
@@ -197,7 +197,7 @@ export default function FilterSidebarClient({
   ];
 
   return (
-    <aside className="hidden sm:flex w-64 gap-3 flex-col">
+    <aside className="hidden sm:flex w-48 gap-3 flex-col">
       {/* Sort */}
       <div className="flex flex-col gap-2 w-full">
         <SortDropdown

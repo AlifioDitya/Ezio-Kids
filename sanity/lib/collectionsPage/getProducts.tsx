@@ -76,8 +76,36 @@ const QUERY = `
     name,
     price,
     "slug": slug,
-    mainImage,
+    "mainImage": mainImage {
+      alert,
+      alt,
+      asset->{
+        url
+      }
+    },
     "mainImageUrl": mainImage.asset->url,
+    "additionalImages": additionalImages[] {
+      _key,
+      alt,
+      asset->{
+        url
+      }
+    },
+    "variants": variants[]{
+      _key,
+      "color": color->{
+        name,
+        "slug": slug.current,
+        trueColor,
+        "swatchUrl": swatch.asset->url
+      },
+      "size": size->{
+        label,
+        order
+      },
+      stock,
+      priceOverride
+    },
     "tagInfo": tags[]->{ title, "slug": slug.current },
   },
 

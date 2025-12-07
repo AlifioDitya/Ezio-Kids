@@ -46,21 +46,21 @@ export default function Header() {
 
             <Link
               href="/catalog"
-              className="uppercase text-[11px] tracking-wider font-semibold "
+              className="hidden md:block uppercase text-[11px] tracking-wider font-semibold "
             >
               CATALOG
             </Link>
 
             <Link
               href="/journal"
-              className="uppercase text-[11px] tracking-wider font-semibold "
+              className="hidden md:block uppercase text-[11px] tracking-wider font-semibold "
             >
               JOURNAL
             </Link>
 
             <Link
               href="/about"
-              className="uppercase text-[11px] tracking-wider font-semibold"
+              className="hidden md:block uppercase text-[11px] tracking-wider font-semibold"
             >
               ABOUT
             </Link>

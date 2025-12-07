@@ -1,7 +1,7 @@
 // components/filters/SidebarSkeleton.tsx
 export default function SidebarSkeleton() {
   return (
-    <aside className="hidden sm:flex w-64 gap-3 flex-col">
+    <aside className="hidden sm:flex w-48 gap-3 flex-col">
       <div className="h-9 w-full rounded bg-gray-200 animate-pulse" />
       <div className="h-5 w-24 rounded bg-gray-200 animate-pulse mt-2" />
       <div className="flex flex-wrap gap-2 mt-1">

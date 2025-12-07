@@ -52,14 +52,14 @@ export const TITLES: Record<
   { h1: string; title: string; description: string }
 > = {
   "see-all": {
-    h1: "All Collections",
-    title: "All Collections - Ezio Kids",
+    h1: "All Products",
+    title: "Catalog - Ezio Kids",
     description:
       "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
   },
   catalog: {
-    h1: "Catalog",
-    title: "Catalog - Ezio Kids",
+    h1: "All Products",
+    title: "All Products - Ezio Kids",
     description: "Browse our full catalog of sustainable kidswear.",
   },
   "new-arrival": {
