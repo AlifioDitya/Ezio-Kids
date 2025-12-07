@@ -9,6 +9,17 @@ type SearchResult = {
     slug?: { current?: string };
     mainImage?: unknown;
     mainImageUrl?: string;
+    additionalImages?: Array<{ asset?: { url: string }; alt?: string }>;
+    variants?: Array<{
+      _key: string;
+      color?: {
+        name?: string;
+        slug?: string;
+        trueColor?: string;
+        swatchUrl?: string;
+      };
+      priceOverride?: number;
+    }>;
     tagInfo?: { title?: string; slug?: string }[];
   }>;
   suggestions: string[];
@@ -33,6 +44,17 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
     "slug": slug,
     mainImage,
     "mainImageUrl": mainImage.asset->url,
+    "additionalImages": additionalImages[]{ asset->{ "url": url }, "alt": alt },
+    "variants": variants[]{
+      _key,
+      priceOverride,
+      color->{
+        name,
+        "slug": slug.current,
+        "trueColor": color.hex,
+        "swatchUrl": swatch.asset->url
+      }
+    },
     "tagInfo": tags[]->{ title, "slug": slug.current },
   },
 

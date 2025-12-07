@@ -50,6 +50,7 @@ export type ProductCardProps = {
   staticMode?: boolean; // if true, disable swipe functionality on images
   showPager?: boolean; // if true, show pager on image stage
   variant?: "default" | "expanded";
+  onProductClick?: () => void;
 };
 
 const isNew = (iso?: string, days = 21) =>
@@ -63,6 +64,7 @@ export default function ProductCard({
   staticMode = false,
   showPager = false,
   variant = "default",
+  onProductClick,
 }: ProductCardProps) {
   // 1. Extract Colors from Variants
   const colors = React.useMemo(() => {
@@ -189,7 +191,12 @@ export default function ProductCard({
   return (
     <Card data-card="true" className={cardClass}>
       {/* IMAGE links to PDP with ?color=<selected> */}
-      <Link href={hrefWithParams} prefetch className="block">
+      <Link
+        href={hrefWithParams}
+        prefetch
+        className="block"
+        onClick={onProductClick}
+      >
         <CardContent className="p-0">
           {variant === "expanded" ? (
             // EXPANDED VARIANT (Grid of 3 images)
@@ -274,7 +281,12 @@ export default function ProductCard({
       {variant !== "expanded" && (
         <div>
           {/* TITLE links to PDP with ?color=<selected> */}
-          <Link href={hrefWithParams} prefetch className="block">
+          <Link
+            href={hrefWithParams}
+            prefetch
+            className="block"
+            onClick={onProductClick}
+          >
             <h3 className="line-clamp-1 text-xs max-w-[90%] text-black font-medium">
               {product.name}
             </h3>

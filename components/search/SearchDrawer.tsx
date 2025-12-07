@@ -17,7 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import ProductTile from "../common/ProductTile";
+import ProductCard from "../common/ProductCard";
 
 type ApiResult = {
   q: string;
@@ -28,6 +28,17 @@ type ApiResult = {
     slug?: { current?: string };
     mainImage?: unknown;
     mainImageUrl?: string;
+    additionalImages?: Array<{ asset?: { url: string }; alt?: string }>;
+    variants?: Array<{
+      _key: string;
+      color?: {
+        name?: string;
+        slug?: string;
+        trueColor?: string;
+        swatchUrl?: string;
+      };
+      priceOverride?: number;
+    }>;
     tagInfo?: { title?: string; slug?: string }[];
   }[];
   suggestions: string[];
@@ -243,7 +254,7 @@ export default function SearchDrawer() {
                           <button
                             key={key}
                             onClick={() => setQ(queryVal)}
-                            className="rounded-full bg-blue-main text-blue-main px-3 py-1 text-sm hover:bg-blue-main/90"
+                            className="rounded-full bg-white border border-gray-300 text-gray-800 px-3 py-1 text-sm hover:bg-gray-100"
                           >
                             {label}
                           </button>
@@ -269,20 +280,25 @@ export default function SearchDrawer() {
                 {res.products.length ? (
                   <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     {res.products.map((p) => {
-                      const href = p.slug?.current
-                        ? `/products/${p.slug.current}`
-                        : "#";
                       return (
-                        <li key={p._id}>
-                          <ProductTile
-                            href={href}
-                            name={p.name ?? "Untitled"}
-                            price={p.price ?? null}
-                            image={p.mainImage}
-                            tags={p.tagInfo}
-                            tagLimit={2}
-                            variant="plain"
-                            onClick={() => {
+                        <li key={p._id} className="min-w-0">
+                          <ProductCard
+                            product={{
+                              _id: p._id,
+                              name: p.name ?? "Untitled",
+                              price: p.price ?? 0,
+                              mainImageUrl: p.mainImageUrl,
+                              slug: p.slug as { current: string | null },
+                              mainImage: p.mainImage as {
+                                asset?: { url: string };
+                                alt?: string;
+                              },
+                              additionalImages: p.additionalImages,
+                              variants: p.variants,
+                              tagInfo: p.tagInfo,
+                            }}
+                            staticMode
+                            onProductClick={() => {
                               if (q.trim()) addRecent(q);
                               closeAndReset();
                             }}
