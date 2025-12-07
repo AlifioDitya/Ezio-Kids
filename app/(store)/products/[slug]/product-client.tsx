@@ -455,9 +455,9 @@ export default function ProductClient({ product, priceLabel }: Props) {
                     disabled={!available}
                     onClick={() => available && setSelectedSizeId(id)}
                     className={cn(
-                      "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden",
+                      "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden border border-gray-200 text-gray-800 hover:border-blue-main hover:text-blue-main",
                       selected &&
-                        "bg-blue-main hover:bg-blue-main/90 text-white",
+                        "border-blue-main text-blue-main hover:border-blue-main hover:text-blue-main hover:bg-blue-main/5",
                       !available && "opacity-60 cursor-not-allowed",
                       "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
                     )}
