@@ -10,8 +10,8 @@ export const NAV_LINKS: NavItem[] = [
     label: "Collar Types",
     children: [
       { label: "Classic", href: "/collections/classic" },
-      { label: "Camp / Cuban", href: "/collections/camp-cuban" },
-      { label: "Band / Mandarin", href: "/collections/band-mandarin" },
+      { label: "Cuban", href: "/collections/cuban" },
+      { label: "Band", href: "/collections/band" },
     ],
   },
   {
@@ -36,8 +36,8 @@ export const ALLOWED_SLUGS = [
 
   // New Collars
   "classic",
-  "camp-cuban",
-  "band-mandarin",
+  "cuban",
+  "band",
 
   // New Materials
   "melange",
@@ -91,15 +91,15 @@ export const TITLES: Record<
     title: "Classic Collars - Ezio Kids",
     description: "Timeless classic collar styles for every occasion.",
   },
-  "camp-cuban": {
-    h1: "Camp / Cuban Collars",
-    title: "Camp & Cuban Collars - Ezio Kids",
-    description: "Relaxed and stylish camp and cuban collar shirts.",
+  cuban: {
+    h1: "Cuban Collars",
+    title: "Cuban Collars - Ezio Kids",
+    description: "Relaxed and stylish Cuban collar shirts.",
   },
-  "band-mandarin": {
-    h1: "Band / Mandarin Collars",
-    title: "Band & Mandarin Collars - Ezio Kids",
-    description: "Modern and sleek band and mandarin collar designs.",
+  band: {
+    h1: "Band Collars",
+    title: "Band Collars - Ezio Kids",
+    description: "Modern and sleek band collar designs.",
   },
   melange: {
     h1: "Melange Collection",

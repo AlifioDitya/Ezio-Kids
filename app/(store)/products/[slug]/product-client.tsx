@@ -11,9 +11,9 @@ import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { AlertTriangle } from "lucide-react";
 import { PortableText } from "next-sanity";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
+import { FaWhatsapp } from "react-icons/fa";
 
 type Props = {
   product: PDPProduct;
@@ -72,51 +72,91 @@ export default function ProductClient({ product, priceLabel }: Props) {
   );
 
   // Helper to find color ID by name or slug (for URL matching)
-  const findColorId = (val: string | null) => {
-    if (!val) return null;
-    const lower = val.toLowerCase();
-    return (
-      colorOptions.find(
-        (c) =>
-          c?.slug === lower ||
-          c?.name?.toLowerCase() === lower ||
-          c?._id === val
-      )?._id ?? null
-    );
-  };
-
-  const findSizeId = (val: string | null) => {
-    if (!val) return null;
-    const lower = val.toLowerCase();
-    return (
-      sizeOptions.find(
-        (s) => s?.label?.toLowerCase() === lower || s?._id === val
-      )?._id ?? null
-    );
-  };
-
-  // State
-  const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
-    () => {
-      const paramColor = searchParams.get("color");
-      if (paramColor) {
-        const found = findColorId(paramColor);
-        if (found) return found;
-      }
-      // Fallback
+  const findColorId = React.useCallback(
+    (val: string | null) => {
+      if (!val) return null;
+      const lower = val.toLowerCase();
       return (
-        colorOptions.find((c) => (c?._id ? colorHasAnyStock(c._id) : false))
-          ?._id ??
-        colorOptions[0]?._id ??
-        null
+        colorOptions.find(
+          (c) =>
+            c?.slug === lower ||
+            c?.name?.toLowerCase() === lower ||
+            c?._id === val
+        )?._id ?? null
       );
+    },
+    [colorOptions]
+  );
+
+  const findSizeId = React.useCallback(
+    (val: string | null) => {
+      if (!val) return null;
+      const lower = val.toLowerCase();
+      return (
+        sizeOptions.find(
+          (s) => s?.label?.toLowerCase() === lower || s?._id === val
+        )?._id ?? null
+      );
+    },
+    [sizeOptions]
+  );
+
+  // State Initialization
+  // --------------------
+  const initialColorId = React.useMemo(() => {
+    const paramColor = searchParams.get("color");
+    if (paramColor) {
+      const found = findColorId(paramColor);
+      if (found) return found;
     }
+    // Fallback: First available or first option
+    return (
+      colorOptions.find((c) => (c?._id ? colorHasAnyStock(c._id) : false))
+        ?._id ??
+      colorOptions[0]?._id ??
+      null
+    );
+  }, [searchParams, colorOptions, colorHasAnyStock, findColorId]);
+
+  const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
+    initialColorId
+  );
+
+  const getFirstAvailableSize = React.useCallback(
+    (colorId: string | null) => {
+      if (!colorId) return null;
+      for (const size of sizeOptions) {
+        if (!size?._id) continue;
+        const sId = size._id;
+        const v = variants.find(
+          (v) => v.color?._id === colorId && v.size?._id === sId
+        );
+        if (v && (v.stock ?? 0) > 0) return sId;
+      }
+      return null;
+    },
+    [sizeOptions, variants]
   );
 
   const [selectedSizeId, setSelectedSizeId] = React.useState<string | null>(
     () => {
       const paramSize = searchParams.get("size");
-      return findSizeId(paramSize);
+      const fromUrl = findSizeId(paramSize);
+      if (fromUrl) {
+        // Evaluate availability? If available for initialColorId, take it.
+        // If not, maybe fallback?
+        // User request: "auto select first available size"
+        // Strict interpretation: if URL param exists but OOS, should we switch?
+        // Let's stick to URL if explicit, otherwise fallback.
+        const isAvailable = variants.some(
+          (v) =>
+            v.size?._id === fromUrl &&
+            v.color?._id === initialColorId &&
+            (v.stock ?? 0) > 0
+        );
+        if (isAvailable) return fromUrl;
+      }
+      return getFirstAvailableSize(initialColorId);
     }
   );
 
@@ -175,11 +215,10 @@ export default function ProductClient({ product, priceLabel }: Props) {
   );
 
   const onSelectColor = (id: string | null) => {
-    if (id !== selectedColorId && selectedSizeId) {
-      // Check if size is still available in new color?
-      // Optional: Deselect size if not available.
-      // For now, consistent with previous logic:
-      setSelectedSizeId(null);
+    if (id !== selectedColorId) {
+      // Auto-select first available size for the new color
+      const newSizeId = getFirstAvailableSize(id);
+      setSelectedSizeId(newSizeId);
     }
     setSelectedColorId(id);
   };
@@ -339,9 +378,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
           </div>
 
           {/* Price */}
-          <p className="text-base font-semibold text-gray-900">
-            {displayPrice}
-          </p>
+          <p className="text-base font-medium text-gray-900">{displayPrice}</p>
         </div>
 
         {/* Colors */}
@@ -419,7 +456,8 @@ export default function ProductClient({ product, priceLabel }: Props) {
                     onClick={() => available && setSelectedSizeId(id)}
                     className={cn(
                       "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden",
-                      selected && "bg-rose-600 hover:bg-rose-600 text-white",
+                      selected &&
+                        "bg-blue-main hover:bg-blue-main/90 text-white",
                       !available && "opacity-60 cursor-not-allowed",
                       "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
                     )}
@@ -453,13 +491,50 @@ export default function ProductClient({ product, priceLabel }: Props) {
         <Separator />
 
         {/* Contact Us CTA */}
-        <div className="flex items-center gap-3">
-          <Link href="mailto:hello@eziokids.com" className="flex-1">
-            <Button className="w-full h-11 text-white text-base font-semibold bg-rose-500 hover:bg-rose-600">
-              Contact Us to Order
-            </Button>
-          </Link>
-        </div>
+        {/* WhatsApp CTA */}
+        {(() => {
+          const isOutOfStock =
+            !activeVariant || (activeVariant.stock ?? 0) <= 0;
+
+          if (isOutOfStock) {
+            return (
+              <Button
+                disabled
+                className="w-full h-11 text-base font-semibold bg-gray-200 text-gray-500 cursor-not-allowed"
+              >
+                Out of Stock
+              </Button>
+            );
+          }
+
+          const colorName =
+            colorOptions.find((c) => c?._id === selectedColorId)?.name ||
+            "Default Color";
+          const sizeLabel =
+            sizeOptions.find((s) => s?._id === selectedSizeId)?.label ||
+            "Default Size";
+
+          const message = `Hi, I'm interested in ${product.name} - ${colorName} - ${sizeLabel}`;
+          const whatsappUrl = `https://wa.me/6281310899214?text=${encodeURIComponent(
+            message
+          )}`;
+
+          return (
+            <div className="flex items-center gap-3">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1"
+              >
+                <Button className="w-full h-11 text-white text-base font-semibold bg-[#25D366] hover:bg-[#20bd5a] gap-2">
+                  <FaWhatsapp className="w-5 h-5" />
+                  Contact us on WhatsApp
+                </Button>
+              </a>
+            </div>
+          );
+        })()}
 
         {/* Description */}
         {product.description && (

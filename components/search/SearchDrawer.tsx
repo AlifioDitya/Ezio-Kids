@@ -243,7 +243,7 @@ export default function SearchDrawer() {
                           <button
                             key={key}
                             onClick={() => setQ(queryVal)}
-                            className="rounded-full bg-rose-50 text-rose-700 px-3 py-1 text-sm hover:bg-rose-100"
+                            className="rounded-full bg-blue-main text-blue-main px-3 py-1 text-sm hover:bg-blue-main/90"
                           >
                             {label}
                           </button>
@@ -315,7 +315,7 @@ export default function SearchDrawer() {
                   <div className="flex items-center justify-center">
                     <Button
                       onClick={goToAllResults}
-                      className="bg-rose-500 hover:bg-rose-600 text-white"
+                      className="bg-blue-main hover:bg-blue-main/90 text-white"
                     >
                       See all {res.total} results
                     </Button>

@@ -131,7 +131,7 @@ export default async function CatalogPage(props: {
               </div>
             }
           >
-            <div className="">
+            <div className="mt-4 sm:mt-0">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

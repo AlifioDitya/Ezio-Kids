@@ -57,12 +57,9 @@ export async function ProductsSection({
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white px-6 py-12 text-center">
         <div className="relative mb-3">
-          <div
-            aria-hidden
-            className="absolute -inset-6 rounded-full bg-gradient-to-br from-rose-100 to-indigo-100 blur-2xl"
-          />
-          <div className="relative mx-auto grid h-16 w-16 place-items-center rounded-full bg-gray-100 shadow-sm">
-            <MdSearchOff className="h-7 w-7 text-rose-500" />
+          <div aria-hidden className="absolute -inset-6 rounded-full" />
+          <div className="relative mx-auto grid h-16 w-16 place-items-center rounded-full bg-white border border-gray-200">
+            <MdSearchOff className="h-7 w-7 text-blue-main" />
           </div>
         </div>
 
@@ -76,7 +73,7 @@ export async function ProductsSection({
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           <Link
             href={basePath}
-            className="inline-flex items-center justify-center rounded-lg bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-600"
+            className="inline-flex items-center justify-center rounded-lg bg-blue-main px-4 py-2 text-sm font-semibold text-white hover:bg-blue-main/90"
           >
             Clear all filters
           </Link>

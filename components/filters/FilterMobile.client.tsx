@@ -279,7 +279,7 @@ export default function FilterMobileClient({
                 Clear
               </Button>
               <Button
-                className="flex-1 bg-rose-500 hover:bg-rose-600 text-white"
+                className="flex-1 bg-blue-main hover:bg-blue-main/90 text-white"
                 onClick={() => setOpen(false)}
               >
                 Done

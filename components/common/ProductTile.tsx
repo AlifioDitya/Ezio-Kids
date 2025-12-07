@@ -1,11 +1,11 @@
 // components/common/ProductTile.tsx
 "use client";
 
+import { imageUrl } from "@/lib/imageUrl";
+import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { imageUrl } from "@/lib/imageUrl";
-import { ArrowRight } from "lucide-react";
 
 type Tag = { title?: string; slug?: string } | null | undefined;
 
@@ -85,7 +85,7 @@ export default function ProductTile({
           </div>
 
           {badge ? (
-            <div className="absolute left-2.5 top-2.5 z-10 inline-flex items-center rounded-full bg-gradient-to-b from-rose-500 to-rose-600 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+            <div className="absolute left-2.5 top-2.5 z-10 inline-flex items-center rounded-full bg-gradient-to-b from-blue-main/60 to-blue-main/20 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
               {badge}
             </div>
           ) : null}

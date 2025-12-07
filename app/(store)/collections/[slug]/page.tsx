@@ -162,7 +162,7 @@ export default async function CollectionsPage(props: {
               </div>
             }
           >
-            <div className="">
+            <div className="mt-4 sm:mt-0">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

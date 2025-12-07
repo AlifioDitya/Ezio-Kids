@@ -14,27 +14,24 @@ const footerSections: FooterSection[] = [
   {
     title: "Shop",
     links: [
-      { label: "Shop All", to: "/collections/all" },
-      { label: "Girls", to: "/collections/girls" },
-      { label: "Boys", to: "/collections/boys" },
-      { label: "Baby", to: "/collections/baby" },
+      { label: "All Products", to: "/catalog" },
+      { label: "Classic Collars", to: "/collections/classic" },
+      { label: "Cuban Collars", to: "/collections/cuban" },
+      { label: "Band Collars", to: "/collections/band" },
     ],
   },
   {
     title: "About Us",
     links: [
-      { label: "Our Story", to: "/our-story" },
-      { label: "VIP Group", to: "/vip" },
-      { label: "Blog", to: "/blog" },
-      { label: "Our Fabrics", to: "/our-fabrics" },
-      { label: "Careers", to: "/careers" },
+      { label: "Our Story", to: "/about-us" },
+      { label: "Our Fabrics", to: "/fabrics" },
+      { label: "Journal", to: "/journal" },
     ],
   },
   {
     title: "Customer Care",
     links: [
       { label: "Contact Us", to: "/contact" },
-      { label: "Returns & Exchanges", to: "/returns" },
       { label: "FAQ", to: "/faq" },
       { label: "Sizing Chart", to: "/sizing" },
     ],
@@ -54,13 +51,15 @@ export default function Footer() {
 
   return (
     <footer className="bg-slate-50 text-gray-800 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24 py-16">
+      <div className="px-6 py-16">
         {/* Split: tagline + menus */}
         <div className="flex flex-col md:flex-row md:space-x-16">
           {/* Tagline (left on md+) */}
           <div className="md:w-1/3 mb-10 md:mb-0">
-            <h2 className="text-3xl font-bold">Tiny Steps, Big Smiles.</h2>
-            <p className="mt-4 text-gray-600">
+            <h2 className="text-xl lg:text-2xl font-bold">
+              Tiny Steps, Big Smiles.
+            </h2>
+            <p className="mt-2 text-gray-600 text-sm lg:text-base">
               Sustainable kidswear for every little adventure.
             </p>
           </div>
@@ -74,8 +73,8 @@ export default function Footer() {
                   aria-label={sec.title}
                   className="space-y-2"
                 >
-                  <h3 className="font-semibold text-lg">{sec.title}</h3>
-                  <ul role="list" className="space-y-1 text-sm">
+                  <h3 className="font-semibold text-base">{sec.title}</h3>
+                  <ul role="list" className="space-y-1 text-xs">
                     {sec.links.map((link) => (
                       <li key={link.to}>
                         <Link
