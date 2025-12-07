@@ -2,48 +2,25 @@
 "use client";
 
 import { NAV_LINKS } from "@/app/constant";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import Logo from "@/public/images/ezio-kids-logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchDrawer from "../search/SearchDrawer";
 import SearchOpenButton from "../search/SearchOpenButton";
+import SideMenu from "./SideMenu";
 
 export default function Header() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Dynamic colors based on state
-  const isTransparent = isHome && !scrolled;
+  const [open, setOpen] = useState(false);
 
   // Icon color: White if transparent home, else Dark
-  const iconClass = isTransparent
-    ? "text-white hover:text-white/80"
-    : "text-gray-800 hover:text-gray-600";
+  const iconClass = "text-gray-800 hover:text-gray-600";
 
   // Base classes for the header container
   const headerClass = cn(
     "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-    isTransparent ? "bg-transparent border-transparent" : "bg-white"
+    "bg-white"
   );
 
   return (
@@ -51,44 +28,42 @@ export default function Header() {
       <header className={headerClass}>
         <div className="px-6 h-14 grid grid-cols-3 items-center max-w-[1440px]">
           {/* LEFT: Unified Side Menu Trigger */}
-          <div className="flex justify-start items-center">
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  aria-label="Open menu"
-                  className={cn("p-2 -ml-2 text-2xl transition", iconClass)}
-                >
-                  <div className="w-4 h-px bg-current mb-2 rounded" />
-                  <div className="w-4 h-px bg-current rounded" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="left"
-                className="w-full h-full sm:w-[350px] sm:h-auto p-0 border-r-0 bg-white backdrop-blur-xl"
+          <div className="flex justify-start items-center gap-4">
+            <button aria-label="Open menu" onClick={() => setOpen(true)}>
+              <svg
+                className="h-5 w-5 mt-px"
+                viewBox="0 0 22 22"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1}
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <SheetHeader className="px-6 py-6 text-left border-b border-gray-100 flex flex-row items-center justify-between">
-                  <SheetTitle className="text-2xl font-bold font-bebas tracking-wide text-gray-900"></SheetTitle>
-                  {/* Mobile close button is handled by Sheet primitive, usually top right */}
-                </SheetHeader>
-                <nav className="flex flex-col py-4 h-full overflow-y-auto">
-                  {NAV_LINKS.map((link) => (
-                    <SheetClose key={link.to} asChild>
-                      <Link
-                        href={link.to}
-                        className={cn(
-                          "group flex items-center px-6 py-5 text-lg font-medium transition-all border-b border-gray-50 last:border-none",
-                          pathname === link.to
-                            ? "text-gray-900 bg-gray-50/50"
-                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-50/30"
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </nav>
-              </SheetContent>
-            </Sheet>
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="4" y1="14" x2="20" y2="14" />
+              </svg>
+            </button>
+
+            <Link
+              href="/catalog"
+              className="uppercase text-[11px] tracking-wider font-semibold "
+            >
+              CATALOG
+            </Link>
+
+            <Link
+              href="/journal"
+              className="uppercase text-[11px] tracking-wider font-semibold "
+            >
+              JOURNAL
+            </Link>
+
+            <Link
+              href="/about"
+              className="uppercase text-[11px] tracking-wider font-semibold"
+            >
+              ABOUT
+            </Link>
           </div>
 
           {/* CENTER: Logo (Smaller) */}
@@ -114,9 +89,11 @@ export default function Header() {
       </header>
 
       {/* Spacer for fixed header */}
-      {!isHome && <div className="h-14 md:h-16" />}
+      <div className="h-14" />
 
       <SearchDrawer />
+
+      <SideMenu open={open} onClose={() => setOpen(false)} data={NAV_LINKS} />
     </>
   );
 }

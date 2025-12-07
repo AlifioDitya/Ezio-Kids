@@ -3,6 +3,7 @@ import HeaderWithSale from "@/components/layouts/HeaderWithSale";
 import { DisableDraftMode } from "@/components/sanity/disableDraftMode";
 import { SanityLive } from "@/sanity/lib/live";
 
+import OverlayScrollbar from "@/components/ui/overlay-scrollbar";
 import type { Metadata } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import { draftMode } from "next/headers";
@@ -56,6 +57,8 @@ export default async function RootLayout({
           <Footer />
 
           <SanityLive />
+
+          <OverlayScrollbar />
         </body>
       </html>
     </>

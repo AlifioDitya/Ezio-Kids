@@ -1,22 +1,22 @@
 // components/search/SearchDrawer.tsx
 "use client";
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import useSearchUi from "@/store/search-ui";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import Logo from "@/public/images/ezio-kids-logo.svg";
+import useSearchUi from "@/store/search-ui";
+import { History, Search, TrendingUp, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Search, TrendingUp, History, X } from "lucide-react";
-import Logo from "@/public/images/ezio-kids-logo.svg";
+import { useRouter } from "next/navigation";
+import * as React from "react";
 import ProductTile from "../common/ProductTile";
 
 type ApiResult = {
@@ -229,11 +229,9 @@ export default function SearchDrawer() {
                     {(popular.length
                       ? popular
                       : [
-                          { title: "dress-shirt" },
-                          { title: "tee" },
-                          { title: "shorts" },
                           { title: "new-arrival" },
                           { title: "best-seller" },
+                          { title: "chambray" },
                         ]
                     )
                       .slice(0, 7)

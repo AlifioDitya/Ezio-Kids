@@ -1,17 +1,48 @@
-export const NAV_LINKS = [
-  { label: "New Arrival", to: "/collections/new-arrival" },
-  { label: "Shop All", to: "/collections/shop-all" },
-  { label: "Baby & Toddler", to: "/collections/baby-toddler" },
-  { label: "Kids", to: "/collections/kids" },
-  { label: "Teens", to: "/collections/teens" },
-] as const;
+export type NavItem = {
+  label: string;
+  href?: string;
+  children?: NavItem[];
+};
+
+export const NAV_LINKS: NavItem[] = [
+  { label: "Catalog", href: "/collections/catalog" },
+  {
+    label: "Collar Types",
+    children: [
+      { label: "Classic", href: "/collections/classic" },
+      { label: "Camp / Cuban", href: "/collections/camp-cuban" },
+      { label: "Band / Mandarin", href: "/collections/band-mandarin" },
+    ],
+  },
+  {
+    label: "Materials",
+    children: [
+      { label: "Melange", href: "/collections/melange" },
+      { label: "Chambray", href: "/collections/chambray" },
+      { label: "Dobby", href: "/collections/dobby" },
+    ],
+  },
+  { label: "Journal", href: "/journal" },
+  { label: "About us", href: "/about" },
+];
 
 export const ALLOWED_SLUGS = [
-  "shop-all",
+  "see-all",
+  "catalog",
   "new-arrival",
   "baby-toddler",
   "kids",
   "teens",
+
+  // New Collars
+  "classic",
+  "camp-cuban",
+  "band-mandarin",
+
+  // New Materials
+  "melange",
+  "chambray",
+  "dobby",
 ] as const;
 
 export type Slug = (typeof ALLOWED_SLUGS)[number];
@@ -20,11 +51,16 @@ export const TITLES: Record<
   Slug,
   { h1: string; title: string; description: string }
 > = {
-  "shop-all": {
+  "see-all": {
     h1: "All Collections",
     title: "All Collections - Ezio Kids",
     description:
       "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
+  },
+  catalog: {
+    h1: "Catalog",
+    title: "Catalog - Ezio Kids",
+    description: "Browse our full catalog of sustainable kidswear.",
   },
   "new-arrival": {
     h1: "New in Ezio Kids",
@@ -49,6 +85,36 @@ export const TITLES: Record<
     title: "Teen Collection - Ezio Kids",
     description:
       "Confident, expressive looks for teens—find the latest trends and timeless essentials.",
+  },
+  classic: {
+    h1: "Classic Collars",
+    title: "Classic Collars - Ezio Kids",
+    description: "Timeless classic collar styles for every occasion.",
+  },
+  "camp-cuban": {
+    h1: "Camp / Cuban Collars",
+    title: "Camp & Cuban Collars - Ezio Kids",
+    description: "Relaxed and stylish camp and cuban collar shirts.",
+  },
+  "band-mandarin": {
+    h1: "Band / Mandarin Collars",
+    title: "Band & Mandarin Collars - Ezio Kids",
+    description: "Modern and sleek band and mandarin collar designs.",
+  },
+  melange: {
+    h1: "Melange Collection",
+    title: "Melange Fabrics - Ezio Kids",
+    description: "Textured and comfortable melange fabric collection.",
+  },
+  chambray: {
+    h1: "Chambray Collection",
+    title: "Chambray Fabrics - Ezio Kids",
+    description: "Soft and breathable chambray styles.",
+  },
+  dobby: {
+    h1: "Dobby Collection",
+    title: "Dobby Fabrics - Ezio Kids",
+    description: "Woven patterned dobby fabric collection.",
   },
 };
 

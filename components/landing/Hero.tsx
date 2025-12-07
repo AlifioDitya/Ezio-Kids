@@ -74,7 +74,7 @@ export default function Hero({ content }: HeroProps) {
 
   return (
     <section className="relative w-full overflow-hidden">
-      <div className="relative h-[60vh] lg:h-[80vh] xl:h-[80vh]">
+      <div className="relative h-[calc(100svh-3.5rem)]">
         {content.backgroundVideo?.asset?.url ? (
           <div className="absolute inset-0">
             <video

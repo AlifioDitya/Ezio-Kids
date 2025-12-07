@@ -124,6 +124,92 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
+  /* Keep layout from jumping when bar appears */
+  body {
+    scrollbar-gutter: stable both-edges;
+  }
+
+  /* Firefox */
+  html,
+  body {
+    scrollbar-width: none;
+  }
+
+  /* ===== Root/page scrollbar: hidden (we use the overlay) ===== */
+  /* Firefox */
+  html,
+  body {
+    scrollbar-width: none;
+  }
+  /* Chrome/Edge/Safari */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* ===== Thin scrollbars for ALL non-root scrollable elements ===== */
+  :root {
+    --sb-inner-w: 8px; /* inner scrollbar width */
+    --sb-thumb: rgba(0, 0, 0, 0.35);
+    --sb-thumb-hover: rgba(0, 0, 0, 0.55);
+  }
+  .dark {
+    --sb-thumb: rgba(255, 255, 255, 0.35);
+    --sb-thumb-hover: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Firefox */
+  *:not(html):not(body) {
+    /* if element is scrollable, Firefox will use these */
+    scrollbar-width: thin;
+    scrollbar-color: var(--sb-thumb) transparent;
+  }
+
+  /* WebKit (Chrome/Edge/Safari) */
+  *:not(html):not(body)::-webkit-scrollbar {
+    width: var(--sb-inner-w);
+    height: var(--sb-inner-w);
+  }
+  *:not(html):not(body)::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *:not(html):not(body)::-webkit-scrollbar-thumb {
+    background-color: var(--sb-thumb);
+    border-radius: 9999px;
+    border: 0; /* no faux-thinning via transparent borders */
+  }
+  *:not(html):not(body):hover::-webkit-scrollbar-thumb {
+    background-color: var(--sb-thumb-hover);
+  }
+
+  /* ===== Utilities (optional) ===== */
+  /* Force thin scrollbar on a specific element (if you ever scope instead of global) */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: var(--sb-inner-w);
+    height: var(--sb-inner-w);
+  }
+
+  /* Already have: hide scrollbar helper */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  } /* Chrome/Safari */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  } /* IE/FF */
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  } /* Chrome/Safari */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE/Edge legacy */
+    scrollbar-width: none; /* Firefox */
+  }
+
   button,
   [type="button"],
   [type="submit"],
