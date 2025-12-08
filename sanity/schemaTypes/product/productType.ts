@@ -106,6 +106,122 @@ export default defineType({
       description: "E.g. machine wash cold, tumble dry low",
     }),
 
+    // — DETAILS (Fabric, Features, Composition) —
+    defineField({
+      name: "fabric",
+      title: "Fabric",
+      type: "object",
+      fields: [
+        defineField({
+          name: "name",
+          title: "Fabric Name",
+          type: "string",
+        }),
+        defineField({
+          name: "image",
+          title: "Fabric Image",
+          type: "image",
+          options: { hotspot: true },
+        }),
+        defineField({
+          name: "description",
+          title: "Description",
+          type: "text",
+          rows: 3,
+        }),
+        defineField({
+          name: "weight",
+          title: "Weight (gsm)",
+          type: "string",
+        }),
+        defineField({
+          name: "properties",
+          title: "Additional Properties",
+          type: "array",
+          of: [
+            defineArrayMember({
+              type: "object",
+              fields: [
+                defineField({ name: "key", title: "Key", type: "string" }),
+                defineField({ name: "value", title: "Value", type: "string" }),
+              ],
+              preview: {
+                select: { key: "key", value: "value" },
+                prepare({ key, value }) {
+                  return { title: key, subtitle: value };
+                },
+              },
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: "features",
+      title: "Product Features",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "description",
+              title: "Description",
+              type: "text",
+              rows: 2,
+            }),
+            defineField({
+              name: "image",
+              title: "Image",
+              type: "image",
+              options: { hotspot: true },
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description", media: "image" },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: "composition",
+      title: "Composition",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({
+              name: "material",
+              title: "Material",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "percentage",
+              title: "Percentage",
+              type: "number",
+            }),
+          ],
+          preview: {
+            select: { material: "material", percentage: "percentage" },
+            prepare({ material, percentage }) {
+              return {
+                title: material,
+                subtitle: percentage ? `${percentage}%` : undefined,
+              };
+            },
+          },
+        }),
+      ],
+    }),
+
     // — AVAILABILITY & PRICING —
     defineField({
       name: "arrivalDate",

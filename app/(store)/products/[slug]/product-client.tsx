@@ -2,6 +2,12 @@
 "use client";
 
 import SwipeImageStage from "@/components/common/SwipeImageStage";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -527,7 +533,7 @@ export default function ProductClient({ product, priceLabel }: Props) {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button className="w-full h-11 text-white text-base font-semibold bg-[#25D366] hover:bg-[#20bd5a] gap-2">
+                <Button className="w-full h-11 text-white text-base font-semibold bg-blue-main hover:bg-blue-main/80 gap-2">
                   <FaWhatsapp className="w-5 h-5" />
                   Contact us on WhatsApp
                 </Button>
@@ -546,35 +552,159 @@ export default function ProductClient({ product, priceLabel }: Props) {
           </>
         )}
 
-        {/* Care instructions */}
-        {Array.isArray(product.careInstructions) &&
-          product.careInstructions.length > 0 && (
-            <>
-              <Separator />
-              <div className="prose text-sm text-gray-700">
-                <h3 className="font-semibold mb-3">Care Instructions</h3>
-                <PortableText
-                  value={product.careInstructions}
-                  components={{
-                    list: {
-                      bullet: ({ children }) => (
-                        <ul className="list-disc pl-5 space-y-1">{children}</ul>
-                      ),
-                      number: ({ children }) => (
-                        <ol className="list-decimal pl-5 space-y-1">
-                          {children}
-                        </ol>
-                      ),
-                    },
-                    listItem: {
-                      bullet: ({ children }) => <li>{children}</li>,
-                      number: ({ children }) => <li>{children}</li>,
-                    },
-                  }}
-                />
-              </div>
-            </>
-          )}
+        {/* Product Details Accordion */}
+        <div className="pt-4">
+          <Accordion type="single" collapsible className="w-full">
+            {/* Fabric */}
+            {product.fabric && (
+              <AccordionItem value="fabric">
+                <AccordionTrigger>Fabric</AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex gap-4 pb-4">
+                    {product.fabric.image && (
+                      <div className="relative w-full max-w-1/2 md:max-w-1/3 rounded-md overflow-hidden bg-gray-100 aspect-square">
+                        <Image
+                          src={imageUrl(product.fabric.image)?.url() ?? ""}
+                          alt={product.fabric.name ?? "Fabric image"}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-2 max-w-2/3">
+                      {product.fabric.name && (
+                        <h4 className="font-medium text-sm">
+                          {product.fabric.name}
+                        </h4>
+                      )}
+                      {product.fabric.description && (
+                        <p className="text-gray-600">
+                          {product.fabric.description}
+                        </p>
+                      )}
+                      {product.fabric.weight && (
+                        <p className="text-sm mt-4">
+                          <span className="font-medium">Weight:</span>{" "}
+                          {product.fabric.weight}gsm
+                        </p>
+                      )}
+                      {product.fabric.properties &&
+                        product.fabric.properties.length > 0 && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                            {product.fabric.properties.map((prop, idx) => (
+                              <div
+                                key={idx}
+                                className="bg-gray-50 p-2 rounded text-sm"
+                              >
+                                <span className="font-medium text-gray-900">
+                                  {prop.key}:
+                                </span>{" "}
+                                <span className="text-gray-600">
+                                  {prop.value}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+            {/* Features */}
+            {product.features && product.features.length > 0 && (
+              <AccordionItem value="features">
+                <AccordionTrigger>Product Features</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="space-y-4">
+                    {product.features.map((feature) => (
+                      <li key={feature._key} className="flex gap-4">
+                        {feature.image && (
+                          <div className="relative shrink-0 w-16 h-16 rounded-md overflow-hidden bg-gray-100">
+                            <Image
+                              src={imageUrl(feature.image)?.url() ?? ""}
+                              alt={feature.title ?? "Feature image"}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-semibold text-sm">
+                            {feature.title}
+                          </h4>
+                          {feature.description && (
+                            <p className="text-sm text-gray-600 mt-0.5">
+                              {feature.description}
+                            </p>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+            {/* Composition */}
+            {product.composition && product.composition.length > 0 && (
+              <AccordionItem value="composition">
+                <AccordionTrigger>Composition</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="space-y-2">
+                    {product.composition.map((comp) => (
+                      <li
+                        key={comp._key}
+                        className="flex gap-2 text-sm py-1 border-b border-gray-100 last:border-0"
+                      >
+                        <span className="font-medium text-gray-700">
+                          {comp.material}
+                        </span>
+                        <span className="text-gray-500">
+                          {comp.percentage}%
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+            {/* Care Instructions */}
+            {Array.isArray(product.careInstructions) &&
+              product.careInstructions.length > 0 && (
+                <AccordionItem value="care">
+                  <AccordionTrigger>Care Instructions</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="prose prose-sm text-gray-700 max-w-none">
+                      <PortableText
+                        value={product.careInstructions}
+                        components={{
+                          list: {
+                            bullet: ({ children }) => (
+                              <ul className="list-disc pl-5 space-y-1">
+                                {children}
+                              </ul>
+                            ),
+                            number: ({ children }) => (
+                              <ol className="list-decimal pl-5 space-y-1">
+                                {children}
+                              </ol>
+                            ),
+                          },
+                          listItem: {
+                            bullet: ({ children }) => <li>{children}</li>,
+                            number: ({ children }) => <li>{children}</li>,
+                          },
+                        }}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              )}
+          </Accordion>
+        </div>
       </section>
     </div>
   );

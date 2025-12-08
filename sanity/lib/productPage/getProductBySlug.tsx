@@ -10,6 +10,24 @@ export type PDPProduct = {
   slug?: string;
   description?: PortableTextBlock[];
   careInstructions?: PortableTextBlock[];
+  fabric?: {
+    name?: string;
+    description?: string;
+    weight?: string;
+    image?: SanityImageSource;
+    properties?: { key?: string; value?: string }[];
+  } | null;
+  features?: {
+    _key: string;
+    title?: string;
+    description?: string;
+    image?: SanityImageSource;
+  }[];
+  composition?: {
+    _key: string;
+    material?: string;
+    percentage?: number;
+  }[];
   arrivalDate?: string;
   price?: number;
   mainImage?: SanityImageSource & { alt?: string };
@@ -49,6 +67,9 @@ export async function getProductBySlug(slug: string) {
       gender,
       description,
       careInstructions,
+      fabric,
+      features,
+      composition,
       arrivalDate,
       price,
       mainImage,
