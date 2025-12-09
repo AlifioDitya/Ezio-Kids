@@ -14,7 +14,6 @@ import { Separator } from "@/components/ui/separator";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
-import { AlertTriangle } from "lucide-react";
 import { PortableText } from "next-sanity";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -62,17 +61,8 @@ export default function ProductClient({ product }: Props) {
     );
   }, [variants]);
 
-  const sizeLabelById = React.useMemo(() => {
-    const m = new Map<string, string>();
-    for (const s of sizeOptions) {
-      if (s?._id && s?.label) m.set(s._id, s.label);
-    }
-    return m;
-  }, [sizeOptions]);
-
-  const colorHasAnyStock = React.useCallback(
-    (colorId: string) =>
-      variants.some((v) => v.color?._id === colorId && (v.stock ?? 0) > 0),
+  const isColorPresent = React.useCallback(
+    (colorId: string) => variants.some((v) => v.color?._id === colorId),
     [variants]
   );
 
@@ -116,12 +106,11 @@ export default function ProductClient({ product }: Props) {
     }
     // Fallback: First available or first option
     return (
-      colorOptions.find((c) => (c?._id ? colorHasAnyStock(c._id) : false))
-        ?._id ??
+      colorOptions.find((c) => (c?._id ? isColorPresent(c._id) : false))?._id ??
       colorOptions[0]?._id ??
       null
     );
-  }, [searchParams, colorOptions, colorHasAnyStock, findColorId]);
+  }, [searchParams, colorOptions, isColorPresent, findColorId]);
 
   const [selectedColorId, setSelectedColorId] = React.useState<string | null>(
     initialColorId
@@ -136,7 +125,7 @@ export default function ProductClient({ product }: Props) {
         const v = variants.find(
           (v) => v.color?._id === colorId && v.size?._id === sId
         );
-        if (v && (v.stock ?? 0) > 0) return sId;
+        if (v) return sId;
       }
       return null;
     },
@@ -154,10 +143,7 @@ export default function ProductClient({ product }: Props) {
         // Strict interpretation: if URL param exists but OOS, should we switch?
         // Let's stick to URL if explicit, otherwise fallback.
         const isAvailable = variants.some(
-          (v) =>
-            v.size?._id === fromUrl &&
-            v.color?._id === initialColorId &&
-            (v.stock ?? 0) > 0
+          (v) => v.size?._id === fromUrl && v.color?._id === initialColorId
         );
         if (isAvailable) return fromUrl;
       }
@@ -213,8 +199,7 @@ export default function ProductClient({ product }: Props) {
       variants.some(
         (v) =>
           v.size?._id === sizeId &&
-          (!selectedColorId || v.color?._id === selectedColorId) &&
-          (v.stock ?? 0) > 0
+          (!selectedColorId || v.color?._id === selectedColorId)
       ),
     [variants, selectedColorId]
   );
@@ -229,8 +214,8 @@ export default function ProductClient({ product }: Props) {
   };
 
   const isColorAvailable = React.useCallback(
-    (colorId: string) => colorHasAnyStock(colorId),
-    [colorHasAnyStock]
+    (colorId: string) => isColorPresent(colorId),
+    [isColorPresent]
   );
 
   const activeVariant = React.useMemo(() => {
@@ -242,11 +227,6 @@ export default function ProductClient({ product }: Props) {
       ) ?? null
     );
   }, [variants, selectedColorId, selectedSizeId]);
-
-  const hasSelectedSize = Boolean(selectedSizeId);
-  const lowStockCount = activeVariant?.stock ?? 0;
-  const showLowStock =
-    hasSelectedSize && lowStockCount > 0 && lowStockCount < 10;
 
   // 4. Image Filtering Logic (Same as ProductCard)
   // ----------------------------------------------
@@ -406,13 +386,9 @@ export default function ProductClient({ product }: Props) {
                     type="button"
                     onClick={() => available && onSelectColor(id)}
                     aria-pressed={checked}
-                    aria-disabled={!available}
-                    disabled={!available}
                     className={cn(
                       "relative h-6 w-6 rounded-full border overflow-hidden",
-                      checked && "ring-2 ring-offset-2 ring-gray-900",
-                      "disabled:opacity-50 disabled:cursor-not-allowed",
-                      "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
+                      checked && "ring-2 ring-offset-2 ring-gray-900"
                     )}
                     title={c?.name ?? ""}
                   >
@@ -454,14 +430,12 @@ export default function ProductClient({ product }: Props) {
                     type="button"
                     variant={selected ? "default" : "outline"}
                     size="sm"
-                    disabled={!available}
-                    onClick={() => available && setSelectedSizeId(id)}
+                    onClick={() => setSelectedSizeId(id)}
                     className={cn(
                       "relative min-w-[3.25rem] bg-white justify-center shadow-none overflow-hidden border border-gray-200 text-gray-800 hover:border-blue-main hover:text-blue-main",
                       selected &&
                         "border-blue-main text-blue-main hover:border-blue-main hover:text-blue-main hover:bg-blue-main/5",
-                      !available && "opacity-60 cursor-not-allowed",
-                      "disabled:after:content-[''] disabled:after:absolute disabled:after:left-[-12%] disabled:after:top-1/2 disabled:after:h-[1px] disabled:after:w-[124%] disabled:after:-rotate-45 disabled:after:bg-gray-400/70"
+                      !available && "opacity-60"
                     )}
                   >
                     {s?.label}
@@ -469,24 +443,6 @@ export default function ProductClient({ product }: Props) {
                 );
               })}
             </div>
-
-            {/* Low stock notice */}
-            {showLowStock && (
-              <div
-                role="status"
-                aria-live="polite"
-                className="mt-3 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900"
-              >
-                <AlertTriangle className="h-4 w-4" />
-                <span className="text-sm font-medium">
-                  Only {lowStockCount} stock left
-                  {selectedSizeId
-                    ? ` in size ${sizeLabelById.get(selectedSizeId) ?? "this size"}`
-                    : ""}{" "}
-                  — grab it before it&apos;s gone!
-                </span>
-              </div>
-            )}
           </div>
         )}
 
@@ -495,16 +451,15 @@ export default function ProductClient({ product }: Props) {
         {/* Contact Us CTA */}
         {/* WhatsApp CTA */}
         {(() => {
-          const isOutOfStock =
-            !activeVariant || (activeVariant.stock ?? 0) <= 0;
+          const isNotAvailable = !activeVariant;
 
-          if (isOutOfStock) {
+          if (isNotAvailable) {
             return (
               <Button
                 disabled
                 className="w-full h-11 text-base font-semibold bg-gray-200 text-gray-500 cursor-not-allowed"
               >
-                Out of Stock
+                Product not available in this variant
               </Button>
             );
           }
@@ -516,7 +471,7 @@ export default function ProductClient({ product }: Props) {
             sizeOptions.find((s) => s?._id === selectedSizeId)?.label ||
             "Default Size";
 
-          const message = `Hi, I'm interested in ${product.name} - ${colorName} - ${sizeLabel}`;
+          const message = `Halo, Saya tertarik dengan produk ${product.name}, warna ${colorName} ukuran ${sizeLabel}`;
           const whatsappUrl = `https://wa.me/6281310899214?text=${encodeURIComponent(
             message
           )}`;
@@ -529,9 +484,9 @@ export default function ProductClient({ product }: Props) {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button className="w-full h-11 text-white text-base font-semibold bg-blue-main hover:bg-blue-main/80 gap-2">
+                <Button className="w-full h-11 text-white text-base font-semibold bg-green-500 hover:bg-green-600 gap-2">
                   <FaWhatsapp className="w-5 h-5" />
-                  Contact us on WhatsApp
+                  Contact us about this product
                 </Button>
               </a>
             </div>
