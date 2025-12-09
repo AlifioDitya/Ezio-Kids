@@ -2,6 +2,7 @@
 import FilterSidebarClient from "@/components/filters/FilterSidebar.client";
 import {
   getAllCategoriesCached,
+  getAllCollarTypesCached,
   getAllFabricsCached,
   getAllSizesCached,
   getAllTagsCached,
@@ -12,11 +13,12 @@ export default async function FilterSidebar({
 }: {
   currentSort: "newest" | "price-asc" | "price-desc";
 }) {
-  const [sizes, categories, tags, fabrics] = await Promise.all([
+  const [sizes, categories, tags, fabrics, collarTypes] = await Promise.all([
     getAllSizesCached(),
     getAllCategoriesCached(),
     getAllTagsCached(),
     getAllFabricsCached(),
+    getAllCollarTypesCached(),
   ]);
 
   return (
@@ -24,6 +26,7 @@ export default async function FilterSidebar({
       sizes={sizes}
       categories={categories}
       fabrics={fabrics}
+      collarTypes={collarTypes}
       tags={tags}
       currentSort={currentSort}
     />

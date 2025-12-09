@@ -16,6 +16,8 @@ type Props = {
   selectedSleeves: string[];
   selectedTrueColors: string[];
   selectedTags: string[];
+  selectedFabrics: string[];
+  selectedCollarTypes: string[];
   ageGroups: AgeGroup[];
   arrivalsOnly: boolean;
   basePath: string;
@@ -31,6 +33,8 @@ export default function CatalogLayout({
   selectedSleeves,
   selectedTrueColors,
   selectedTags,
+  selectedFabrics,
+  selectedCollarTypes,
   ageGroups,
   arrivalsOnly,
   basePath,
@@ -44,6 +48,8 @@ export default function CatalogLayout({
     selectedSleeves,
     selectedTrueColors,
     selectedTags,
+    selectedFabrics,
+    selectedCollarTypes,
     ageGroups,
     arrivalsOnly,
     searchQ,
@@ -109,6 +115,8 @@ export default function CatalogLayout({
                 sleeves={selectedSleeves}
                 tags={selectedTags}
                 trueColors={selectedTrueColors}
+                fabrics={selectedFabrics}
+                collarTypes={selectedCollarTypes}
                 ageGroups={ageGroups}
                 arrivalsOnly={arrivalsOnly}
                 basePath={basePath}

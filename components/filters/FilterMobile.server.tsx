@@ -1,5 +1,6 @@
 import {
   getAllCategoriesCached,
+  getAllCollarTypesCached,
   getAllFabricsCached,
   getAllSizesCached,
   getAllTagsCached,
@@ -7,11 +8,12 @@ import {
 import FilterMobileClient from "./FilterMobile.client";
 
 export default async function FilterMobile() {
-  const [sizes, categories, tags, fabrics] = await Promise.all([
+  const [sizes, categories, tags, fabrics, collarTypes] = await Promise.all([
     getAllSizesCached(),
     getAllCategoriesCached(),
     getAllTagsCached(),
     getAllFabricsCached(),
+    getAllCollarTypesCached(),
   ]);
 
   return (
@@ -19,6 +21,7 @@ export default async function FilterMobile() {
       sizes={sizes}
       categories={categories}
       fabrics={fabrics}
+      collarTypes={collarTypes}
       tags={tags}
     />
   );

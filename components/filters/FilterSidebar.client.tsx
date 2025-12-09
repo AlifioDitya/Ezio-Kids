@@ -1,40 +1,42 @@
 // components/filters/FilterSidebar.client.tsx
 "use client";
 
-import type { FabricOption } from "@/sanity/lib/collectionsPage/getAllFabrics";
-
 import { TRUE_COLOR_OPTIONS } from "@/app/constant";
-import { SizeFilter } from "@/components/filters/SizeFilter";
-import SortDropdown from "@/components/filters/SortDropdown";
+import { ComboboxItem } from "@/components/ui/combobox";
+import { cn } from "@/lib/utils";
+import type { Category, Size, Tag } from "@/sanity.types";
+import type { CollarTypeOption } from "@/sanity/lib/collectionsPage/getAllCollarTypes";
+import type { FabricOption } from "@/sanity/lib/collectionsPage/getAllFabrics";
+import { X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import type { ComboboxItem } from "@/components/ui/combobox";
-import { Separator } from "@/components/ui/separator";
+} from "../ui/accordion";
+import { Badge } from "../ui/badge";
+import { Separator } from "../ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import type { Category, Size, Tag } from "@/sanity.types";
-import { X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import * as React from "react";
+} from "../ui/tooltip";
 import CategoryFilter from "./CategoryFilter";
+import CollarTypeFilter from "./CollarTypeFilter";
 import FabricFilter from "./FabricFilter";
+import { SizeFilter } from "./SizeFilter";
 import SleeveLengthFilter from "./SleeveLengthFilter";
+import SortDropdown from "./SortDropdown";
 import TagFilter from "./TagFilter";
 
 interface FilterSidebarClientProps {
   sizes: Size[];
   categories: Category[];
   fabrics: FabricOption[];
+  collarTypes: CollarTypeOption[];
   tags: Tag[];
   currentSort: "newest" | "price-asc" | "price-desc";
   initialSelectedSizes?: string[];
@@ -64,6 +66,7 @@ export default function FilterSidebarClient({
   sizes,
   categories,
   fabrics,
+  collarTypes,
   tags,
   currentSort,
 }: FilterSidebarClientProps) {
@@ -92,6 +95,10 @@ export default function FilterSidebarClient({
     () => (params.get("fabric") ?? "").split(",").filter(Boolean),
     [params]
   );
+  const selectedCollars = React.useMemo(
+    () => (params.get("collar") ?? "").split(",").filter(Boolean),
+    [params]
+  );
   const selectedTags = React.useMemo(
     () => (params.get("tag") ?? "").split(",").filter(Boolean),
     [params]
@@ -103,12 +110,13 @@ export default function FilterSidebarClient({
     selectedCategories.length ||
     selectedSleeves.length ||
     selectedFabrics.length ||
+    selectedCollars.length ||
     selectedTags.length;
 
   // Helper: write arrays back to URL and reset page (stay on current route)
   const setParamList = React.useCallback(
     (
-      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric",
+      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric" | "collar",
       next: string[]
     ) => {
       startTransition(() => {
@@ -151,6 +159,8 @@ export default function FilterSidebarClient({
     setParamList("sleeve", toggle(selectedSleeves, slug));
   const onToggleFabric = (val: string) =>
     setParamList("fabric", toggle(selectedFabrics, val));
+  const onToggleCollar = (slug: string) =>
+    setParamList("collar", toggle(selectedCollars, slug));
   const onToggleTag = (slug: string) =>
     setParamList("tag", toggle(selectedTags, slug));
 
@@ -163,6 +173,7 @@ export default function FilterSidebarClient({
       q.delete("cat");
       q.delete("sleeve");
       q.delete("fabric");
+      q.delete("collar");
       q.delete("tag");
       q.delete("page");
       replaceWithPrefetch(router, startTransition)(q);
@@ -209,6 +220,11 @@ export default function FilterSidebarClient({
       key: `fabric:${f}`,
       label: f,
       onRemove: () => onToggleFabric(f),
+    })),
+    ...selectedCollars.map((c) => ({
+      key: `collar:${c}`,
+      label: c,
+      onRemove: () => onToggleCollar(c),
     })),
     ...selectedTags.map((t) => ({
       key: `tag:${t}`,
@@ -346,6 +362,20 @@ export default function FilterSidebarClient({
               selectedFabrics={selectedFabrics}
               onToggleFabric={onToggleFabric}
             />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Separator />
+
+      {/* Collar Types */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="collar">
+          <AccordionTrigger className="font-semibold text-xs">
+            Collar Type
+          </AccordionTrigger>
+          <AccordionContent>
+            <CollarTypeFilter collarTypes={collarTypes} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

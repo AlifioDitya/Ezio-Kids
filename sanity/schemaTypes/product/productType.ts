@@ -110,51 +110,14 @@ export default defineType({
     defineField({
       name: "fabric",
       title: "Fabric",
-      type: "object",
-      fields: [
-        defineField({
-          name: "name",
-          title: "Fabric Name",
-          type: "string",
-        }),
-        defineField({
-          name: "image",
-          title: "Fabric Image",
-          type: "image",
-          options: { hotspot: true },
-        }),
-        defineField({
-          name: "description",
-          title: "Description",
-          type: "text",
-          rows: 3,
-        }),
-        defineField({
-          name: "weight",
-          title: "Weight (gsm)",
-          type: "string",
-        }),
-        defineField({
-          name: "properties",
-          title: "Additional Properties",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "key", title: "Key", type: "string" }),
-                defineField({ name: "value", title: "Value", type: "string" }),
-              ],
-              preview: {
-                select: { key: "key", value: "value" },
-                prepare({ key, value }) {
-                  return { title: key, subtitle: value };
-                },
-              },
-            }),
-          ],
-        }),
-      ],
+      type: "reference",
+      to: [{ type: "fabric" }],
+    }),
+    defineField({
+      name: "collarType",
+      title: "Collar Type",
+      type: "reference",
+      to: [{ type: "collarType" }],
     }),
     defineField({
       name: "features",

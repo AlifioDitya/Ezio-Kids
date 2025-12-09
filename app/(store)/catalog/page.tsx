@@ -23,6 +23,7 @@ type SearchParams = {
   tag?: string | string[];
   q?: string | string[];
   fabric?: string | string[];
+  collar?: string | string[];
 };
 
 const toArray = (v?: string | string[]) =>
@@ -58,6 +59,8 @@ export default async function CatalogPage(props: {
   const selectedSleeves = toArray(searchParams.sleeve);
   const selectedTrueColors = toArray(searchParams.tcolor);
   const selectedTags = toArray(searchParams.tag);
+  const selectedFabrics = toArray(searchParams.fabric);
+  const selectedCollars = toArray(searchParams.collar);
 
   const titleBlock = TITLES["catalog"];
 
@@ -71,6 +74,8 @@ export default async function CatalogPage(props: {
       selectedSleeves={selectedSleeves}
       selectedTrueColors={selectedTrueColors}
       selectedTags={selectedTags}
+      selectedFabrics={selectedFabrics}
+      selectedCollarTypes={selectedCollars}
       ageGroups={[]}
       arrivalsOnly={false}
       basePath="/catalog"

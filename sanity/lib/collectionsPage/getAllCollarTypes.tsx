@@ -1,15 +1,15 @@
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "../live";
 
-export type FabricOption = {
+export type CollarTypeOption = {
   name: string;
   slug: string;
   image?: string | null;
 };
 
-export const getAllFabrics = async (): Promise<FabricOption[]> => {
-  const GET_ALL_FABRICS_QUERY = defineQuery(
-    `*[_type == "fabric"]{
+export const getAllCollarTypes = async (): Promise<CollarTypeOption[]> => {
+  const QUERY = defineQuery(
+    `*[_type == "collarType"]{
       name,
       "slug": slug.current,
       "image": image.asset->url
@@ -17,7 +17,7 @@ export const getAllFabrics = async (): Promise<FabricOption[]> => {
   );
 
   const result = await sanityFetch({
-    query: GET_ALL_FABRICS_QUERY,
+    query: QUERY,
   });
 
   return result.data || [];

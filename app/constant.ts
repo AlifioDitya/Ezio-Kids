@@ -15,7 +15,7 @@ export const NAV_LINKS: NavItem[] = [
     ],
   },
   {
-    label: "Materials",
+    label: "Fabrics",
     children: [
       { label: "Melange", href: "/collections/melange" },
       { label: "Chambray", href: "/collections/chambray" },

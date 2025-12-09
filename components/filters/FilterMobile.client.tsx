@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import CategoryFilter from "@/components/filters/CategoryFilter";
+import CollarTypeFilter from "@/components/filters/CollarTypeFilter";
 import FabricFilter from "@/components/filters/FabricFilter";
 import { SizeFilter } from "@/components/filters/SizeFilter";
 import SleeveLengthFilter from "@/components/filters/SleeveLengthFilter";
@@ -27,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { CollarTypeOption } from "@/sanity/lib/collectionsPage/getAllCollarTypes";
 import type { FabricOption } from "@/sanity/lib/collectionsPage/getAllFabrics";
 import { SlidersHorizontal } from "lucide-react";
 
@@ -34,6 +36,7 @@ type Props = {
   sizes: Size[];
   categories: Category[];
   fabrics: FabricOption[];
+  collarTypes: CollarTypeOption[];
   tags: Tag[];
 };
 
@@ -59,6 +62,7 @@ export default function FilterMobileClient({
   sizes,
   categories,
   fabrics,
+  collarTypes,
   tags,
 }: Props) {
   const [open, setOpen] = React.useState(false);
@@ -238,6 +242,16 @@ export default function FilterMobileClient({
                 selectedFabrics={selectedFabrics}
                 onToggleFabric={onToggleFabric}
               />
+            </div>
+
+            <Separator />
+
+            {/* Collar Types */}
+            <div>
+              <p className="mb-3 text-xs font-semibold text-gray-800">
+                Collar Type
+              </p>
+              <CollarTypeFilter collarTypes={collarTypes} />
             </div>
 
             <Separator />

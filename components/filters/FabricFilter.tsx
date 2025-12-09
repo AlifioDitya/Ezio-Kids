@@ -31,9 +31,9 @@ export default function FabricFilter({
             {/* Avatar with Ring */}
             <div
               className={cn(
-                "relative ml-1 h-6 w-6 overflow-hidden rounded-full border border-gray-100 flex-shrink-0 transition-all",
+                "relative ml-1 h-8 w-8 overflow-hidden rounded-full border border-gray-100 flex-shrink-0 transition-all",
                 checked
-                  ? "ring-1 ring-gray-900 ring-offset-2"
+                  ? "ring-1 ring-gray-900 ring-offset-1"
                   : "group-hover:ring-1 group-hover:ring-gray-200 group-hover:ring-offset-1"
               )}
             >

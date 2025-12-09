@@ -22,6 +22,8 @@ const QUERY = `
       slug.current match $search ||
       category->name match $search ||
       category->slug.current match $search ||
+      fabric->name match $search ||
+      collarType->name match $search ||
       count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
       count(variants[
         color->name match $search || size->label match $search
@@ -61,7 +63,13 @@ const QUERY = `
     // ---- FABRICS ----
     (
       count($fabrics) == 0 ||
-      fabric.name in $fabrics
+      fabric->slug.current in $fabrics
+    ) &&
+
+    // ---- COLLAR TYPES ----
+    (
+      count($collarTypes) == 0 ||
+      collarType->slug.current in $collarTypes
     ) &&
 
     // ---- TAGS (by tag slug) ----
@@ -113,7 +121,8 @@ const QUERY = `
       priceOverride
     },
     "category": category->{name, "slug": slug.current},
-    "fabric": fabric{name},
+    "fabric": fabric->{name, "slug": slug.current},
+    "collarType": collarType->{name, "slug": slug.current},
   },
 
   "total": count(*[
@@ -125,6 +134,8 @@ const QUERY = `
       slug.current match $search ||
       category->name match $search ||
       category->slug.current match $search ||
+      fabric->name match $search ||
+      collarType->name match $search ||
       count(tags[@->title match $search || @->slug.current match $search]) > 0 ||
       count(variants[
         color->name match $search || size->label match $search
@@ -181,6 +192,7 @@ export async function getProducts(
     categories?: string[];
     sleeves?: string[];
     fabrics?: string[];
+    collarTypes?: string[];
     trueColors?: string[];
     tags?: string[];
 
@@ -218,6 +230,7 @@ export async function getProducts(
       categories: opts.categories ?? [],
       sleeves: opts.sleeves ?? [],
       fabrics: opts.fabrics ?? [],
+      collarTypes: opts.collarTypes ?? [],
       trueColors: opts.trueColors ?? [],
       tags: opts.tags ?? [],
       arrivalsOnly: Boolean(opts.arrivalsOnly),

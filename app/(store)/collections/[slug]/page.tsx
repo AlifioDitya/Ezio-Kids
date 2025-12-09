@@ -34,6 +34,7 @@ type SearchParams = {
   tag?: string | string[];
   q?: string | string[];
   fabric?: string | string[];
+  collar?: string | string[];
 };
 
 const toArray = (v?: string | string[]) =>
@@ -75,6 +76,9 @@ export default async function CollectionsPage(props: {
   const selectedTrueColors = toArray(searchParams.tcolor);
   const selectedTags = toArray(searchParams.tag);
 
+  const selectedFabrics = toArray(searchParams.fabric);
+  const selectedCollarTypes = toArray(searchParams.collar);
+
   // derive age groups from slug
   const ageGroupsFromSlug: AgeGroup[] =
     slug === "baby-toddler"
@@ -100,6 +104,8 @@ export default async function CollectionsPage(props: {
       selectedSleeves={selectedSleeves}
       selectedTrueColors={selectedTrueColors}
       selectedTags={selectedTags}
+      selectedFabrics={selectedFabrics}
+      selectedCollarTypes={selectedCollarTypes}
       ageGroups={ageGroupsFromSlug}
       arrivalsOnly={arrivalsOnly}
       basePath={`/collections/${slug}`}

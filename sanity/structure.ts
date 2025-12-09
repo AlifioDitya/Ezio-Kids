@@ -13,6 +13,8 @@ import {
   FaThLarge,
   FaTshirt,
 } from "react-icons/fa";
+import { GiRolledCloth } from "react-icons/gi";
+import { IoShirtOutline } from "react-icons/io5";
 import type { StructureResolver } from "sanity/structure";
 
 export const structure: StructureResolver = (S) =>
@@ -43,6 +45,12 @@ export const structure: StructureResolver = (S) =>
                 .title("Sizes")
                 .icon(FaRulerHorizontal),
               S.documentTypeListItem("tag").title("Tags").icon(FaTag),
+              S.documentTypeListItem("fabric")
+                .title("Fabrics")
+                .icon(GiRolledCloth),
+              S.documentTypeListItem("collarType")
+                .title("Collar Types")
+                .icon(IoShirtOutline),
               S.listItem()
                 .title("Popular Products")
                 .icon(FaStar)

@@ -26,3 +26,10 @@ export const getAllFabricsCached = cache(async () => {
   const res = await getAllFabrics();
   return res;
 });
+
+import { getAllCollarTypes } from "./getAllCollarTypes";
+
+export const getAllCollarTypesCached = cache(async () => {
+  const res = await getAllCollarTypes();
+  return res;
+});
