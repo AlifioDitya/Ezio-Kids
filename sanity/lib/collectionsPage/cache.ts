@@ -1,7 +1,7 @@
 // sanity/lib/collectionsPage/cache.ts
 import { cache } from "react";
-import { getAllSizes } from "./getAllSizes";
 import { getAllCategories } from "./getAllCategories";
+import { getAllSizes } from "./getAllSizes";
 import { getAllTags } from "./getAllTags";
 
 // Wrap with React cache so repeated calls in the same process are instant.
@@ -18,4 +18,11 @@ export const getAllCategoriesCached = cache(async () => {
 export const getAllTagsCached = cache(async () => {
   const res = await getAllTags();
   return res.data;
+});
+
+import { getAllFabrics } from "./getAllFabrics";
+
+export const getAllFabricsCached = cache(async () => {
+  const res = await getAllFabrics();
+  return res;
 });

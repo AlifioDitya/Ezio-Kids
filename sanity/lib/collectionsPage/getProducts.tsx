@@ -58,6 +58,12 @@ const QUERY = `
       sleeveLength in $sleeves
     ) &&
 
+    // ---- FABRICS ----
+    (
+      count($fabrics) == 0 ||
+      fabric.name in $fabrics
+    ) &&
+
     // ---- TAGS (by tag slug) ----
     (
       count($tags) == 0 ||
@@ -174,6 +180,7 @@ export async function getProducts(
     sizes?: string[];
     categories?: string[];
     sleeves?: string[];
+    fabrics?: string[];
     trueColors?: string[];
     tags?: string[];
 
@@ -210,6 +217,7 @@ export async function getProducts(
       sizes: opts.sizes ?? [],
       categories: opts.categories ?? [],
       sleeves: opts.sleeves ?? [],
+      fabrics: opts.fabrics ?? [],
       trueColors: opts.trueColors ?? [],
       tags: opts.tags ?? [],
       arrivalsOnly: Boolean(opts.arrivalsOnly),

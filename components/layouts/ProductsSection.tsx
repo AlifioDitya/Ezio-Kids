@@ -107,7 +107,7 @@ export async function ProductsSection({
   return (
     <div className="flex-1">
       {/* Grid (unchanged styling) */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-px md:gap-4">
         {products.items.map((p: ProductCardProps["product"]) => (
           <ProductCard key={p._id} product={p} />
         ))}

@@ -37,6 +37,9 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
       name match $q || 
       lower(name) match lower($q) ||
       category->name match $q ||
+      fabric.name match $q ||
+      count(variants[color->name match $q]) > 0 ||
+      sleeveLength match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
     )
   ] | order(_score desc, _createdAt desc) [0...$limit]{
@@ -68,6 +71,9 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
       name match $q || 
       lower(name) match lower($q) ||
       category->name match $q ||
+      fabric.name match $q ||
+      count(variants[color->name match $q]) > 0 ||
+      sleeveLength match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
     )
   ]),
@@ -75,7 +81,8 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
   // primitive suggestions: tag titles + category names containing query
   "suggestions": array::unique([
     ...*[_type=="tag" && (title match $q || slug.current match $q)][0...10].title,
-    ...*[_type=="category" && (name match $q || slug.current match $q)][0...10].name
+    ...*[_type=="category" && (name match $q || slug.current match $q)][0...10].name,
+    ...*[_type=="product" && fabric.name match $q].fabric.name
   ])
 }
 `;

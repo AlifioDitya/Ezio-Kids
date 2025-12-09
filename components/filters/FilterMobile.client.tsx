@@ -7,9 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import CategoryFilter from "@/components/filters/CategoryFilter";
+import FabricFilter from "@/components/filters/FabricFilter";
 import { SizeFilter } from "@/components/filters/SizeFilter";
 import SleeveLengthFilter from "@/components/filters/SleeveLengthFilter";
-import SortDropdown from "@/components/filters/SortDropdown";
 import TagFilter from "@/components/filters/TagFilter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,13 +27,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { FabricOption } from "@/sanity/lib/collectionsPage/getAllFabrics";
 import { SlidersHorizontal } from "lucide-react";
 
 type Props = {
   sizes: Size[];
   categories: Category[];
+  fabrics: FabricOption[];
   tags: Tag[];
-  currentSort: "newest" | "price-asc" | "price-desc";
 };
 
 const csv = (arr: string[]) => arr.filter(Boolean).join(",");
@@ -57,8 +58,8 @@ function replaceWithPrefetch(
 export default function FilterMobileClient({
   sizes,
   categories,
+  fabrics,
   tags,
-  currentSort,
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -82,6 +83,10 @@ export default function FilterMobileClient({
     () => toArray(params.get("sleeve")),
     [params]
   );
+  const selectedFabrics = React.useMemo(
+    () => toArray(params.get("fabric")),
+    [params]
+  );
   const selectedTags = React.useMemo(
     () => toArray(params.get("tag")),
     [params]
@@ -92,10 +97,14 @@ export default function FilterMobileClient({
     selectedSizes.length +
     selectedCategories.length +
     selectedSleeves.length +
+    selectedFabrics.length +
     selectedTags.length;
 
   const setParamList = React.useCallback(
-    (key: "tcolor" | "size" | "cat" | "sleeve" | "tag", next: string[]) => {
+    (
+      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric",
+      next: string[]
+    ) => {
       const q = new URLSearchParams(params.toString());
       if (next.length) q.set(key, csv(next));
       else q.delete(key);
@@ -116,56 +125,33 @@ export default function FilterMobileClient({
     setParamList("cat", toggle(selectedCategories, slug));
   const onToggleSleeve = (slug: string) =>
     setParamList("sleeve", toggle(selectedSleeves, slug));
+  const onToggleFabric = (val: string) =>
+    setParamList("fabric", toggle(selectedFabrics, val));
   const onToggleTag = (slug: string) =>
     setParamList("tag", toggle(selectedTags, slug));
 
   const clearAll = () => {
     const q = new URLSearchParams(params.toString());
-    ["tcolor", "size", "cat", "sleeve", "tag", "page"].forEach((k) =>
+    ["tcolor", "size", "cat", "sleeve", "fabric", "tag", "page"].forEach((k) =>
       q.delete(k)
     );
     replaceWithPrefetch(router, startTransition)(q);
-  };
-
-  const sortOptions = [
-    { value: "newest", label: "Newest" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
-  ];
-
-  const onSortChange = (newSort: string) => {
-    const q = new URLSearchParams(params.toString());
-    q.set("sort", newSort);
-    q.delete("page");
-    replaceWithPrefetch(router, startTransition)(q);
+    setOpen(false);
   };
 
   // Top trigger bar (mobile-only)
   return (
     <>
-      <div className="sm:hidden flex items-center gap-2">
-        <div className="flex-1">
-          <SortDropdown
-            id="mobile-sort"
-            label="Sort"
-            items={sortOptions}
-            value={currentSort}
-            onChange={onSortChange}
-            placeholder="Sort"
-            widthClassName="w-full"
-            disabled={isPending}
-          />
-        </div>
-
+      <div className="md:hidden flex items-center">
         <Button
           onClick={() => setOpen(true)}
           variant="outline"
-          className="flex items-center gap-2 rounded-xs shadow-none bg-white"
+          className="flex items-center gap-2 rounded-xs shadow-none bg-white border-gray-300"
         >
           <SlidersHorizontal className="h-4 w-4" />
-          <p className="text-xs">Filters</p>
+          <p className="text-xs font-medium">Filters</p>
           {activeCount > 0 && (
-            <Badge className="rounded-full px-2 py-0.5 text-[10px] bg-red-500 text-white h-5 w-5">
+            <Badge className="rounded-full px-2 py-0.5 text-[10px] bg-red-500 text-white h-5 w-5 justify-center">
               {activeCount}
             </Badge>
           )}
@@ -173,7 +159,7 @@ export default function FilterMobileClient({
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="p-0 w-full sm:max-w-sm">
+        <SheetContent side="left" className="p-0 w-full md:max-w-sm">
           <SheetHeader className="px-5 py-4 border-b">
             <div className="flex flex-col gap-3">
               <SheetTitle className="text-base">Filters</SheetTitle>
@@ -239,6 +225,18 @@ export default function FilterMobileClient({
                 categories={categories}
                 selectedSlugs={selectedCategories}
                 onToggle={onToggleCategory}
+              />
+            </div>
+
+            <Separator />
+
+            {/* Fabric */}
+            <div>
+              <p className="mb-3 text-xs font-semibold text-gray-800">Fabric</p>
+              <FabricFilter
+                fabrics={fabrics}
+                selectedFabrics={selectedFabrics}
+                onToggleFabric={onToggleFabric}
               />
             </div>
 

@@ -172,7 +172,9 @@ export default function SearchDrawer() {
                   "outline-none ring-0 focus:border-gray-300"
                 )}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && q.trim()) goToAllResults();
+                  if (e.key === "Enter") {
+                    e.currentTarget.blur();
+                  }
                   if (e.key === "Escape") closeAndReset();
                 }}
               />

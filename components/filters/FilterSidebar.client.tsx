@@ -1,6 +1,8 @@
 // components/filters/FilterSidebar.client.tsx
 "use client";
 
+import type { FabricOption } from "@/sanity/lib/collectionsPage/getAllFabrics";
+
 import { TRUE_COLOR_OPTIONS } from "@/app/constant";
 import { SizeFilter } from "@/components/filters/SizeFilter";
 import SortDropdown from "@/components/filters/SortDropdown";
@@ -25,12 +27,14 @@ import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import CategoryFilter from "./CategoryFilter";
+import FabricFilter from "./FabricFilter";
 import SleeveLengthFilter from "./SleeveLengthFilter";
 import TagFilter from "./TagFilter";
 
 interface FilterSidebarClientProps {
   sizes: Size[];
   categories: Category[];
+  fabrics: FabricOption[];
   tags: Tag[];
   currentSort: "newest" | "price-asc" | "price-desc";
   initialSelectedSizes?: string[];
@@ -59,6 +63,7 @@ const csv = (arr: string[]) => arr.filter(Boolean).join(",");
 export default function FilterSidebarClient({
   sizes,
   categories,
+  fabrics,
   tags,
   currentSort,
 }: FilterSidebarClientProps) {
@@ -83,6 +88,10 @@ export default function FilterSidebarClient({
     () => (params.get("sleeve") ?? "").split(",").filter(Boolean),
     [params]
   );
+  const selectedFabrics = React.useMemo(
+    () => (params.get("fabric") ?? "").split(",").filter(Boolean),
+    [params]
+  );
   const selectedTags = React.useMemo(
     () => (params.get("tag") ?? "").split(",").filter(Boolean),
     [params]
@@ -93,11 +102,15 @@ export default function FilterSidebarClient({
     selectedSizes.length ||
     selectedCategories.length ||
     selectedSleeves.length ||
+    selectedFabrics.length ||
     selectedTags.length;
 
   // Helper: write arrays back to URL and reset page (stay on current route)
   const setParamList = React.useCallback(
-    (key: "tcolor" | "size" | "cat" | "sleeve" | "tag", next: string[]) => {
+    (
+      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric",
+      next: string[]
+    ) => {
       startTransition(() => {
         const q = new URLSearchParams(params.toString());
         if (next.length) q.set(key, csv(next));
@@ -136,6 +149,8 @@ export default function FilterSidebarClient({
     setParamList("cat", toggle(selectedCategories, slug));
   const onToggleSleeve = (slug: string) =>
     setParamList("sleeve", toggle(selectedSleeves, slug));
+  const onToggleFabric = (val: string) =>
+    setParamList("fabric", toggle(selectedFabrics, val));
   const onToggleTag = (slug: string) =>
     setParamList("tag", toggle(selectedTags, slug));
 
@@ -147,6 +162,7 @@ export default function FilterSidebarClient({
       q.delete("size");
       q.delete("cat");
       q.delete("sleeve");
+      q.delete("fabric");
       q.delete("tag");
       q.delete("page");
       replaceWithPrefetch(router, startTransition)(q);
@@ -188,6 +204,11 @@ export default function FilterSidebarClient({
       key: `sleeve:${sl}`,
       label: sleeveLabel(sl),
       onRemove: () => onToggleSleeve(sl),
+    })),
+    ...selectedFabrics.map((f) => ({
+      key: `fabric:${f}`,
+      label: f,
+      onRemove: () => onToggleFabric(f),
     })),
     ...selectedTags.map((t) => ({
       key: `tag:${t}`,
@@ -306,6 +327,24 @@ export default function FilterSidebarClient({
               sizes={sizes}
               selectedSizes={selectedSizes}
               onToggleSize={onToggleSize}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Separator />
+
+      {/* Fabric */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="fabric">
+          <AccordionTrigger className="font-semibold text-xs">
+            Fabric
+          </AccordionTrigger>
+          <AccordionContent>
+            <FabricFilter
+              fabrics={fabrics}
+              selectedFabrics={selectedFabrics}
+              onToggleFabric={onToggleFabric}
             />
           </AccordionContent>
         </AccordionItem>

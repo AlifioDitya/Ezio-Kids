@@ -356,8 +356,8 @@ export default function ProductClient({ product }: Props) {
 
       {/* RIGHT: Details */}
       <section aria-label="Product details" className="space-y-4">
-        {/* Tags */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 sticky bottom-0 z-40 md:relative">
+          {/* Tags */}
           <div className="flex items-center gap-2">
             {product.tags?.map((tag) => (
               <Badge
@@ -385,7 +385,7 @@ export default function ProductClient({ product }: Props) {
 
         {/* Colors */}
         {colorOptions.length > 0 && (
-          <div>
+          <div className="mb-6">
             <div className="flex flex-wrap gap-3">
               {colorOptions.map((c) => {
                 const id = c?._id ?? "";

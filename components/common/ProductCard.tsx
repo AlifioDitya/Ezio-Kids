@@ -272,7 +272,7 @@ export default function ProductCard({
       </Link>
 
       {variant !== "expanded" && (
-        <div>
+        <div className="px-2 md:px-0">
           {/* TITLE links to PDP with ?color=<selected> */}
           <Link
             href={hrefWithParams}
