@@ -5,7 +5,6 @@ import ColorSwatch from "@/components/common/ColorSwatch";
 import SwipeImageStage from "@/components/common/SwipeImageStage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatMoney } from "@/lib/utils";
 import NextImage from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -40,6 +39,8 @@ export type ProductCardProps = {
     additionalImages?: Array<{ asset?: { url: string }; alt?: string }>;
     variants?: Variant[] | null;
     tagInfo?: Array<{ title?: string; slug?: string }>;
+    category?: { name?: string; slug?: string };
+    fabric?: { name?: string };
     arrivalDate?: string | null;
     _createdAt?: string;
     _updatedAt?: string;
@@ -163,15 +164,6 @@ export default function ProductCard({
     product.mainImageUrl,
   ]);
 
-  // 4. Calculate Price (based on variant selection if relevant, or default)
-  // Sanity often has one price for product, but here we can check if variant has override
-  const price = React.useMemo(() => {
-    const variant = product.variants?.find(
-      (v) => v.color?.slug === activeColor
-    );
-    return variant?.priceOverride ?? product.price;
-  }, [product.variants, product.price, activeColor]);
-
   // Links
   const hrefBase = `/products/${product.slug?.current}`;
   const hrefWithParams = React.useMemo(() => {
@@ -179,8 +171,6 @@ export default function ProductCard({
     const q = new URLSearchParams({ color: activeColor }).toString();
     return `${hrefBase}?${q}`;
   }, [hrefBase, activeColor]);
-
-  const currencyCode = "IDR"; // Hardcoded for now based on context (Rp)
 
   const cardClass = `
     shrink-0 snap-start border-0 bg-transparent p-0 shadow-none gap-4
@@ -223,13 +213,16 @@ export default function ProductCard({
                   <h3 className="text-sm text-black tracking-wide">
                     {product.name}
                   </h3>
-                  {typeof price === "number" && (
-                    <div className="mt-1 flex flex-col items-start">
-                      <p className="text-xs text-gray-800 tracking-wide">
-                        {formatMoney(price.toString(), currencyCode)}
-                      </p>
-                    </div>
-                  )}
+                  <div className="mt-1 flex flex-col items-start">
+                    <p className="text-xs text-gray-800 tracking-wide">
+                      {product.category?.name
+                        ? `${product.category.name} design`
+                        : ""}{" "}
+                      {product.fabric?.name
+                        ? `with ${product.fabric.name}`
+                        : ""}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Color Selection */}
@@ -287,19 +280,20 @@ export default function ProductCard({
             className="block"
             onClick={onProductClick}
           >
-            <h3 className="line-clamp-1 text-xs max-w-[90%] text-black font-medium">
+            <h3 className="line-clamp-1 text-sm max-w-[90%] text-black font-semibold">
               {product.name}
             </h3>
           </Link>
 
           <div className="flex flex-col gap-4">
-            {typeof price === "number" && (
-              <div className="mt-2 flex flex-col items-start">
-                <p className="text-xs text-gray-800 tracking-wide">
-                  {formatMoney(price.toString(), currencyCode)}
-                </p>
-              </div>
-            )}
+            <div className="mt-1.5 flex flex-col items-start">
+              <p className="text-xs text-gray-800 tracking-wide">
+                {product.category?.name
+                  ? `${product.category.name} design`
+                  : ""}{" "}
+                {product.fabric?.name ? `with ${product.fabric.name}` : ""}
+              </p>
+            </div>
 
             {colors.length > 0 && (
               <div

@@ -21,6 +21,8 @@ type SearchResult = {
       priceOverride?: number;
     }>;
     tagInfo?: { title?: string; slug?: string }[];
+    category?: { name?: string; slug?: string };
+    fabric?: { name?: string };
   }>;
   suggestions: string[];
   total: number;
@@ -56,6 +58,8 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
       }
     },
     "tagInfo": tags[]->{ title, "slug": slug.current },
+    "category": category->{name, "slug": slug.current},
+    "fabric": fabric{name},
   },
 
   "total": count(*[

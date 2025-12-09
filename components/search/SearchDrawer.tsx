@@ -40,6 +40,8 @@ type ApiResult = {
       priceOverride?: number;
     }>;
     tagInfo?: { title?: string; slug?: string }[];
+    category?: { name?: string; slug?: string };
+    fabric?: { name?: string };
   }[];
   suggestions: string[];
   total: number;
@@ -296,6 +298,8 @@ export default function SearchDrawer() {
                               additionalImages: p.additionalImages,
                               variants: p.variants,
                               tagInfo: p.tagInfo,
+                              category: p.category,
+                              fabric: p.fabric,
                             }}
                             staticMode
                             onProductClick={() => {

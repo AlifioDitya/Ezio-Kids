@@ -196,20 +196,24 @@ export default function FilterSidebarClient({
     })),
   ];
 
+  const enableSort = false; // Change later if we need sorting
+
   return (
     <aside className="hidden sm:flex w-48 gap-1 flex-col">
       {/* Sort */}
       <div className="flex flex-col gap-2 w-full">
-        <SortDropdown
-          id="filter-sort"
-          label="Sort"
-          items={sortOptions}
-          value={currentSort}
-          onChange={onSortChange}
-          placeholder="Sort"
-          widthClassName="w-full"
-          disabled={isPending}
-        />
+        {enableSort && (
+          <SortDropdown
+            id="filter-sort"
+            label="Sort"
+            items={sortOptions}
+            value={currentSort}
+            onChange={onSortChange}
+            placeholder="Sort"
+            widthClassName="w-full"
+            disabled={isPending}
+          />
+        )}
 
         {/* Active filters */}
         {hasAnyFilter ? (

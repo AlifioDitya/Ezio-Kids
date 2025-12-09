@@ -106,7 +106,8 @@ const QUERY = `
       stock,
       priceOverride
     },
-    "tagInfo": tags[]->{ title, "slug": slug.current },
+    "category": category->{name, "slug": slug.current},
+    "fabric": fabric{name},
   },
 
   "total": count(*[

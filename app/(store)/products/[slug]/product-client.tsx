@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { imageUrl } from "@/lib/imageUrl";
-import { cn, formatMoney } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { AlertTriangle } from "lucide-react";
 import { PortableText } from "next-sanity";
@@ -23,10 +23,9 @@ import { FaWhatsapp } from "react-icons/fa";
 
 type Props = {
   product: PDPProduct;
-  priceLabel: string;
 };
 
-export default function ProductClient({ product, priceLabel }: Props) {
+export default function ProductClient({ product }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -244,11 +243,6 @@ export default function ProductClient({ product, priceLabel }: Props) {
     );
   }, [variants, selectedColorId, selectedSizeId]);
 
-  const displayPrice =
-    activeVariant?.priceOverride != null
-      ? formatMoney(activeVariant.priceOverride, "IDR")
-      : priceLabel; // priceLabel is already formatted from server
-
   const hasSelectedSize = Boolean(selectedSizeId);
   const lowStockCount = activeVariant?.stock ?? 0;
   const showLowStock =
@@ -383,8 +377,10 @@ export default function ProductClient({ product, priceLabel }: Props) {
             </h1>
           </div>
 
-          {/* Price */}
-          <p className="text-base font-medium text-gray-900">{displayPrice}</p>
+          {/* Description */}
+          <p className="mb-2">
+            {product.category?.name} design with {product.fabric?.name}
+          </p>
         </div>
 
         {/* Colors */}
