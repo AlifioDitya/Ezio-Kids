@@ -116,7 +116,7 @@ export default function SearchDrawer() {
       typeof window !== "undefined" &&
       window.location.pathname.startsWith("/collections/")
         ? window.location.pathname
-        : "/collections/shop-all";
+        : "/catalog";
 
     const sp =
       typeof window !== "undefined"
@@ -323,7 +323,7 @@ export default function SearchDrawer() {
                     </p>
                     <div className="mt-4">
                       <Link
-                        href="/collections/shop-all"
+                        href="/catalog"
                         className="inline-flex items-center justify-center rounded-lg border bg-white px-4 py-2 text-sm font-semibold hover:bg-gray-50"
                         onClick={closeAndReset}
                       >

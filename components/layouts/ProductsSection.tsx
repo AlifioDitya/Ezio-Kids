@@ -84,7 +84,7 @@ export async function ProductsSection({
             Clear all filters
           </Link>
           <Link
-            href="/collections/shop-all"
+            href="/catalog"
             className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
           >
             Shop all

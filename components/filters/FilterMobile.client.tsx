@@ -91,6 +91,10 @@ export default function FilterMobileClient({
     () => toArray(params.get("fabric")),
     [params]
   );
+  const selectedCollars = React.useMemo(
+    () => toArray(params.get("collar")),
+    [params]
+  );
   const selectedTags = React.useMemo(
     () => toArray(params.get("tag")),
     [params]
@@ -102,11 +106,12 @@ export default function FilterMobileClient({
     selectedCategories.length +
     selectedSleeves.length +
     selectedFabrics.length +
+    selectedCollars.length +
     selectedTags.length;
 
   const setParamList = React.useCallback(
     (
-      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric",
+      key: "tcolor" | "size" | "cat" | "sleeve" | "tag" | "fabric" | "collar",
       next: string[]
     ) => {
       const q = new URLSearchParams(params.toString());
@@ -131,14 +136,23 @@ export default function FilterMobileClient({
     setParamList("sleeve", toggle(selectedSleeves, slug));
   const onToggleFabric = (val: string) =>
     setParamList("fabric", toggle(selectedFabrics, val));
+  const onToggleCollar = (slug: string) =>
+    setParamList("collar", toggle(selectedCollars, slug));
   const onToggleTag = (slug: string) =>
     setParamList("tag", toggle(selectedTags, slug));
 
   const clearAll = () => {
     const q = new URLSearchParams(params.toString());
-    ["tcolor", "size", "cat", "sleeve", "fabric", "tag", "page"].forEach((k) =>
-      q.delete(k)
-    );
+    [
+      "tcolor",
+      "size",
+      "cat",
+      "sleeve",
+      "fabric",
+      "collar",
+      "tag",
+      "page",
+    ].forEach((k) => q.delete(k));
     replaceWithPrefetch(router, startTransition)(q);
     setOpen(false);
   };
@@ -251,7 +265,11 @@ export default function FilterMobileClient({
               <p className="mb-3 text-xs font-semibold text-gray-800">
                 Collar Type
               </p>
-              <CollarTypeFilter collarTypes={collarTypes} />
+              <CollarTypeFilter
+                collarTypes={collarTypes}
+                selectedCollars={selectedCollars}
+                onToggleCollar={onToggleCollar}
+              />
             </div>
 
             <Separator />

@@ -70,7 +70,7 @@ const desktopPositionClass = (position?: string): string => {
 
 export default function Hero({ content }: HeroProps) {
   if (!content) return null;
-  const ctaHref = content?.cta?.href || "/collections/shop-all";
+  const ctaHref = content?.cta?.href || "/catalog";
 
   return (
     <section className="relative w-full overflow-hidden">

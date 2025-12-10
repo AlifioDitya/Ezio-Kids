@@ -20,12 +20,12 @@ export default function FabricFilter({
   return (
     <div className="flex flex-col gap-2 py-1">
       {fabrics.map((fabric) => {
-        const checked = selectedFabrics.includes(fabric.name);
+        const checked = selectedFabrics.includes(fabric.slug);
         return (
           <button
-            key={fabric.name}
+            key={fabric.slug}
             type="button"
-            onClick={() => onToggleFabric(fabric.name)}
+            onClick={() => onToggleFabric(fabric.slug)}
             className="flex items-center gap-2 w-full text-left group"
           >
             {/* Avatar with Ring */}

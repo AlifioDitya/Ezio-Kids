@@ -9,8 +9,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion, type Variants } from "framer-motion";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 import ProductTile from "../common/ProductTile";
 
 type Item = {
@@ -194,7 +194,7 @@ export default function BestSellerClient({ items }: { items: Item[] }) {
           className="mt-10 text-center"
         >
           <Link
-            href="/collections/shop-all?tag=best-seller"
+            href="/catalog?tag=best-seller"
             className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-b from-rose-500 to-rose-600 px-6 py-2.5 text-lg font-semibold text-white transition hover:brightness-110 sm:w-auto sm:px-8 sm:py-3 sm:text-lg lg:px-10 lg:py-4 lg:text-xl"
           >
             Snag the Faves!

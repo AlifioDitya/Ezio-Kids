@@ -56,11 +56,11 @@ export default function CatalogLayout({
   });
 
   return (
-    <main className="overflow-x-hidden bg-white pb-16">
+    <main className="bg-white pb-16">
       {/* make the wrapper a column on mobile, row on desktop */}
-      <div className="w-full px-0 md:px-6 flex flex-col md:flex-row gap-4 md:gap-8 py-6">
+      <div className="w-full px-0 md:px-6 flex flex-col md:flex-row items-start gap-4 md:gap-8 py-6">
         {/* Sidebar: desktop/tablet only */}
-        <aside className="shrink-0 flex md:flex-col justify-between md:justify-start items-center md:items-start px-4 md:px-0">
+        <aside className="shrink-0 flex md:flex-col justify-between md:justify-start items-center md:items-start px-4 md:px-0 md:sticky md:top-16">
           <h1 className="text-lg md:text-base font-semibold mb-0 md:mb-3 hidden md:block">
             {title}
           </h1>

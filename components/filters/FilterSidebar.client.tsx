@@ -216,16 +216,22 @@ export default function FilterSidebarClient({
       label: sleeveLabel(sl),
       onRemove: () => onToggleSleeve(sl),
     })),
-    ...selectedFabrics.map((f) => ({
-      key: `fabric:${f}`,
-      label: f,
-      onRemove: () => onToggleFabric(f),
-    })),
-    ...selectedCollars.map((c) => ({
-      key: `collar:${c}`,
-      label: c,
-      onRemove: () => onToggleCollar(c),
-    })),
+    ...selectedFabrics.map((slug) => {
+      const fabricName = fabrics.find((f) => f.slug === slug)?.name || slug;
+      return {
+        key: `fabric:${slug}`,
+        label: fabricName,
+        onRemove: () => onToggleFabric(slug),
+      };
+    }),
+    ...selectedCollars.map((slug) => {
+      const collarName = collarTypes.find((c) => c.slug === slug)?.name || slug;
+      return {
+        key: `collar:${slug}`,
+        label: collarName,
+        onRemove: () => onToggleCollar(slug),
+      };
+    }),
     ...selectedTags.map((t) => ({
       key: `tag:${t}`,
       label: tagLabel(t),
@@ -375,7 +381,11 @@ export default function FilterSidebarClient({
             Collar Type
           </AccordionTrigger>
           <AccordionContent>
-            <CollarTypeFilter collarTypes={collarTypes} />
+            <CollarTypeFilter
+              collarTypes={collarTypes}
+              selectedCollars={selectedCollars}
+              onToggleCollar={onToggleCollar}
+            />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

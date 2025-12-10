@@ -8,12 +8,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 
 type Age = NonNullable<Size["ageGroup"]>;
-type CollectionSlug =
-  | "shop-all"
-  | "new-arrival"
-  | "baby-toddler"
-  | "kids"
-  | "teens";
+type CollectionSlug = "new-arrival" | "baby-toddler" | "kids" | "teens";
 
 export interface SizeFilterProps {
   /** All sizes from Sanity */
