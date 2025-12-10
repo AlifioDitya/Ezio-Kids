@@ -160,7 +160,7 @@ export default function FilterMobileClient({
   // Top trigger bar (mobile-only)
   return (
     <>
-      <div className="md:hidden flex items-center">
+      <div className="lg:hidden flex items-center">
         <Button
           onClick={() => setOpen(true)}
           variant="outline"
@@ -177,7 +177,7 @@ export default function FilterMobileClient({
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="p-0 w-full md:max-w-sm">
+        <SheetContent side="left" className="p-0 w-full lg:max-w-sm">
           <SheetHeader className="px-5 py-4 border-b">
             <div className="flex flex-col gap-3">
               <SheetTitle className="text-base">Filters</SheetTitle>
@@ -236,9 +236,7 @@ export default function FilterMobileClient({
 
             {/* Categories */}
             <div>
-              <p className="mb-3 text-xs font-semibold text-gray-800">
-                Categories
-              </p>
+              <p className="mb-3 text-xs font-semibold text-gray-800">Design</p>
               <CategoryFilter
                 categories={categories}
                 selectedSlugs={selectedCategories}

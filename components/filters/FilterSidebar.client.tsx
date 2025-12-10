@@ -356,6 +356,24 @@ export default function FilterSidebarClient({
 
       <Separator />
 
+      {/* Categories */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="categories">
+          <AccordionTrigger className="font-semibold text-xs">
+            Design
+          </AccordionTrigger>
+          <AccordionContent>
+            <CategoryFilter
+              categories={categories}
+              selectedSlugs={selectedCategories}
+              onToggle={onToggleCategory}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Separator />
+
       {/* Fabric */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="fabric">
@@ -385,24 +403,6 @@ export default function FilterSidebarClient({
               collarTypes={collarTypes}
               selectedCollars={selectedCollars}
               onToggleCollar={onToggleCollar}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <Separator />
-
-      {/* Categories */}
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="categories">
-          <AccordionTrigger className="font-semibold text-xs">
-            Categories
-          </AccordionTrigger>
-          <AccordionContent>
-            <CategoryFilter
-              categories={categories}
-              selectedSlugs={selectedCategories}
-              onToggle={onToggleCategory}
             />
           </AccordionContent>
         </AccordionItem>
