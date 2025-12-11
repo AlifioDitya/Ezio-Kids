@@ -22,3 +22,14 @@ export const getJournalBySlugQuery = defineQuery(`
     seo
   }
 `);
+
+export const getLatestJournalsQuery = defineQuery(`
+  *[_type == "journal"] | order(publishedAt desc)[0...3] {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    image,
+    excerpt
+  }
+`);

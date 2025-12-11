@@ -50,17 +50,17 @@ export default function Footer() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <footer className="bg-slate-50 text-gray-800 border-t border-gray-200">
+    <footer className="bg-neutral-800 text-white border-t border-neutral-700">
       <div className="px-6 py-16">
         {/* Split: tagline + menus */}
         <div className="flex flex-col md:flex-row md:space-x-16">
           {/* Tagline (left on md+) */}
           <div className="md:w-1/3 mb-10 md:mb-0">
-            <h2 className="text-xl lg:text-2xl font-bold">
-              Tiny Steps, Big Smiles.
+            <h2 className="text-xl lg:text-2xl font-bold font-bebas tracking-wide">
+              Effortlessly refined. Comfortably bold.
             </h2>
-            <p className="mt-2 text-gray-600 text-sm lg:text-base">
-              Sustainable kidswear for every little adventure.
+            <p className="mt-2 text-gray-400 text-sm lg:text-base">
+              Classic essentials made for the modern little gentleman.
             </p>
           </div>
 
@@ -79,7 +79,7 @@ export default function Footer() {
                       <li key={link.to}>
                         <Link
                           href={link.to}
-                          className="hover:underline hover:text-gray-900 transition"
+                          className="hover:underline transition"
                         >
                           {link.label}
                         </Link>
@@ -94,8 +94,8 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-200 bg-slate-100 py-4">
-        <div className="max-w-7xl mx-auto px-6 text-center text-xs text-gray-500">
+      <div className="border-t border-neutral-700 bg-neutral-800 py-4">
+        <div className="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300">
           © {currentYear} Ezio Kids. All rights reserved.
         </div>
       </div>
