@@ -342,7 +342,10 @@ export default function ProductClient({ product }: Props) {
       </section>
 
       {/* RIGHT: Details */}
-      <section aria-label="Product details" className="space-y-4">
+      <section
+        aria-label="Product details"
+        className="space-y-4 md:sticky md:top-24 h-fit"
+      >
         <div className="flex flex-col gap-2 sticky bottom-0 z-40 md:relative">
           {/* Tags */}
           <div className="flex items-center gap-2">
