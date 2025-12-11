@@ -41,7 +41,15 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
       count(variants[color->name match $q]) > 0 ||
       sleeveLength match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
-    )
+    ) &&
+    // Filters
+    (count($sizes) == 0 || count(variants[size->label in $sizes]) > 0) &&
+    (count($categories) == 0 || category->slug.current in $categories) &&
+    (count($fabrics) == 0 || fabric->slug.current in $fabrics) &&
+    (count($collarTypes) == 0 || collarType->slug.current in $collarTypes) &&
+    (count($tags) == 0 || count(tags[@->slug.current in $tags]) > 0) &&
+    (count($trueColors) == 0 || count(variants[color->trueColor in $trueColors]) > 0) &&
+    (count($sleeves) == 0 || sleeveLength in $sleeves)
   ] | order(_score desc, _createdAt desc) [0...$limit]{
     _id,
     name,
@@ -75,7 +83,15 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
       count(variants[color->name match $q]) > 0 ||
       sleeveLength match $q ||
       count(tags[@->title match $q || @->slug.current match $q]) > 0
-    )
+    ) &&
+    // Filters
+    (count($sizes) == 0 || count(variants[size->label in $sizes]) > 0) &&
+    (count($categories) == 0 || category->slug.current in $categories) &&
+    (count($fabrics) == 0 || fabric->slug.current in $fabrics) &&
+    (count($collarTypes) == 0 || collarType->slug.current in $collarTypes) &&
+    (count($tags) == 0 || count(tags[@->slug.current in $tags]) > 0) &&
+    (count($trueColors) == 0 || count(variants[color->trueColor in $trueColors]) > 0) &&
+    (count($sleeves) == 0 || sleeveLength in $sleeves)
   ]),
 
   // primitive suggestions: tag titles + category names containing query
@@ -90,14 +106,38 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
 export async function getSearchResults({
   q,
   limit = 8,
+  sizes = [],
+  categories = [],
+  fabrics = [],
+  collarTypes = [],
+  tags = [],
+  trueColors = [],
+  sleeves = [],
 }: {
   q: string;
   limit?: number;
+  sizes?: string[];
+  categories?: string[];
+  fabrics?: string[];
+  collarTypes?: string[];
+  tags?: string[];
+  trueColors?: string[];
+  sleeves?: string[];
 }): Promise<SearchResult> {
   const cleaned = `${q}*`; // prefix match
   const res = await sanityFetch({
     query: GET_SEARCH_RESULTS_QUERY,
-    params: { q: cleaned, limit },
+    params: {
+      q: cleaned,
+      limit,
+      sizes,
+      categories,
+      fabrics,
+      collarTypes,
+      tags,
+      trueColors,
+      sleeves,
+    },
   });
 
   return {
