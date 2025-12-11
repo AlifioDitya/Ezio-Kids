@@ -19,6 +19,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { FaWhatsapp } from "react-icons/fa";
+import { HiChevronLeft } from "react-icons/hi2";
 
 type Props = {
   product: PDPProduct;
@@ -295,6 +296,12 @@ export default function ProductClient({ product }: Props) {
       <section aria-label="Product images" className="grid gap-4">
         {/* Mobile / Tablet: SwipeImageStage */}
         <div className="md:hidden relative aspect-[3/4] w-full bg-[#F2F2F2] rounded-lg overflow-hidden">
+          <button
+            onClick={() => window.history.back()}
+            className="absolute sm:hidden aspect-square top-4 left-3 z-50 p-1 rounded-full bg-neutral-100 shadow flex justify-center items-center"
+          >
+            <HiChevronLeft className="w-4 h-4 mr-0.5" />
+          </button>
           {finalImages.length > 0 ? (
             <SwipeImageStage
               images={finalImages} // Strings
@@ -310,7 +317,7 @@ export default function ProductClient({ product }: Props) {
         </div>
 
         {/* Desktop: 2-column image grid */}
-        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="hidden md:grid md:grid-cols-2 gap-4 h-fit">
           {finalImages.map((url, idx) => (
             <div
               key={url + idx}
@@ -511,9 +518,9 @@ export default function ProductClient({ product }: Props) {
               <AccordionItem value="fabric">
                 <AccordionTrigger>Fabric</AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex gap-4 pb-4">
+                  <div className="flex flex-col sm:flex-row gap-4 pb-4">
                     {product.fabric.image && (
-                      <div className="relative w-full max-w-1/2 md:max-w-1/3 rounded-md overflow-hidden bg-gray-100 aspect-square">
+                      <div className="relative max-w-40 w-full h-fit rounded-md overflow-hidden bg-gray-100 aspect-square">
                         <Image
                           src={imageUrl(product.fabric.image)?.url() ?? ""}
                           alt={product.fabric.name ?? "Fabric image"}
@@ -522,7 +529,7 @@ export default function ProductClient({ product }: Props) {
                         />
                       </div>
                     )}
-                    <div className="space-y-2 max-w-2/3">
+                    <div className="space-y-2 mt-3 sm:mt-0 sm:max-w-3/4 w-full">
                       {product.fabric.name && (
                         <h4 className="font-medium text-sm">
                           {product.fabric.name}
@@ -568,9 +575,9 @@ export default function ProductClient({ product }: Props) {
               <AccordionItem value="collarType">
                 <AccordionTrigger>Collar Type</AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex gap-4 pb-4">
+                  <div className="flex flex-col sm:flex-row gap-4 pb-4">
                     {product.collarType.image && (
-                      <div className="relative w-full max-w-1/2 md:max-w-1/3 rounded-md overflow-hidden bg-gray-100 aspect-square">
+                      <div className="relative max-w-40 w-full h-fit rounded-md overflow-hidden bg-gray-100 aspect-square">
                         <Image
                           src={imageUrl(product.collarType.image)?.url() ?? ""}
                           alt={product.collarType.name ?? "Collar Type image"}
@@ -579,7 +586,7 @@ export default function ProductClient({ product }: Props) {
                         />
                       </div>
                     )}
-                    <div className="space-y-2 max-w-2/3">
+                    <div className="space-y-2 mt-3 sm:mt-0 sm:max-w-3/4 w-full">
                       {product.collarType.name && (
                         <h4 className="font-medium text-sm">
                           {product.collarType.name}

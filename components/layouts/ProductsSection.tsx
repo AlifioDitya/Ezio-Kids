@@ -63,34 +63,36 @@ export async function ProductsSection({
   // Empty state (unchanged)
   if (!products.items.length) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white px-6 py-12 text-center">
-        <div className="relative mb-3">
-          <div aria-hidden className="absolute -inset-6 rounded-full" />
-          <div className="relative mx-auto grid h-16 w-16 place-items-center rounded-full bg-white border border-gray-200">
-            <MdSearchOff className="h-7 w-7 text-blue-main" />
+      <div className="w-full h-full flex flex-col items-center p-2 lg:p-8">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white px-6 py-12 text-center w-full h-full">
+          <div className="relative mb-3">
+            <div aria-hidden className="absolute -inset-6 rounded-full" />
+            <div className="relative mx-auto grid h-16 w-16 place-items-center rounded-full bg-white border border-gray-200">
+              <MdSearchOff className="h-7 w-7 text-blue-main" />
+            </div>
           </div>
-        </div>
 
-        <h3 className="text-base font-semibold text-gray-900">
-          No products match your filters
-        </h3>
-        <p className="mt-1 max-w-xs text-sm text-gray-600">
-          Try removing a filter or broaden your selection.
-        </p>
+          <h3 className="text-base font-semibold text-gray-900">
+            No products match your filters
+          </h3>
+          <p className="mt-1 max-w-xs text-sm text-gray-600">
+            Try removing a filter or broaden your selection.
+          </p>
 
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <Link
-            href={basePath}
-            className="inline-flex items-center justify-center rounded-lg bg-blue-main px-4 py-2 text-sm font-semibold text-white hover:bg-blue-main/90"
-          >
-            Clear all filters
-          </Link>
-          <Link
-            href="/catalog"
-            className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-          >
-            Shop all
-          </Link>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+            <Link
+              href={basePath}
+              className="inline-flex items-center justify-center rounded-lg bg-blue-main px-4 py-2 text-sm font-semibold text-white hover:bg-blue-main/90"
+            >
+              Clear all filters
+            </Link>
+            <Link
+              href="/catalog"
+              className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            >
+              Shop all
+            </Link>
+          </div>
         </div>
       </div>
     );

@@ -38,7 +38,7 @@ export const TITLES: Record<
   { h1: string; title: string; description: string }
 > = {
   catalog: {
-    h1: "All Products Catalog",
+    h1: "All Products",
     title: "All Products Catalog - Ezio Kids",
     description: "Browse all Ezio Kids products.",
   },

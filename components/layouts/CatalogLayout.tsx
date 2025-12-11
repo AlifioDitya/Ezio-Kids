@@ -64,7 +64,7 @@ export default function CatalogLayout({
       <div className="w-full px-0 lg:px-6 flex flex-col lg:flex-row items-start gap-4 lg:gap-8 py-6">
         {/* Sidebar: desktop/tablet only */}
         <aside className="shrink-0 flex lg:flex-col justify-between lg:justify-start items-center lg:items-start px-4 lg:px-0 lg:sticky lg:top-16 w-full lg:max-w-48">
-          <h1 className="text-lg lg:text-base font-semibold mb-0 lg:mb-3 hidden lg:block flex-wrap w-full">
+          <h1 className="text-base font-semibold mb-0 lg:mb-3 hidden lg:block flex-wrap w-full">
             {title}
           </h1>
 
@@ -97,7 +97,7 @@ export default function CatalogLayout({
         </aside>
 
         {/* Content */}
-        <section className="flex-1 flex flex-col min-w-0">
+        <section className="flex-1 flex flex-col min-w-0 w-full">
           <Suspense
             key={suspenseKey}
             fallback={
@@ -112,7 +112,7 @@ export default function CatalogLayout({
               </div>
             }
           >
-            <div className="">
+            <div className="w-full">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

@@ -14,7 +14,7 @@ export default async function ProductPage(props: {
   if (!product) return notFound();
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8 bg-white pb-16">
+    <main className="w-full px-4 sm:px-5 py-4 md:py-8 bg-white pb-16">
       <ProductClient product={product as PDPProduct} />
     </main>
   );
