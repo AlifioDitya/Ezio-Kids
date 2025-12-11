@@ -1,4 +1,4 @@
-import { type AgeGroup } from "@/app/constant";
+import { type AgeGroup } from "@/app/lib/constant";
 import FilterMobile from "@/components/filters/FilterMobile.server";
 import FilterSidebar from "@/components/filters/FilterSidebar.server";
 import SidebarSkeleton from "@/components/filters/SidebarSkeleton";

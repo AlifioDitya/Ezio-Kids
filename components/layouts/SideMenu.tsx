@@ -1,7 +1,7 @@
 // components/layouts/nav/SideMenu.tsx
 "use client";
 
-import { NavItem } from "@/app/constant";
+import { NavItem } from "@/app/lib/constant";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";

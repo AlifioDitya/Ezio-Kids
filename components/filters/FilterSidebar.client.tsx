@@ -1,7 +1,7 @@
 // components/filters/FilterSidebar.client.tsx
 "use client";
 
-import { TRUE_COLOR_OPTIONS } from "@/app/constant";
+import { TRUE_COLOR_OPTIONS } from "@/app/lib/constant";
 import { ComboboxItem } from "@/components/ui/combobox";
 import { cn } from "@/lib/utils";
 import type { Category, Size, Tag } from "@/sanity.types";

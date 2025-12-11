@@ -1,5 +1,5 @@
 // app/components/layouts/ProductsSection.tsx
-import { AgeGroup } from "@/app/constant";
+import { AgeGroup } from "@/app/lib/constant";
 import {
   Pagination,
   PaginationContent,

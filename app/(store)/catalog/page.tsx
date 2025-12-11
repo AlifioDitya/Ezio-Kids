@@ -1,4 +1,4 @@
-import { TITLES } from "@/app/constant";
+import { TITLES } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import type { Metadata } from "next";
 

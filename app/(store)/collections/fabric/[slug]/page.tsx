@@ -1,5 +1,5 @@
 // app/collections/fabric/[slug]/page.tsx
-import { AgeGroup } from "@/app/constant";
+import { AgeGroup } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import { client } from "@/sanity/lib/client";
 import { FABRICS_QUERY, getNavData } from "@/sanity/lib/products/getNavData";

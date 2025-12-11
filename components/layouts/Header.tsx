@@ -1,7 +1,7 @@
 // components/layouts/Header.tsx
 "use client";
 
-import { NAV_LINKS } from "@/app/constant";
+import { NAV_LINKS } from "@/app/lib/constant";
 import { cn } from "@/lib/utils";
 import Logo from "@/public/images/ezio-kids-logo.svg";
 import Image from "next/image";

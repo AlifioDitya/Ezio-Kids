@@ -1,5 +1,5 @@
 // app/collections/[slug]/page.tsx
-import { ALLOWED_SLUGS, Slug, TITLES } from "@/app/constant";
+import { ALLOWED_SLUGS, Slug, TITLES } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";

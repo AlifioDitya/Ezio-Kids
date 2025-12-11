@@ -1,7 +1,7 @@
 // schemas/color.ts
-import { TRUE_COLOR_OPTIONS } from "@/app/constant";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { defineField, defineType } from "sanity";
+import { TRUE_COLOR_OPTIONS } from "../../lib/constant";
 
 export default defineType({
   name: "color",

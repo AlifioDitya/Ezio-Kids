@@ -1,6 +1,6 @@
 "use client";
 
-import { TRUE_COLOR_OPTIONS } from "@/app/constant";
+import { TRUE_COLOR_OPTIONS } from "@/app/lib/constant";
 import { cn } from "@/lib/utils";
 import type { Category, Size, Tag } from "@/sanity.types";
 import { useRouter, useSearchParams } from "next/navigation";
