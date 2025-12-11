@@ -58,7 +58,7 @@ export default function Header({
   return (
     <>
       <header className={headerClass}>
-        <div className="px-4 lg:px-6 h-14 grid grid-cols-3 items-center max-w-[1440px]">
+        <div className="px-4 lg:px-6 h-14 grid grid-cols-3 items-center">
           {/* LEFT: Unified Side Menu Trigger */}
           <div className="flex justify-start items-center gap-4">
             <button aria-label="Open menu" onClick={() => setOpen(true)}>

@@ -291,7 +291,7 @@ export default function ProductClient({ product }: Props) {
   // 5. Render
   // ---------
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 md:mb-32">
       {/* LEFT: Gallery */}
       <section aria-label="Product images" className="grid gap-4">
         {/* Mobile / Tablet: SwipeImageStage */}
@@ -344,7 +344,7 @@ export default function ProductClient({ product }: Props) {
       {/* RIGHT: Details */}
       <section
         aria-label="Product details"
-        className="space-y-4 md:sticky md:top-24 h-fit"
+        className="space-y-4 md:sticky md:top-22 h-fit"
       >
         <div className="flex flex-col gap-2 sticky bottom-0 z-40 md:relative">
           {/* Tags */}
