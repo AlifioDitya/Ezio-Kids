@@ -55,7 +55,7 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
     name,
     price,
     "slug": slug,
-    mainImage,
+    "mainImage": mainImage{ asset->{ "url": url }, "alt": alt },
     "mainImageUrl": mainImage.asset->url,
     "additionalImages": additionalImages[]{ asset->{ "url": url }, "alt": alt },
     "variants": variants[]{
@@ -70,7 +70,7 @@ const GET_SEARCH_RESULTS_QUERY = /* groq */ `
     },
     "tagInfo": tags[]->{ title, "slug": slug.current },
     "category": category->{name, "slug": slug.current},
-    "fabric": fabric{name},
+    "fabric": fabric->{name},
   },
 
   "total": count(*[
