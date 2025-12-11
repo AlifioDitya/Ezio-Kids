@@ -1,5 +1,6 @@
 import { type SchemaTypeDefinition } from "sanity";
 
+import { journalType } from "./journal";
 import orderType from "./order/orderType";
 import salesType from "./order/salesType";
 import { blockContentType } from "./other/blockContentType";
@@ -31,5 +32,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     landingPageType,
     heroType,
     popularType,
+    journalType,
   ],
 };

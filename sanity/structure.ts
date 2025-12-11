@@ -1,4 +1,5 @@
 import {
+  FaBook,
   FaBoxes,
   FaClipboardList,
   FaFileAlt,
@@ -101,6 +102,7 @@ export const structure: StructureResolver = (S) =>
                     .schemaType("landingPage")
                     .documentId("landingPageSingleton")
                 ),
+              S.documentTypeListItem("journal").title("Journal").icon(FaBook),
             ])
         ),
     ]);
