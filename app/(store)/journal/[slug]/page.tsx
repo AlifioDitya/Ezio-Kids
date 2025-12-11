@@ -53,7 +53,7 @@ export default async function JournalSlugPage({
   return (
     <article className="min-h-screen bg-white">
       {/* Hero Header */}
-      <div className="relative h-[60vh] w-full bg-gray-100">
+      <div className="relative h-[80svh] w-full bg-gray-100">
         {journal.image && (
           <Image
             src={urlFor(journal.image).width(1920).height(1080).url()}

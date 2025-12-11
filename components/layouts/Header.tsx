@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 import Logo from "@/public/images/ezio-kids-logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import SearchDrawer from "../search/SearchDrawer";
 import SearchOpenButton from "../search/SearchOpenButton";
 import SideMenu from "./SideMenu";
@@ -20,14 +21,46 @@ export default function Header({
   };
 }) {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
 
-  // Icon color: White if transparent home, else Dark
-  const iconClass = "text-gray-800 hover:text-gray-600";
+  // Scroll detection
+  const handleScroll = () => {
+    if (window.scrollY > 10) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Check if we are on a specific journal page (but not the main /journal listing)
+  const isJournalSlug =
+    pathname?.startsWith("/journal/") && pathname !== "/journal";
+
+  const isTransparent = isJournalSlug && !isScrolled;
+
+  // Icon color: White if transparent layout, else Dark
+  const iconClass = isTransparent
+    ? "text-white hover:text-white/80"
+    : "text-gray-800 hover:text-gray-600";
 
   // Base classes for the header container
   const headerClass = cn(
     "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-    "bg-white"
+    isTransparent
+      ? "bg-transparent backdrop-blur-[2px] border-b border-white/10"
+      : "bg-white/80 backdrop-blur-md border-b border-gray-200/50"
+  );
+
+  // Link text color
+  const linkClass = cn(
+    "hidden md:block uppercase text-[11px] tracking-wider font-bold transition-colors duration-300",
+    isTransparent ? "text-white" : "text-gray-700"
   );
 
   // Merge dynamic data into NAV_LINKS
@@ -61,7 +94,11 @@ export default function Header({
         <div className="px-4 lg:px-6 h-14 grid grid-cols-3 items-center">
           {/* LEFT: Unified Side Menu Trigger */}
           <div className="flex justify-start items-center gap-4">
-            <button aria-label="Open menu" onClick={() => setOpen(true)}>
+            <button
+              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              className={isTransparent ? "text-white" : "text-gray-800"}
+            >
               <svg
                 className="h-5 w-5 mt-px"
                 viewBox="0 0 22 22"
@@ -76,24 +113,15 @@ export default function Header({
               </svg>
             </button>
 
-            <Link
-              href="/catalog"
-              className="hidden md:block uppercase text-[11px] tracking-wider font-bold text-gray-700 "
-            >
+            <Link href="/catalog" className={linkClass}>
               CATALOG
             </Link>
 
-            <Link
-              href="/journal"
-              className="hidden md:block uppercase text-[11px] tracking-wider font-bold text-gray-700 "
-            >
+            <Link href="/journal" className={linkClass}>
               JOURNAL
             </Link>
 
-            <Link
-              href="/about"
-              className="hidden md:block uppercase text-[11px] tracking-wider font-bold text-gray-700"
-            >
+            <Link href="/about" className={linkClass}>
               ABOUT
             </Link>
           </div>
@@ -106,7 +134,7 @@ export default function Header({
                 alt="Ezio Kids"
                 width={128}
                 height={32}
-                className="w-full h-auto object-contain"
+                className={cn("w-full h-auto object-contain")}
                 priority
               />
             </Link>
@@ -120,8 +148,8 @@ export default function Header({
         </div>
       </header>
 
-      {/* Spacer for fixed header */}
-      <div className="h-14" />
+      {/* Spacer for fixed header - Only render if NOT on journal slug page */}
+      {!isJournalSlug && <div className="h-14" />}
 
       <SearchDrawer />
 
