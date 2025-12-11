@@ -4,6 +4,7 @@
 import { NavItem } from "@/app/constant";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { HiChevronRight } from "react-icons/hi2";
@@ -390,9 +391,20 @@ export default function SideMenu({ open, onClose, data }: Props) {
                                     onMouseEnter={() => setChildHover(idx)}
                                     onMouseLeave={() => setChildHover(null)}
                                   >
-                                    <span className={labelUnderline}>
-                                      {c.label}
-                                    </span>
+                                    <div className="flex items-center gap-4">
+                                      {c.image && (
+                                        <Image
+                                          src={c.image}
+                                          alt=""
+                                          className="rounded-full object-cover bg-gray-100"
+                                          width={48}
+                                          height={48}
+                                        />
+                                      )}
+                                      <span className={labelUnderline}>
+                                        {c.label}
+                                      </span>
+                                    </div>
                                     {hasGrand && (
                                       <HiChevronRight
                                         className={[
@@ -516,7 +528,7 @@ export default function SideMenu({ open, onClose, data }: Props) {
 
                         <button
                           onClick={handleClose}
-                          className="p-2 -mr-2 text-gray-500 hover:text-black"
+                          className="p-2 pt-1 -mr-2 text-gray-500 hover:text-black"
                           aria-label="Close menu"
                         >
                           <VscChromeClose className="w-5 h-5" />
@@ -555,9 +567,19 @@ export default function SideMenu({ open, onClose, data }: Props) {
                                   onMouseEnter={() => setChildHover(idx)}
                                   onMouseLeave={() => setChildHover(null)}
                                 >
-                                  <span className={labelUnderline}>
-                                    {c.label}
-                                  </span>
+                                  <div className="flex items-center gap-3">
+                                    {c.image && (
+                                      /* eslint-disable-next-line @next/next/no-img-element */
+                                      <img
+                                        src={c.image}
+                                        alt=""
+                                        className="h-10 w-10 min-w-10 rounded-full object-cover bg-gray-100"
+                                      />
+                                    )}
+                                    <span className={labelUnderline}>
+                                      {c.label}
+                                    </span>
+                                  </div>
                                   {hasGrand && (
                                     <HiChevronRight
                                       className={[chev, "text-gray-400"].join(

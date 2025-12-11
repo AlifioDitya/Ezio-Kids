@@ -22,6 +22,7 @@ type Props = {
   arrivalsOnly: boolean;
   basePath: string;
   searchQ: string;
+  hiddenFacets?: string[];
 };
 
 export default function CatalogLayout({
@@ -39,6 +40,7 @@ export default function CatalogLayout({
   arrivalsOnly,
   basePath,
   searchQ,
+  hiddenFacets = [],
 }: Props) {
   const suspenseKey = JSON.stringify({
     sortKey,
@@ -53,6 +55,7 @@ export default function CatalogLayout({
     ageGroups,
     arrivalsOnly,
     searchQ,
+    hiddenFacets,
   });
 
   return (
@@ -60,8 +63,8 @@ export default function CatalogLayout({
       {/* make the wrapper a column on mobile, row on desktop */}
       <div className="w-full px-0 lg:px-6 flex flex-col lg:flex-row items-start gap-4 lg:gap-8 py-6">
         {/* Sidebar: desktop/tablet only */}
-        <aside className="shrink-0 flex lg:flex-col justify-between lg:justify-start items-center lg:items-start px-4 lg:px-0 lg:sticky lg:top-16 w-full lg:w-fit">
-          <h1 className="text-lg lg:text-base font-semibold mb-0 lg:mb-3 hidden lg:block">
+        <aside className="shrink-0 flex lg:flex-col justify-between lg:justify-start items-center lg:items-start px-4 lg:px-0 lg:sticky lg:top-16 w-full lg:max-w-48">
+          <h1 className="text-lg lg:text-base font-semibold mb-0 lg:mb-3 hidden lg:block flex-wrap w-full">
             {title}
           </h1>
 
@@ -71,21 +74,24 @@ export default function CatalogLayout({
               <Suspense
                 fallback={<div className="h-8 w-24 bg-gray-100 rounded" />}
               >
-                <FilterMobile />
+                <FilterMobile hiddenFacets={hiddenFacets} />
               </Suspense>
             }
             stickyFilter={
               <Suspense
                 fallback={<div className="h-8 w-24 bg-gray-100 rounded" />}
               >
-                <FilterMobile />
+                <FilterMobile hiddenFacets={hiddenFacets} />
               </Suspense>
             }
           />
 
           <div className="hidden lg:block">
             <Suspense fallback={<SidebarSkeleton />}>
-              <FilterSidebar currentSort={sortKey} />
+              <FilterSidebar
+                currentSort={sortKey}
+                hiddenFacets={hiddenFacets}
+              />
             </Suspense>
           </div>
         </aside>

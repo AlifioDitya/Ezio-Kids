@@ -11,7 +11,14 @@ import SearchDrawer from "../search/SearchDrawer";
 import SearchOpenButton from "../search/SearchOpenButton";
 import SideMenu from "./SideMenu";
 
-export default function Header() {
+export default function Header({
+  navData,
+}: {
+  navData: {
+    collarTypes: { name: string; slug: string; image: string | null }[];
+    fabrics: { name: string; slug: string; image: string | null }[];
+  };
+}) {
   const [open, setOpen] = useState(false);
 
   // Icon color: White if transparent home, else Dark
@@ -22,6 +29,31 @@ export default function Header() {
     "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
     "bg-white"
   );
+
+  // Merge dynamic data into NAV_LINKS
+  const dynamicLinks = NAV_LINKS.map((item) => {
+    if (item.label === "Collar Types") {
+      return {
+        ...item,
+        children: navData.collarTypes.map((c) => ({
+          label: c.name,
+          href: `/collections/collar/${c.slug}`,
+          image: c.image,
+        })),
+      };
+    }
+    if (item.label === "Fabrics") {
+      return {
+        ...item,
+        children: navData.fabrics.map((f) => ({
+          label: f.name,
+          href: `/collections/fabric/${f.slug}`,
+          image: f.image,
+        })),
+      };
+    }
+    return item;
+  });
 
   return (
     <>
@@ -93,7 +125,11 @@ export default function Header() {
 
       <SearchDrawer />
 
-      <SideMenu open={open} onClose={() => setOpen(false)} data={NAV_LINKS} />
+      <SideMenu
+        open={open}
+        onClose={() => setOpen(false)}
+        data={dynamicLinks}
+      />
     </>
   );
 }

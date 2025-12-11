@@ -7,7 +7,11 @@ import {
 } from "@/sanity/lib/collectionsPage/cache";
 import FilterMobileClient from "./FilterMobile.client";
 
-export default async function FilterMobile() {
+export default async function FilterMobile({
+  hiddenFacets,
+}: {
+  hiddenFacets?: string[];
+}) {
   const [sizes, categories, tags, fabrics, collarTypes] = await Promise.all([
     getAllSizesCached(),
     getAllCategoriesCached(),
@@ -23,6 +27,7 @@ export default async function FilterMobile() {
       fabrics={fabrics}
       collarTypes={collarTypes}
       tags={tags}
+      hiddenFacets={hiddenFacets}
     />
   );
 }

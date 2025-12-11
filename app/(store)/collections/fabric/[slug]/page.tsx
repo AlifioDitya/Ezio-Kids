@@ -1,27 +1,36 @@
-// app/collections/[slug]/page.tsx
-import { ALLOWED_SLUGS, Slug, TITLES } from "@/app/constant";
+// app/collections/fabric/[slug]/page.tsx
+import { AgeGroup } from "@/app/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
+import { client } from "@/sanity/lib/client";
+import { FABRICS_QUERY, getNavData } from "@/sanity/lib/products/getNavData";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const dynamicParams = false;
-export function generateStaticParams() {
-  return ALLOWED_SLUGS.map((slug) => ({ slug }));
+// Generate params from Sanity data
+export async function generateStaticParams() {
+  const fabrics = await client.fetch(FABRICS_QUERY);
+  return fabrics.map((f: { slug: string }) => ({ slug: f.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: Slug }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const meta = TITLES[slug];
-  if (!meta) return {};
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: { canonical: `/collections/${slug}` },
-  };
+  const { fabrics } = await getNavData();
+  const matched = fabrics.find(
+    (f: { slug: string; name: string }) => f.slug === slug
+  );
+
+  if (matched) {
+    return {
+      title: `${matched.name} Fabric Collection - Ezio Kids`,
+      description: `Shop our ${matched.name} collection at Ezio Kids.`,
+      alternates: { canonical: `/collections/fabric/${slug}` },
+    };
+  }
+  return {};
 }
 
 type SearchParams = {
@@ -33,22 +42,29 @@ type SearchParams = {
   tcolor?: string | string[];
   tag?: string | string[];
   q?: string | string[];
-  fabric?: string | string[];
   collar?: string | string[];
+  // 'fabric' not needed as it's the main context
 };
 
 const toArray = (v?: string | string[]) =>
   !v ? [] : Array.isArray(v) ? v : v.split(",").filter(Boolean);
-const ARRIVALS_DEFAULT = { arrivalsOnly: true } as const;
 
-export default async function CollectionsPage(props: {
-  params: Promise<{ slug: Slug }>;
+export default async function FabricPage(props: {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<SearchParams>;
 }) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const slug = params.slug;
-  if (!ALLOWED_SLUGS.includes(slug)) notFound();
+
+  const { fabrics } = await getNavData();
+  const matched = fabrics.find(
+    (f: { slug: string; name: string }) => f.slug === slug
+  );
+
+  if (!matched) {
+    notFound();
+  }
 
   // search
   const searchRaw = Array.isArray(searchParams.q)
@@ -76,17 +92,16 @@ export default async function CollectionsPage(props: {
   const selectedTrueColors = toArray(searchParams.tcolor);
   const selectedTags = toArray(searchParams.tag);
 
-  const selectedFabrics = toArray(searchParams.fabric);
+  // Auto-select this fabric
+  const selectedFabrics = [slug];
+  // Allow filtering by collar type
   const selectedCollarTypes = toArray(searchParams.collar);
 
-  const arrivalsOnly =
-    slug === "new-arrival" ? ARRIVALS_DEFAULT.arrivalsOnly : false;
-
-  const titleBlock = TITLES[slug];
+  const ageGroups: AgeGroup[] = []; // No age group inference for fabric pages
 
   return (
     <CatalogLayout
-      title={titleBlock?.h1 ?? "Collection"}
+      title={matched.name + " Collection"}
       sortKey={sortKey}
       pageNum={pageNum}
       selectedSizes={selectedSizes}
@@ -96,10 +111,11 @@ export default async function CollectionsPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollarTypes}
-      ageGroups={[]} // No longer deriving age groups from slug
-      arrivalsOnly={arrivalsOnly}
-      basePath={`/collections/${slug}`}
+      ageGroups={ageGroups}
+      arrivalsOnly={false}
+      basePath={`/collections/fabric/${slug}`}
       searchQ={searchQ}
+      hiddenFacets={["fabric"]}
     />
   );
 }

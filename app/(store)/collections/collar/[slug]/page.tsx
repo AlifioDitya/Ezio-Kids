@@ -1,27 +1,39 @@
-// app/collections/[slug]/page.tsx
-import { ALLOWED_SLUGS, Slug, TITLES } from "@/app/constant";
+// app/collections/collar/[slug]/page.tsx
+import { AgeGroup } from "@/app/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
+import { client } from "@/sanity/lib/client";
+import {
+  COLLAR_TYPES_QUERY,
+  getNavData,
+} from "@/sanity/lib/products/getNavData";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const dynamicParams = false;
-export function generateStaticParams() {
-  return ALLOWED_SLUGS.map((slug) => ({ slug }));
+// Generate params from Sanity data
+export async function generateStaticParams() {
+  const collarTypes = await client.fetch(COLLAR_TYPES_QUERY);
+  return collarTypes.map((c: { slug: string }) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: Slug }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const meta = TITLES[slug];
-  if (!meta) return {};
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: { canonical: `/collections/${slug}` },
-  };
+  const { collarTypes } = await getNavData();
+  const matched = collarTypes.find(
+    (c: { slug: string; name: string }) => c.slug === slug
+  );
+
+  if (matched) {
+    return {
+      title: `${matched.name} Collar Collection - Ezio Kids`,
+      description: `Shop our ${matched.name} collection at Ezio Kids.`,
+      alternates: { canonical: `/collections/collar/${slug}` },
+    };
+  }
+  return {};
 }
 
 type SearchParams = {
@@ -34,21 +46,28 @@ type SearchParams = {
   tag?: string | string[];
   q?: string | string[];
   fabric?: string | string[];
-  collar?: string | string[];
+  // 'collar' not needed as it's the main context
 };
 
 const toArray = (v?: string | string[]) =>
   !v ? [] : Array.isArray(v) ? v : v.split(",").filter(Boolean);
-const ARRIVALS_DEFAULT = { arrivalsOnly: true } as const;
 
-export default async function CollectionsPage(props: {
-  params: Promise<{ slug: Slug }>;
+export default async function CollarPage(props: {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<SearchParams>;
 }) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const slug = params.slug;
-  if (!ALLOWED_SLUGS.includes(slug)) notFound();
+
+  const { collarTypes } = await getNavData();
+  const matched = collarTypes.find(
+    (c: { slug: string; name: string }) => c.slug === slug
+  );
+
+  if (!matched) {
+    notFound();
+  }
 
   // search
   const searchRaw = Array.isArray(searchParams.q)
@@ -77,16 +96,14 @@ export default async function CollectionsPage(props: {
   const selectedTags = toArray(searchParams.tag);
 
   const selectedFabrics = toArray(searchParams.fabric);
-  const selectedCollarTypes = toArray(searchParams.collar);
+  // Auto-select this collar
+  const selectedCollarTypes = [slug];
 
-  const arrivalsOnly =
-    slug === "new-arrival" ? ARRIVALS_DEFAULT.arrivalsOnly : false;
-
-  const titleBlock = TITLES[slug];
+  const ageGroups: AgeGroup[] = [];
 
   return (
     <CatalogLayout
-      title={titleBlock?.h1 ?? "Collection"}
+      title={matched.name + " Collar Collection"}
       sortKey={sortKey}
       pageNum={pageNum}
       selectedSizes={selectedSizes}
@@ -96,10 +113,11 @@ export default async function CollectionsPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollarTypes}
-      ageGroups={[]} // No longer deriving age groups from slug
-      arrivalsOnly={arrivalsOnly}
-      basePath={`/collections/${slug}`}
+      ageGroups={ageGroups}
+      arrivalsOnly={false}
+      basePath={`/collections/collar/${slug}`}
       searchQ={searchQ}
+      hiddenFacets={["collar"]}
     />
   );
 }

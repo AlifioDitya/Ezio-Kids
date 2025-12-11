@@ -46,7 +46,13 @@ export default async function RootLayout({
         <body
           className={`${manrope.variable} ${bebasNeue.variable} antialiased`}
         >
-          {(await draftMode()).isEnabled && (
+          {(await (async () => {
+            try {
+              return (await draftMode()).isEnabled;
+            } catch {
+              return false;
+            }
+          })()) && (
             <>
               <DisableDraftMode />
             </>

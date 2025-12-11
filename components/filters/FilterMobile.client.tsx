@@ -38,6 +38,7 @@ type Props = {
   fabrics: FabricOption[];
   collarTypes: CollarTypeOption[];
   tags: Tag[];
+  hiddenFacets?: string[];
 };
 
 const csv = (arr: string[]) => arr.filter(Boolean).join(",");
@@ -59,11 +60,12 @@ function replaceWithPrefetch(
 }
 
 export default function FilterMobileClient({
-  sizes,
-  categories,
   fabrics,
   collarTypes,
+  sizes,
   tags,
+  categories,
+  hiddenFacets = [],
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -247,30 +249,38 @@ export default function FilterMobileClient({
             <Separator />
 
             {/* Fabric */}
-            <div>
-              <p className="mb-3 text-xs font-semibold text-gray-800">Fabric</p>
-              <FabricFilter
-                fabrics={fabrics}
-                selectedFabrics={selectedFabrics}
-                onToggleFabric={onToggleFabric}
-              />
-            </div>
-
-            <Separator />
+            {!hiddenFacets.includes("fabric") && (
+              <>
+                <div>
+                  <p className="mb-3 text-xs font-semibold text-gray-800">
+                    Fabric
+                  </p>
+                  <FabricFilter
+                    fabrics={fabrics}
+                    selectedFabrics={selectedFabrics}
+                    onToggleFabric={onToggleFabric}
+                  />
+                </div>
+                <Separator />
+              </>
+            )}
 
             {/* Collar Types */}
-            <div>
-              <p className="mb-3 text-xs font-semibold text-gray-800">
-                Collar Type
-              </p>
-              <CollarTypeFilter
-                collarTypes={collarTypes}
-                selectedCollars={selectedCollars}
-                onToggleCollar={onToggleCollar}
-              />
-            </div>
-
-            <Separator />
+            {!hiddenFacets.includes("collar") && (
+              <>
+                <div>
+                  <p className="mb-3 text-xs font-semibold text-gray-800">
+                    Collar Type
+                  </p>
+                  <CollarTypeFilter
+                    collarTypes={collarTypes}
+                    selectedCollars={selectedCollars}
+                    onToggleCollar={onToggleCollar}
+                  />
+                </div>
+                <Separator />
+              </>
+            )}
 
             {/* Sleeve */}
             <div>

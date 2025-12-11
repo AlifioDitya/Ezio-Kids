@@ -1,6 +1,7 @@
 export type NavItem = {
   label: string;
   href?: string;
+  image?: string | null;
   children?: NavItem[];
 };
 
@@ -26,24 +27,7 @@ export const NAV_LINKS: NavItem[] = [
   { label: "About us", href: "/about" },
 ];
 
-export const ALLOWED_SLUGS = [
-  "see-all",
-  "catalog",
-  "new-arrival",
-  "baby-toddler",
-  "kids",
-  "teens",
-
-  // New Collars
-  "classic",
-  "cuban",
-  "band",
-
-  // New Materials
-  "melange",
-  "chambray",
-  "dobby",
-] as const;
+export const ALLOWED_SLUGS = ["catalog", "new-arrival"] as const;
 
 export type Slug = (typeof ALLOWED_SLUGS)[number];
 
@@ -51,70 +35,15 @@ export const TITLES: Record<
   Slug,
   { h1: string; title: string; description: string }
 > = {
-  "see-all": {
-    h1: "All Products",
-    title: "Catalog - Ezio Kids",
-    description:
-      "Discover every playful, sustainable piece in our kidswear universe. Filter by color, size, or category to find your favorites.",
-  },
   catalog: {
-    h1: "All Products",
-    title: "All Products - Ezio Kids",
-    description: "Browse our full catalog of sustainable kidswear.",
+    h1: "All Products Catalog",
+    title: "All Products Catalog - Ezio Kids",
+    description: "Browse all Ezio Kids products.",
   },
   "new-arrival": {
-    h1: "New in Ezio Kids",
+    h1: "New Arrivals",
     title: "New Arrivals - Ezio Kids",
-    description:
-      "Be the first to shop our latest drops—fresh styles and trending looks for every age.",
-  },
-  "baby-toddler": {
-    h1: "For Babies & Toddlers",
-    title: "Baby & Toddler Clothes - Ezio Kids",
-    description:
-      "Soft, durable, and adorable outfits for little ones aged 0-3. Explore gentle fabrics and playful prints.",
-  },
-  kids: {
-    h1: "For Kids",
-    title: "Kidswear - Ezio Kids",
-    description:
-      "From playground to party, shop comfy and cool styles for growing kids.",
-  },
-  teens: {
-    h1: "For Teens",
-    title: "Teen Collection - Ezio Kids",
-    description:
-      "Confident, expressive looks for teens—find the latest trends and timeless essentials.",
-  },
-  classic: {
-    h1: "Classic Collars",
-    title: "Classic Collars - Ezio Kids",
-    description: "Timeless classic collar styles for every occasion.",
-  },
-  cuban: {
-    h1: "Cuban Collars",
-    title: "Cuban Collars - Ezio Kids",
-    description: "Relaxed and stylish Cuban collar shirts.",
-  },
-  band: {
-    h1: "Band Collars",
-    title: "Band Collars - Ezio Kids",
-    description: "Modern and sleek band collar designs.",
-  },
-  melange: {
-    h1: "Melange Collection",
-    title: "Melange Fabrics - Ezio Kids",
-    description: "Textured and comfortable melange fabric collection.",
-  },
-  chambray: {
-    h1: "Chambray Collection",
-    title: "Chambray Fabrics - Ezio Kids",
-    description: "Soft and breathable chambray styles.",
-  },
-  dobby: {
-    h1: "Dobby Collection",
-    title: "Dobby Fabrics - Ezio Kids",
-    description: "Woven patterned dobby fabric collection.",
+    description: "Check out the latest additions to Ezio Kids.",
   },
 };
 

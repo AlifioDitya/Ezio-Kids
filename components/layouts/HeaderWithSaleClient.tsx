@@ -11,7 +11,16 @@ function formatShort(dateStr?: string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export default function HeaderWithSaleClient({ sale }: { sale: Sale | null }) {
+export default function HeaderWithSaleClient({
+  sale,
+  navData,
+}: {
+  sale: Sale | null;
+  navData: {
+    collarTypes: { name: string; slug: string; image: string | null }[];
+    fabrics: { name: string; slug: string; image: string | null }[];
+  };
+}) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -41,7 +50,7 @@ export default function HeaderWithSaleClient({ sale }: { sale: Sale | null }) {
         </div>
       ) : null}
 
-      <Header />
+      <Header navData={navData} />
     </div>
   );
 }

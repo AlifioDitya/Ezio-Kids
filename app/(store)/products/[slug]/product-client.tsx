@@ -290,11 +290,11 @@ export default function ProductClient({ product }: Props) {
   // 5. Render
   // ---------
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* LEFT: Gallery */}
       <section aria-label="Product images" className="grid gap-4">
         {/* Mobile / Tablet: SwipeImageStage */}
-        <div className="lg:hidden relative aspect-[3/4] w-full bg-[#F2F2F2] rounded-lg overflow-hidden">
+        <div className="md:hidden relative aspect-[3/4] w-full bg-[#F2F2F2] rounded-lg overflow-hidden">
           {finalImages.length > 0 ? (
             <SwipeImageStage
               images={finalImages} // Strings
@@ -310,7 +310,7 @@ export default function ProductClient({ product }: Props) {
         </div>
 
         {/* Desktop: 2-column image grid */}
-        <div className="hidden lg:grid grid-cols-2 gap-4">
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-4">
           {finalImages.map((url, idx) => (
             <div
               key={url + idx}

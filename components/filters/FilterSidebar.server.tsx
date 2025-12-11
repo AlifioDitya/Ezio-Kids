@@ -10,8 +10,10 @@ import {
 
 export default async function FilterSidebar({
   currentSort,
+  hiddenFacets,
 }: {
   currentSort: "newest" | "price-asc" | "price-desc";
+  hiddenFacets?: string[];
 }) {
   const [sizes, categories, tags, fabrics, collarTypes] = await Promise.all([
     getAllSizesCached(),
@@ -29,6 +31,7 @@ export default async function FilterSidebar({
       collarTypes={collarTypes}
       tags={tags}
       currentSort={currentSort}
+      hiddenFacets={hiddenFacets}
     />
   );
 }

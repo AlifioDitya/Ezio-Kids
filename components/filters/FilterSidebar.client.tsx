@@ -42,6 +42,7 @@ interface FilterSidebarClientProps {
   initialSelectedSizes?: string[];
   initialSelectedCategories?: string[];
   initialSelectedSleeves?: string[];
+  hiddenFacets?: string[];
 }
 
 const getBasePath = () =>
@@ -69,6 +70,7 @@ export default function FilterSidebarClient({
   collarTypes,
   tags,
   currentSort,
+  hiddenFacets = [],
 }: FilterSidebarClientProps) {
   const router = useRouter();
   const params = useSearchParams();
@@ -375,40 +377,46 @@ export default function FilterSidebarClient({
       <Separator />
 
       {/* Fabric */}
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="fabric">
-          <AccordionTrigger className="font-semibold text-xs">
-            Fabric
-          </AccordionTrigger>
-          <AccordionContent>
-            <FabricFilter
-              fabrics={fabrics}
-              selectedFabrics={selectedFabrics}
-              onToggleFabric={onToggleFabric}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <Separator />
+      {!hiddenFacets.includes("fabric") && (
+        <>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="fabric">
+              <AccordionTrigger className="font-semibold text-xs">
+                Fabric
+              </AccordionTrigger>
+              <AccordionContent>
+                <FabricFilter
+                  fabrics={fabrics}
+                  selectedFabrics={selectedFabrics}
+                  onToggleFabric={onToggleFabric}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Separator />
+        </>
+      )}
 
       {/* Collar Types */}
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="collar">
-          <AccordionTrigger className="font-semibold text-xs">
-            Collar Type
-          </AccordionTrigger>
-          <AccordionContent>
-            <CollarTypeFilter
-              collarTypes={collarTypes}
-              selectedCollars={selectedCollars}
-              onToggleCollar={onToggleCollar}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <Separator />
+      {!hiddenFacets.includes("collar") && (
+        <>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="collar">
+              <AccordionTrigger className="font-semibold text-xs">
+                Collar Type
+              </AccordionTrigger>
+              <AccordionContent>
+                <CollarTypeFilter
+                  collarTypes={collarTypes}
+                  selectedCollars={selectedCollars}
+                  onToggleCollar={onToggleCollar}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Separator />
+        </>
+      )}
 
       {/* Sleeve */}
       <Accordion type="single" collapsible className="w-full">
