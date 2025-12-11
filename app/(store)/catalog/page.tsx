@@ -1,4 +1,4 @@
-import { TITLES } from "@/app/lib/constant";
+import { AGE_GROUPS, TITLES } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import type { Metadata } from "next";
 
@@ -76,7 +76,7 @@ export default async function CatalogPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollars}
-      ageGroups={[]}
+      ageGroups={AGE_GROUPS}
       arrivalsOnly={false}
       basePath="/catalog"
       searchQ={searchQ}

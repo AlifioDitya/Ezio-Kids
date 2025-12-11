@@ -1,3 +1,5 @@
+import { AgeGroup } from "@/sanity/lib/collectionsPage/getProducts";
+
 export type NavItem = {
   label: string;
   href?: string;
@@ -105,3 +107,5 @@ export const TRUE_COLOR_OPTIONS: {
   { label: "Purple", value: "purple", css: "#a855f7" },
   { label: "Lavender", value: "lavender", css: "#c4b5fd" },
 ];
+
+export const AGE_GROUPS = ["baby", "toddler", "child", "teens"] as AgeGroup[];

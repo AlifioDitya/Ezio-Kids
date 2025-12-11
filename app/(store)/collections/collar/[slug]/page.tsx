@@ -1,5 +1,5 @@
 // app/collections/collar/[slug]/page.tsx
-import { AgeGroup } from "@/app/lib/constant";
+import { AGE_GROUPS } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import { client } from "@/sanity/lib/client";
 import {
@@ -99,8 +99,6 @@ export default async function CollarPage(props: {
   // Auto-select this collar
   const selectedCollarTypes = [slug];
 
-  const ageGroups: AgeGroup[] = [];
-
   return (
     <CatalogLayout
       title={matched.name + " Collar Collection"}
@@ -113,7 +111,7 @@ export default async function CollarPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollarTypes}
-      ageGroups={ageGroups}
+      ageGroups={AGE_GROUPS}
       arrivalsOnly={false}
       basePath={`/collections/collar/${slug}`}
       searchQ={searchQ}

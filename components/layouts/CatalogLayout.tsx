@@ -1,9 +1,9 @@
-import { type AgeGroup } from "@/app/lib/constant";
 import FilterMobile from "@/components/filters/FilterMobile.server";
 import FilterSidebar from "@/components/filters/FilterSidebar.server";
 import SidebarSkeleton from "@/components/filters/SidebarSkeleton";
 import { ProductsSection } from "@/components/layouts/ProductsSection";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AgeGroup } from "@/sanity/lib/collectionsPage/getProducts";
 import { Suspense } from "react";
 import MobileCatalogHeader from "./MobileCatalogHeader";
 

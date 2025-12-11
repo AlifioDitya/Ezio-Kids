@@ -4,11 +4,9 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Size } from "@/sanity.types";
-import { usePathname } from "next/navigation";
 import * as React from "react";
 
 type Age = NonNullable<Size["ageGroup"]>;
-type CollectionSlug = "new-arrival" | "baby-toddler" | "kids" | "teens";
 
 export interface SizeFilterProps {
   /** All sizes from Sanity */
@@ -17,29 +15,13 @@ export interface SizeFilterProps {
   selectedSizes: string[];
   /** Toggle a size in/out of the selected list */
   onToggleSize: (sizeLabel: string) => void;
-  /**
-   * Optional: pass the current collections slug if you have it.
-   * If omitted, the component will auto-detect from the URL.
-   */
-  collectionSlug?: CollectionSlug;
 }
 
 export function SizeFilter({
   sizes,
   selectedSizes,
   onToggleSize,
-  collectionSlug,
 }: SizeFilterProps) {
-  const pathname = usePathname();
-
-  // Detect slug from /collections/[slug] if not passed
-  const detectedSlug = React.useMemo<CollectionSlug | undefined>(() => {
-    if (collectionSlug) return collectionSlug;
-    const m = pathname?.match(/\/collections\/([^/?#]+)/);
-    const s = (m?.[1] ?? "") as CollectionSlug;
-    return s || undefined;
-  }, [pathname, collectionSlug]);
-
   // Full order (and labels)
   const ageGroupOrder = React.useMemo<Age[]>(
     () => ["baby", "toddler", "child", "teens"],
@@ -51,20 +33,6 @@ export function SizeFilter({
     child: "Kids",
     teens: "Teens",
   };
-
-  // Map slug -> visible age groups
-  const visibleAgeGroups = React.useMemo<Age[] | null>(() => {
-    switch (detectedSlug) {
-      case "baby-toddler":
-        return ["baby", "toddler"];
-      case "kids":
-        return ["child"];
-      case "teens":
-        return ["teens"];
-      default:
-        return null; // show all for shop-all / new-arrival / unknown
-    }
-  }, [detectedSlug]);
 
   // Build a map: { baby: Size[], toddler: Size[], … }
   const grouped = React.useMemo(() => {
@@ -82,7 +50,7 @@ export function SizeFilter({
   }, [sizes, ageGroupOrder]);
 
   // Final list of groups to render
-  const groupsToRender = (visibleAgeGroups ?? ageGroupOrder).filter(
+  const groupsToRender = ageGroupOrder.filter(
     (g) => (grouped[g]?.length ?? 0) > 0
   );
 
@@ -93,7 +61,7 @@ export function SizeFilter({
         return (
           <div key={groupKey} className="">
             {groupsToRender.length > 1 && (
-              <p className="text-xs font-semibold text-gray-500 mb-2 xl:text-base">
+              <p className="text-xs font-semibold text-gray-500 mb-2">
                 {ageGroupLabels[groupKey]}
               </p>
             )}

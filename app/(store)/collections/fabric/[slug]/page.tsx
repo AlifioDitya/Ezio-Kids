@@ -1,5 +1,5 @@
 // app/collections/fabric/[slug]/page.tsx
-import { AgeGroup } from "@/app/lib/constant";
+import { AGE_GROUPS } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import { client } from "@/sanity/lib/client";
 import { FABRICS_QUERY, getNavData } from "@/sanity/lib/products/getNavData";
@@ -97,8 +97,6 @@ export default async function FabricPage(props: {
   // Allow filtering by collar type
   const selectedCollarTypes = toArray(searchParams.collar);
 
-  const ageGroups: AgeGroup[] = []; // No age group inference for fabric pages
-
   return (
     <CatalogLayout
       title={matched.name + " Collection"}
@@ -111,7 +109,7 @@ export default async function FabricPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollarTypes}
-      ageGroups={ageGroups}
+      ageGroups={AGE_GROUPS}
       arrivalsOnly={false}
       basePath={`/collections/fabric/${slug}`}
       searchQ={searchQ}

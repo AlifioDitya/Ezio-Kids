@@ -1,5 +1,4 @@
 // app/components/layouts/ProductsSection.tsx
-import { AgeGroup } from "@/app/lib/constant";
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +8,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { getProducts } from "@/sanity/lib/collectionsPage/getProducts";
+import {
+  AgeGroup,
+  getProducts,
+} from "@/sanity/lib/collectionsPage/getProducts";
 import Link from "next/link";
 import { MdSearchOff } from "react-icons/md";
 import ProductCard, { ProductCardProps } from "../common/ProductCard";

@@ -1,5 +1,5 @@
 // app/collections/[slug]/page.tsx
-import { ALLOWED_SLUGS, Slug, TITLES } from "@/app/lib/constant";
+import { AGE_GROUPS, ALLOWED_SLUGS, Slug, TITLES } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -96,7 +96,7 @@ export default async function CollectionsPage(props: {
       selectedTags={selectedTags}
       selectedFabrics={selectedFabrics}
       selectedCollarTypes={selectedCollarTypes}
-      ageGroups={[]} // No longer deriving age groups from slug
+      ageGroups={AGE_GROUPS}
       arrivalsOnly={arrivalsOnly}
       basePath={`/collections/${slug}`}
       searchQ={searchQ}
