@@ -85,35 +85,35 @@ export default async function JournalSlugPage({
         {/* Navigation Back */}
         <Link
           href="/journal"
-          className="inline-flex items-center text-amber-900 hover:text-amber-700 font-medium mb-8 transition-colors"
+          className="inline-flex items-center text-blue-main hover:text-blue-main/90 font-medium mb-8 transition-colors"
         >
           <BsArrowLeft className="mr-2" />
           <p>Back to Journal</p>
         </Link>
 
-        <div className="prose prose-lg prose-amber max-w-none font-manrope leading-relaxed">
+        <div className="prose prose-lg max-w-none font-manrope leading-relaxed">
           {journal.content && (
             <PortableText
               value={journal.content}
               components={{
                 block: {
                   h1: ({ children }) => (
-                    <h1 className="text-3xl md:text-4xl font-bebas tracking-wide text-amber-950 mb-6 mt-10">
+                    <h1 className="text-3xl md:text-4xl font-bebas tracking-wide text-blue-main mb-6 mt-10">
                       {children}
                     </h1>
                   ),
                   h2: ({ children }) => (
-                    <h2 className="text-2xl md:text-3xl font-bebas tracking-wide text-amber-900 mb-4 mt-8">
+                    <h2 className="text-2xl md:text-3xl font-bebas tracking-wide text-blue-main mb-4 mt-8">
                       {children}
                     </h2>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="text-xl font-bold font-manrope text-amber-900 mb-3 mt-6">
+                    <h3 className="text-xl font-bold font-manrope text-blue-main mb-3 mt-6">
                       {children}
                     </h3>
                   ),
                   h4: ({ children }) => (
-                    <h4 className="text-lg font-bold font-manrope text-amber-900 mb-2 mt-6">
+                    <h4 className="text-lg font-bold font-manrope text-blue-main mb-2 mt-6">
                       {children}
                     </h4>
                   ),
@@ -123,7 +123,7 @@ export default async function JournalSlugPage({
                     </p>
                   ),
                   blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-amber-500 pl-4 italic my-8 text-gray-700 font-medium">
+                    <blockquote className="border-l-4 border-rose-600 pl-4 italic my-8 text-gray-700 font-medium">
                       {children}
                     </blockquote>
                   ),

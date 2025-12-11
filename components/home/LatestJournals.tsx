@@ -37,9 +37,11 @@ export default async function LatestJournals() {
           </div>
           <Link
             href="/journal"
-            className="mr-2 group flex items-center text-zinc-300 font-semibold hover:text-zinc-200 transition-colors"
+            className="mr-2 mb-2 group flex items-center text-zinc-300 font-semibold hover:text-zinc-200 transition-colors"
           >
-            <span className="mr-2">View All Articles</span>
+            <span className="mr-2 relative after:absolute after:left-0 after:-bottom-[2px] after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-neutral-50 after:transition-transform group-hover:after:scale-x-100">
+              View All Articles
+            </span>
             <BsArrowRight className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

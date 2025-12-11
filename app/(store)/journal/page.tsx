@@ -28,8 +28,9 @@ export default async function JournalPage() {
     <div className="bg-neutral-50 min-h-screen py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         <header className="mb-12 text-center max-w-2xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bebas text-amber-950 mb-4 tracking-wide">
-            The Ezio Journal
+          <h1 className="text-4xl md:text-5xl font-bebas  mb-4 tracking-wide">
+            <span className="text-blue-main">The Ezio</span>
+            <span className="text-rose-600"> Journal</span>
           </h1>
           <p className="text-gray-600 text-lg font-manrope leading-relaxed">
             Explore our stories on sustainable fashion, kids style inspiration,

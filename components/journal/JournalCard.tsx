@@ -46,7 +46,7 @@ export default function JournalCard({ journal }: JournalCardProps) {
               <p className="relative w-fit after:absolute after:left-0 after:-bottom-[2px] after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-neutral-50 after:transition-transform group-hover:after:scale-x-100">
                 Read Article
               </p>
-              <BsArrowRight />
+              <BsArrowRight className="group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>
