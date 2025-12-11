@@ -26,7 +26,7 @@ export default async function LatestJournals() {
   return (
     <section className="py-16 bg-neutral-800">
       <div className="container mx-auto px-6 max-w-7xl">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end md:mb-12 mb-8 gap-4">
           <div>
             <span className="text-zinc-300 font-bold tracking-wider uppercase text-sm mb-2 block">
               Our Stories
