@@ -254,8 +254,6 @@ export default function SearchDrawer() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTitle className="sr-only">Search</SheetTitle>
-
       <SheetContent
         side="top"
         className={cn(
@@ -263,6 +261,7 @@ export default function SearchDrawer() {
           "h-[100dvh] bg-white flex flex-col"
         )}
       >
+        <SheetTitle className="sr-only">Search</SheetTitle>
         {/* Header */}
         <div className="sticky top-0 z-10 border-b bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
           {/* Row 1: Logo + Close */}

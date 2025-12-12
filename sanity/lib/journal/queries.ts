@@ -18,7 +18,18 @@ export const getJournalBySlugQuery = defineQuery(`
     slug,
     publishedAt,
     image,
-    content,
+    content[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          metadata {
+            dimensions
+          }
+        }
+      }
+    },
     seo
   }
 `);

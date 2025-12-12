@@ -35,8 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -59,13 +57,11 @@ export default async function RootLayout({
               <DisableDraftMode />
             </>
           )}
-          <SmoothScrollProvider>
-            <HeaderWithSale />
-            {children}
-            <Footer />
-            <SanityLive />
-            <OverlayScrollbar />
-          </SmoothScrollProvider>
+          <HeaderWithSale />
+          {children}
+          <Footer />
+          <SanityLive />
+          <OverlayScrollbar />
         </body>
       </html>
     </>

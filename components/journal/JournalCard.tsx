@@ -24,12 +24,13 @@ export default function JournalCard({ journal }: JournalCardProps) {
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           {image && (
             <Image
-              src={urlFor(image).width(800).height(600).url()}
+              src={urlFor(image).width(1920).fit("max").auto("format").url()}
               alt={title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           )}
+          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-500" />
           <div className="absolute bottom-0 p-5 pb-6 flex flex-col flex-grow">
             <div className="text-xs font-medium text-neutral-200 mb-2 uppercase tracking-wider">
               {format(new Date(publishedAt), "MMMM d, yyyy")}
