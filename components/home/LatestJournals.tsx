@@ -1,4 +1,11 @@
 import JournalCard from "@/components/journal/JournalCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { getLatestJournalsQuery } from "@/sanity/lib/journal/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
@@ -24,7 +31,7 @@ export default async function LatestJournals() {
   }
 
   return (
-    <section className="py-16 bg-neutral-800">
+    <section className="py-16 bg-neutral-800 overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end md:mb-12 mb-8 gap-4">
           <div>
@@ -46,11 +53,30 @@ export default async function LatestJournals() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {journals.map((journal: Journal) => (
-            <JournalCard key={journal._id} journal={journal} />
-          ))}
-        </div>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent viewportClassName="overflow-visible">
+            {journals.map((journal: Journal) => (
+              <CarouselItem
+                key={journal._id}
+                className="basis-[85%] md:basis-[45%] lg:basis-[32%]"
+              >
+                <div className="h-full">
+                  <JournalCard journal={journal} />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="hidden md:block">
+            <CarouselPrevious className="left-0 -translate-x-1/2 bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 hover:text-white" />
+            <CarouselNext className="right-auto left-12 -translate-x-1/2 bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 hover:text-white" />
+          </div>
+        </Carousel>
       </div>
     </section>
   );
