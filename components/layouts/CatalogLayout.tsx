@@ -59,15 +59,14 @@ export default function CatalogLayout({
   });
 
   return (
-    <main className="bg-white pb-16">
+    <main className="bg-neutral-50 mt-8 pb-16">
       {/* make the wrapper a column on mobile, row on desktop */}
-      <div className="w-full px-0 lg:px-6 flex flex-col lg:flex-row items-start gap-4 lg:gap-8 py-6">
+      <h1 className="px-6 text-base font-semibold mb-0 md:mb-6 hidden lg:block flex-wrap w-full">
+        {title}
+      </h1>
+      <div className="w-full px-0 lg:px-6 flex flex-col lg:flex-row items-start gap-4 lg:gap-8 pb-6">
         {/* Sidebar: desktop/tablet only */}
         <aside className="shrink-0 flex lg:flex-col justify-between lg:justify-start items-center lg:items-start px-4 lg:px-0 lg:sticky lg:top-16 w-full lg:max-w-48">
-          <h1 className="text-base font-semibold mb-0 lg:mb-3 hidden lg:block flex-wrap w-full">
-            {title}
-          </h1>
-
           <MobileCatalogHeader
             title={title}
             staticFilter={
@@ -112,7 +111,7 @@ export default function CatalogLayout({
               </div>
             }
           >
-            <div className="w-full">
+            <div className="w-full md:mt-2">
               <ProductsSection
                 sortKey={sortKey}
                 pageNum={pageNum}

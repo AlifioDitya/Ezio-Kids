@@ -10,20 +10,12 @@ export type NavItem = {
 export const NAV_LINKS: NavItem[] = [
   { label: "Catalog", href: "/catalog" },
   {
-    label: "Collar Types",
-    children: [
-      { label: "Classic", href: "/collections/classic" },
-      { label: "Cuban", href: "/collections/cuban" },
-      { label: "Band", href: "/collections/band" },
-    ],
+    label: "Fabrics",
+    children: [],
   },
   {
-    label: "Fabrics",
-    children: [
-      { label: "Melange", href: "/collections/melange" },
-      { label: "Chambray", href: "/collections/chambray" },
-      { label: "Dobby", href: "/collections/dobby" },
-    ],
+    label: "Collar Types",
+    children: [],
   },
   { label: "Journal", href: "/journal" },
   { label: "About us", href: "/about" },

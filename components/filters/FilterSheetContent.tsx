@@ -88,7 +88,7 @@ export default function FilterSheetContent({
 }: Props) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent side="left" className="p-0 w-full lg:max-w-sm z-[99]">
+      <SheetContent side="right" className="p-0 w-full lg:max-w-sm z-[99]">
         <SheetHeader className="px-5 py-4 border-b">
           <div className="flex flex-col gap-3">
             <SheetTitle className="text-base">Filters</SheetTitle>

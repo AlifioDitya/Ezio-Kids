@@ -38,11 +38,11 @@ export default function Header({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Check if we are on a specific journal page (but not the main /journal listing)
-  const isJournalSlug =
+  // Check if we are on a specific journal page OR fabric collection page
+  const isTransparentPage =
     pathname?.startsWith("/journal/") && pathname !== "/journal";
 
-  const isTransparent = isJournalSlug && !isScrolled;
+  const isTransparent = isTransparentPage && !isScrolled;
 
   // Icon color: White if transparent layout, else Dark
   const iconClass = isTransparent
@@ -65,16 +65,6 @@ export default function Header({
 
   // Merge dynamic data into NAV_LINKS
   const dynamicLinks = NAV_LINKS.map((item) => {
-    if (item.label === "Collar Types") {
-      return {
-        ...item,
-        children: navData.collarTypes.map((c) => ({
-          label: c.name,
-          href: `/collections/collar/${c.slug}`,
-          image: c.image,
-        })),
-      };
-    }
     if (item.label === "Fabrics") {
       return {
         ...item,
@@ -85,6 +75,18 @@ export default function Header({
         })),
       };
     }
+
+    if (item.label === "Collar Types") {
+      return {
+        ...item,
+        children: navData.collarTypes.map((c) => ({
+          label: c.name,
+          href: `/collections/collar/${c.slug}`,
+          image: c.image,
+        })),
+      };
+    }
+
     return item;
   });
 
@@ -148,8 +150,8 @@ export default function Header({
         </div>
       </header>
 
-      {/* Spacer for fixed header - Only render if NOT on journal slug page */}
-      {!isJournalSlug && <div className="h-14" />}
+      {/* Spacer for fixed header - Only render if NOT on a transparent page */}
+      {!isTransparentPage && <div className="h-14" />}
 
       <SearchDrawer />
 

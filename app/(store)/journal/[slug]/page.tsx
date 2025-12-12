@@ -128,7 +128,7 @@ export default async function JournalSlugPage({
                   {format(new Date(journal.publishedAt), "MMMM d, yyyy")}
                 </span>
                 <span>•</span>
-                <span>Ezio Kids Journal</span>
+                <span>Ezio Kids</span>
               </div>
             </div>
           </div>

@@ -22,15 +22,43 @@ export const fabricType = defineType({
     }),
     defineField({
       name: "image",
-      title: "Image",
+      title: "Avatar Image",
+      description: "Square aspect ratio recommended (e.g., 1080x1080)",
       type: "image",
       options: { hotspot: true },
     }),
     defineField({
-      name: "description",
-      title: "Description",
+      name: "bannerImage",
+      title: "Banner Image",
+      description: "Landscape high-res image for the collection page header",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "bannerTitle",
+      title: "Banner Title",
+      type: "string",
+    }),
+    defineField({
+      name: "excerpt",
+      title: "Excerpt",
+      description: "Short description shown on the banner",
       type: "text",
       rows: 3,
+    }),
+    defineField({
+      name: "journal",
+      title: "Related Journal",
+      description: "Link to a journal article explaining this fabric",
+      type: "reference",
+      to: [{ type: "journal" }],
+    }),
+    defineField({
+      name: "description",
+      title: "Description (Hidden)",
+      type: "text",
+      rows: 3,
+      hidden: true, // Hiding as we are using excerpt now, but keeping for backward formatting if needed or deprecating
     }),
     defineField({
       name: "weight",

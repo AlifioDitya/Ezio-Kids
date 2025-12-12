@@ -2,9 +2,15 @@
 import { AGE_GROUPS } from "@/app/lib/constant";
 import CatalogLayout from "@/components/layouts/CatalogLayout";
 import { client } from "@/sanity/lib/client";
-import { FABRICS_QUERY, getNavData } from "@/sanity/lib/products/getNavData";
+import { urlFor } from "@/sanity/lib/image";
+import { sanityFetch } from "@/sanity/lib/live";
+import { FABRICS_QUERY } from "@/sanity/lib/products/getNavData";
+import { GET_FABRIC_BY_SLUG_QUERY } from "@/sanity/lib/products/queries";
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BsArrowRight } from "react-icons/bs";
 
 // Generate params from Sanity data
 export async function generateStaticParams() {
@@ -18,16 +24,22 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { fabrics } = await getNavData();
-  const matched = fabrics.find(
-    (f: { slug: string; name: string }) => f.slug === slug
-  );
+  const { data: matched } = await sanityFetch({
+    query: GET_FABRIC_BY_SLUG_QUERY,
+    params: { slug },
+  });
 
   if (matched) {
     return {
       title: `${matched.name} Fabric Collection - Ezio Kids`,
-      description: `Shop our ${matched.name} collection at Ezio Kids.`,
+      description:
+        matched.excerpt || `Shop our ${matched.name} collection at Ezio Kids.`,
       alternates: { canonical: `/collections/fabric/${slug}` },
+      openGraph: {
+        images: matched.bannerImage
+          ? [urlFor(matched.bannerImage).width(1200).height(630).url()]
+          : undefined,
+      },
     };
   }
   return {};
@@ -57,10 +69,11 @@ export default async function FabricPage(props: {
   const searchParams = await props.searchParams;
   const slug = params.slug;
 
-  const { fabrics } = await getNavData();
-  const matched = fabrics.find(
-    (f: { slug: string; name: string }) => f.slug === slug
-  );
+  // Use the detailed query
+  const { data: matched } = await sanityFetch({
+    query: GET_FABRIC_BY_SLUG_QUERY,
+    params: { slug },
+  });
 
   if (!matched) {
     notFound();
@@ -98,22 +111,62 @@ export default async function FabricPage(props: {
   const selectedCollarTypes = toArray(searchParams.collar);
 
   return (
-    <CatalogLayout
-      title={matched.name + " Collection"}
-      sortKey={sortKey}
-      pageNum={pageNum}
-      selectedSizes={selectedSizes}
-      selectedCategories={selectedCategories}
-      selectedSleeves={selectedSleeves}
-      selectedTrueColors={selectedTrueColors}
-      selectedTags={selectedTags}
-      selectedFabrics={selectedFabrics}
-      selectedCollarTypes={selectedCollarTypes}
-      ageGroups={AGE_GROUPS}
-      arrivalsOnly={false}
-      basePath={`/collections/fabric/${slug}`}
-      searchQ={searchQ}
-      hiddenFacets={["fabric"]}
-    />
+    <>
+      {/* Optional Hero Banner */}
+      {matched.bannerImage && (
+        <div className="relative h-[60vh] md:h-[70vh] w-full bg-gray-900 mb-8 md:mb-10">
+          <Image
+            src={urlFor(matched.bannerImage).width(1920).quality(90).url()}
+            alt={matched.bannerTitle || matched.name}
+            fill
+            priority
+            className="object-cover opacity-80"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 flex items-end text-left p-4 md:p-8 mb-3">
+            <div className="max-w-3xl text-white space-y-4 mt-16 md:mt-0">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bebas tracking-wider drop-shadow-xl">
+                {matched.bannerTitle || matched.name}
+              </h1>
+              {matched.excerpt && (
+                <p className="text-lg md:text-xl font-manrope font-medium text-gray-100 max-w-2xl leading-relaxed drop-shadow-md">
+                  {matched.excerpt}
+                </p>
+              )}
+              {matched.journal && matched.journal.slug && (
+                <div className="pt-4">
+                  <Link
+                    href={`/journal/${matched.journal.slug}`}
+                    className="group inline-flex items-center gap-2 border-b-2 border-white pb-1 text-sm md:text-base font-bold uppercase tracking-widest hover:text-gray-200 hover:border-gray-200 transition-all"
+                  >
+                    <span>Read The Story</span>
+                    <BsArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <CatalogLayout
+        title={`${matched.name} Collection`}
+        sortKey={sortKey}
+        pageNum={pageNum}
+        selectedSizes={selectedSizes}
+        selectedCategories={selectedCategories}
+        selectedSleeves={selectedSleeves}
+        selectedTrueColors={selectedTrueColors}
+        selectedTags={selectedTags}
+        selectedFabrics={selectedFabrics}
+        selectedCollarTypes={selectedCollarTypes}
+        ageGroups={AGE_GROUPS}
+        arrivalsOnly={false}
+        basePath={`/collections/fabric/${slug}`}
+        searchQ={searchQ}
+        hiddenFacets={["fabric"]}
+        // If banner is present, we might want to reduce top padding of catalog
+      />
+    </>
   );
 }
