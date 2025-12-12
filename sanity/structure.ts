@@ -94,6 +94,24 @@ export const structure: StructureResolver = (S) =>
             .title("Pages")
             .items([
               S.listItem()
+                .title("Catalog Page")
+                .icon(FaBoxes)
+                .schemaType("catalogPage")
+                .child(
+                  S.document()
+                    .schemaType("catalogPage")
+                    .documentId("catalogPageSingleton")
+                ),
+              S.listItem()
+                .title("About Page")
+                .icon(FaFileAlt)
+                .schemaType("aboutPage")
+                .child(
+                  S.document()
+                    .schemaType("aboutPage")
+                    .documentId("aboutPageSingleton")
+                ),
+              S.listItem()
                 .title("Landing Page")
                 .icon(FaHome)
                 .schemaType("landingPage")

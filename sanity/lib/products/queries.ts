@@ -17,3 +17,25 @@ export const GET_FABRIC_BY_SLUG_QUERY = defineQuery(`
     image
   }
 `);
+
+export const GET_CATALOG_PAGE_QUERY = defineQuery(`
+  *[_type == "catalogPage" && _id == "catalogPageSingleton"][0] {
+    bannerImage,
+    bannerTitle,
+    excerpt
+  }
+`);
+
+export const GET_ABOUT_PAGE_QUERY = defineQuery(`
+  *[_type == "aboutPage" && _id == "aboutPageSingleton"][0] {
+    heroHeading,
+    heroSubheading,
+    heroImage,
+    storyTitle,
+    storyContent,
+    storyImage,
+    values,
+    seoTitle,
+    seoDescription
+  }
+`);

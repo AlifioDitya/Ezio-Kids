@@ -64,7 +64,7 @@ export default async function LatestJournals() {
             {journals.map((journal: Journal) => (
               <CarouselItem
                 key={journal._id}
-                className="basis-[85%] md:basis-[45%] lg:basis-[32%]"
+                className="basis-[85%] md:basis-[45%] lg:basis-[32%] mr-2"
               >
                 <div className="h-full">
                   <JournalCard journal={journal} />

@@ -38,9 +38,11 @@ export default function Header({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Check if we are on a specific journal page OR fabric collection page
+  // Check if we are on a specific journal page OR fabric collection page OR about page
   const isTransparentPage =
-    pathname?.startsWith("/journal/") && pathname !== "/journal";
+    (pathname?.startsWith("/journal/") && pathname !== "/journal") ||
+    pathname?.startsWith("/collections/fabric/") ||
+    pathname === "/about";
 
   const isTransparent = isTransparentPage && !isScrolled;
 

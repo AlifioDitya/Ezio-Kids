@@ -114,7 +114,7 @@ export default async function FabricPage(props: {
     <>
       {/* Optional Hero Banner */}
       {matched.bannerImage && (
-        <div className="relative h-[60vh] md:h-[70vh] w-full bg-gray-900 mb-8 md:mb-10">
+        <div className="relative h-[60svh] md:h-[70svh] w-full bg-gray-900 mb-8 md:mb-10">
           <Image
             src={urlFor(matched.bannerImage).width(1920).quality(90).url()}
             alt={matched.bannerTitle || matched.name}
@@ -134,12 +134,14 @@ export default async function FabricPage(props: {
                 </p>
               )}
               {matched.journal && matched.journal.slug && (
-                <div className="pt-4">
+                <div className="pt-2">
                   <Link
                     href={`/journal/${matched.journal.slug}`}
-                    className="group inline-flex items-center gap-2 border-b-2 border-white pb-1 text-sm md:text-base font-bold uppercase tracking-widest hover:text-gray-200 hover:border-gray-200 transition-all"
+                    className="group inline-flex items-center gap-2  pb-1 text-sm font-bold uppercase tracking-widest hover:text-gray-200 hover:border-gray-200 transition-all"
                   >
-                    <span>Read The Story</span>
+                    <p className="relative w-fit after:absolute after:left-0 after:-bottom-[2px] after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-neutral-50 after:transition-transform group-hover:after:scale-x-100">
+                      Read The Fabric Guide
+                    </p>
                     <BsArrowRight className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
