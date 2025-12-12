@@ -11,6 +11,11 @@ export const getLandingPageContent = async () => {
           asset->{
             url
           }
+        },
+        mobileBackgroundVideo {
+          asset->{
+            url
+          }
         }
       }
     }`

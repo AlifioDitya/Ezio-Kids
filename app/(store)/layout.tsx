@@ -22,9 +22,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Ezio Kids - Playful, Sustainable Kidswear",
+  title: "EZIO KIDS | Limitless Creativity",
   description:
-    "Shop Ezio Kids for bright, eco-friendly, and durable children's clothing. Discover our new arrivals and best sellers!",
+    "Shop Ezio Kids for modern, durable children's clothing. Discover our best collections from premium fabric.",
   icons: {
     icon: [
       {

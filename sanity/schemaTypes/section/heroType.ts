@@ -22,15 +22,23 @@ export default defineType({
     }),
     defineField({
       name: "backgroundVideo",
-      title: "Background Video",
+      title: "Background Video (Desktop)",
       type: "file",
       options: { accept: "video/mp4,video/webm,video/ogg" },
       description:
-        "Optional video background. Takes precedence over the image if provided.",
+        "Optional video background for desktop. Takes precedence over the image.",
+    }),
+    defineField({
+      name: "mobileBackgroundVideo",
+      title: "Background Video (Mobile)",
+      type: "file",
+      options: { accept: "video/mp4,video/webm,video/ogg" },
+      description:
+        "Optional video background for mobile devices. Falls back to desktop video if not provided.",
     }),
     defineField({
       name: "backgroundImage",
-      title: "Background Image",
+      title: "Background Image (Desktop)",
       type: "image",
       options: { hotspot: true },
       fields: [
@@ -42,6 +50,20 @@ export default defineType({
         }),
       ],
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "mobileBackgroundImage",
+      title: "Background Image (Mobile)",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          type: "string",
+        }),
+      ],
+      description: "Optional background image for mobile devices.",
     }),
     defineField({
       name: "cta",

@@ -13,6 +13,17 @@ interface HeroProps {
         url?: string;
       };
     };
+    mobileBackgroundVideo?: {
+      asset?: {
+        url?: string;
+      };
+    };
+    mobileBackgroundImage?: {
+      asset?: {
+        _ref: string;
+      };
+      alt?: string;
+    };
   };
 }
 
@@ -72,11 +83,18 @@ export default function Hero({ content }: HeroProps) {
   if (!content) return null;
   const ctaHref = content?.cta?.href || "/catalog";
 
+  const hasMobileAsset =
+    !!content.mobileBackgroundVideo?.asset?.url ||
+    !!content.mobileBackgroundImage;
+
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative h-[calc(100svh-3.5rem)]">
-        {content.backgroundVideo?.asset?.url ? (
-          <div className="absolute inset-0">
+        {/* Desktop Assets (shown everywhere if no mobile asset, otherwise hidden on mobile) */}
+        <div
+          className={`absolute inset-0 ${hasMobileAsset ? "hidden md:block" : ""}`}
+        >
+          {content.backgroundVideo?.asset?.url ? (
             <video
               src={content.backgroundVideo.asset.url}
               autoPlay
@@ -85,10 +103,8 @@ export default function Hero({ content }: HeroProps) {
               playsInline
               className="object-cover object-center w-full h-full"
             />
-          </div>
-        ) : (
-          content.backgroundImage && (
-            <div className="absolute inset-0">
+          ) : (
+            content.backgroundImage && (
               <Image
                 src={imageUrl(content.backgroundImage)?.url() || ""}
                 alt={content.backgroundImage.alt || "Hero Background"}
@@ -96,8 +112,34 @@ export default function Hero({ content }: HeroProps) {
                 className="object-cover object-center"
                 priority
               />
-            </div>
-          )
+            )
+          )}
+        </div>
+
+        {/* Mobile Assets (only rendered if they exist) */}
+        {hasMobileAsset && (
+          <div className="absolute inset-0 md:hidden">
+            {content.mobileBackgroundVideo?.asset?.url ? (
+              <video
+                src={content.mobileBackgroundVideo.asset.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="object-cover object-center w-full h-full"
+              />
+            ) : (
+              content.mobileBackgroundImage && (
+                <Image
+                  src={imageUrl(content.mobileBackgroundImage)?.url() || ""}
+                  alt={content.mobileBackgroundImage.alt || "Hero Background"}
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
+              )
+            )}
+          </div>
         )}
 
         <div className="absolute inset-0 bg-gradient-to-br from-black/30 to-transparent" />
