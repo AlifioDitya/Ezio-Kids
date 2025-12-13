@@ -25,6 +25,8 @@ export default async function FabricSelection() {
     return null;
   }
 
+  const displayedFabrics = fabrics.slice(0, 4);
+
   return (
     <section
       className="py-20 bg-neutral-50"
@@ -46,21 +48,21 @@ export default async function FabricSelection() {
           </div>
 
           <Link
-            href="/catalog"
+            href="/fabrics"
             className="group flex items-center text-zinc-800 font-semibold hover:text-zinc-600 transition-colors pb-2"
           >
             <span className="mr-3 text-lg tracking-wide relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-zinc-800 after:transition-transform group-hover:after:scale-x-100">
-              Browse All Collections
+              Browse All Fabrics
             </span>
             <BsArrowRight className="text-xl transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
-          {fabrics.map((fabric: Fabric) => (
+          {displayedFabrics.map((fabric: Fabric) => (
             <Link
               key={fabric._id}
-              href={`/collections/${fabric.slug}`}
+              href={`/collections/fabric/${fabric.slug}`}
               className="group relative block aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-sm cursor-pointer"
             >
               <div className="absolute inset-0 bg-neutral-200">

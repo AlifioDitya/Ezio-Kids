@@ -8,6 +8,8 @@ export const getAllFabricsQuery = defineQuery(`
     description,
     image,
     bannerImage,
-    excerpt
+    excerpt,
+    weight,
+    properties
   }
 `);
