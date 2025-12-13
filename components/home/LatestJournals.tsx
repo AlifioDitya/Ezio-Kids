@@ -3,8 +3,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { getLatestJournalsQuery } from "@/sanity/lib/journal/queries";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -72,10 +70,6 @@ export default async function LatestJournals() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="hidden md:block">
-            <CarouselPrevious className="left-0 -translate-x-1/2 bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 hover:text-white" />
-            <CarouselNext className="right-auto left-12 -translate-x-1/2 bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 hover:text-white" />
-          </div>
         </Carousel>
       </div>
     </section>
