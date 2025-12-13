@@ -142,8 +142,8 @@ export default async function FabricsPage() {
               )}
 
               <Link
-                href={`/collections/${fabric.slug}`}
-                className="inline-flex items-center group text-lg font-bebas tracking-wider text-white bg-zinc-900 px-8 py-3 w-fit hover:bg-zinc-800 transition-colors rounded-sm"
+                href={`/collections/fabric/${fabric.slug}`}
+                className="inline-flex items-center group text-base tracking-wide text-white bg-slate-800 px-8 py-3 w-fit hover:bg-slate-700 transition-colors rounded-sm"
               >
                 <span>Shop {fabric.name} Collection</span>
                 <BsArrowRight className="ml-3 transition-transform group-hover:translate-x-1" />
