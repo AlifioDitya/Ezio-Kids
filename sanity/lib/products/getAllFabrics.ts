@@ -10,6 +10,10 @@ export const getAllFabricsQuery = defineQuery(`
     bannerImage,
     excerpt,
     weight,
-    properties
+    properties,
+    journal->{
+      title,
+      "slug": slug.current
+    }
   }
 `);

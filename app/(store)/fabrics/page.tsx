@@ -22,6 +22,7 @@ interface Fabric {
   excerpt?: string;
   weight?: string;
   properties?: { key: string; value: string }[];
+  journal?: { title: string; slug: string };
 }
 
 export const dynamic = "force-dynamic";
@@ -102,17 +103,44 @@ export default async function FabricsPage() {
                 <div className="h-px bg-zinc-300 flex-1" />
               </div>
 
-              <h2 className="text-4xl md:text-6xl font-bebas text-zinc-800 mb-6">
-                {fabric.name}
-              </h2>
+              <div className="flex items-center gap-4 mb-6">
+                {/* Swatch/Avatar Image */}
+                {fabric.image && (
+                  <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-zinc-200 shadow-sm shrink-0">
+                    <Image
+                      src={urlFor(fabric.image).url()}
+                      alt={`${fabric.name} swatch`}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  </div>
+                )}
+                <h2 className="text-4xl md:text-6xl font-bebas text-zinc-800 mt-1.5">
+                  {fabric.name}
+                </h2>
+              </div>
 
-              <div className="prose prose-zinc prose-lg mb-8 text-zinc-600">
+              <div className="prose prose-zinc prose-lg mb-6 text-zinc-600">
                 <p>
                   {fabric.description ||
                     fabric.excerpt ||
                     "Experience the quality of our premium fabric."}
                 </p>
               </div>
+
+              {/* Journal Link */}
+              {fabric.journal && (
+                <Link
+                  href={`/journal/${fabric.journal.slug}`}
+                  className="inline-flex flex-col gap-1 text-rose-600 hover:text-rose-700 font-bold tracking-wide uppercase text-sm mb-8 transition-colors"
+                >
+                  <p className="text-xs text-zinc-500">Read the Guide</p>
+                  <span className="w-fit border-b-2 border-rose-600/30 pb-0.5 hover:border-rose-600">
+                    {fabric.journal.title}
+                  </span>
+                </Link>
+              )}
 
               {/* Properties Grid */}
               {(fabric.weight ||
