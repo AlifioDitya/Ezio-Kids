@@ -5,7 +5,8 @@ import { SanityLive } from "@/sanity/lib/live";
 
 import OverlayScrollbar from "@/components/ui/overlay-scrollbar";
 import type { Metadata } from "next";
-import { Bebas_Neue, Manrope } from "next/font/google";
+import { Bebas_Neue } from "next/font/google";
+import localFont from "next/font/local";
 import { draftMode } from "next/headers";
 import "../globals.css";
 
@@ -15,10 +16,10 @@ const bebasNeue = Bebas_Neue({
   weight: ["400"],
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const satoshi = localFont({
+  src: "../../fonts/Satoshi-Variable.ttf",
+  variable: "--font-satoshi",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -44,7 +45,7 @@ export default async function RootLayout({
     <>
       <html lang="en">
         <body
-          className={`${manrope.variable} ${bebasNeue.variable} antialiased`}
+          className={`${satoshi.variable} ${bebasNeue.variable} antialiased`}
         >
           {(await (async () => {
             try {
