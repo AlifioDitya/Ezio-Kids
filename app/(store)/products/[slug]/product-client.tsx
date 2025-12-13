@@ -501,7 +501,7 @@ export default function ProductClient({ product }: Props) {
               >
                 <Button className="w-full h-11 text-white text-base font-semibold bg-green-500 hover:bg-green-600 gap-2">
                   <FaWhatsapp className="w-5 h-5" />
-                  Contact us about this product
+                  Contact Us About This Product
                 </Button>
               </a>
             </div>
@@ -518,9 +518,12 @@ export default function ProductClient({ product }: Props) {
           </>
         )}
 
-        {/* Product Details Accordion */}
         <div className="pt-4">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            type="multiple"
+            defaultValue={["fabric"]}
+            className="w-full"
+          >
             {/* Fabric */}
             {product.fabric && (
               <AccordionItem value="fabric">
