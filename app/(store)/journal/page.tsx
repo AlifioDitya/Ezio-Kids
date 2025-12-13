@@ -32,7 +32,7 @@ export default async function JournalPage() {
             <span className="text-blue-main">The Ezio</span>
             <span className="text-rose-600"> Journal</span>
           </h1>
-          <p className="text-gray-600 text-lg font-manrope leading-relaxed">
+          <p className="text-gray-600 text-lg leading-relaxed">
             Explore our stories on sustainable fashion, kids style inspiration,
             and the journey behind our collections.
           </p>

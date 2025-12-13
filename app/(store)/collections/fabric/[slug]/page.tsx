@@ -129,15 +129,15 @@ export default async function FabricPage(props: {
                 {matched.bannerTitle || matched.name}
               </h1>
               {matched.excerpt && (
-                <p className="text-lg md:text-xl font-manrope font-medium text-gray-100 max-w-2xl leading-relaxed drop-shadow-md">
+                <p className="text-base px-px md:px-1 font-medium text-gray-100 max-w-2xl leading-relaxed drop-shadow-md">
                   {matched.excerpt}
                 </p>
               )}
               {matched.journal && matched.journal.slug && (
-                <div className="pt-2">
+                <div className="pt-2 px-px md:px-1">
                   <Link
                     href={`/journal/${matched.journal.slug}`}
-                    className="group inline-flex items-center gap-2  pb-1 text-sm font-bold uppercase tracking-widest hover:text-gray-200 hover:border-gray-200 transition-all"
+                    className="group inline-flex items-center gap-2  pb-1 text-xs md:text-sm font-bold uppercase tracking-widest hover:text-gray-200 hover:border-gray-200 transition-all"
                   >
                     <p className="relative w-fit after:absolute after:left-0 after:-bottom-[2px] after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-neutral-50 after:transition-transform group-hover:after:scale-x-100">
                       Read The Fabric Guide

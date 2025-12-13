@@ -58,7 +58,7 @@ export default async function AboutPage() {
               {aboutPage.heroHeading}
             </h1>
             {aboutPage.heroSubheading && (
-              <p className="text-lg md:text-2xl font-manrope font-medium text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+              <p className="text-lg md:text-2xl font-medium text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
                 {aboutPage.heroSubheading}
               </p>
             )}
@@ -89,7 +89,7 @@ export default async function AboutPage() {
             <h2 className="text-4xl md:text-5xl font-bebas text-zinc-900 tracking-wide leading-tight">
               {aboutPage.storyTitle}
             </h2>
-            <div className="prose prose-lg text-zinc-600 font-manrope">
+            <div className="prose prose-lg text-zinc-600">
               {aboutPage.storyContent && (
                 <PortableText value={aboutPage.storyContent} />
               )}
@@ -127,7 +127,7 @@ export default async function AboutPage() {
                   <h3 className="text-2xl font-bebas text-zinc-800 tracking-wide">
                     {value.title}
                   </h3>
-                  <p className="text-zinc-600 font-manrope leading-relaxed max-w-xs">
+                  <p className="text-zinc-600 leading-relaxed max-w-xs">
                     {value.description}
                   </p>
                 </div>

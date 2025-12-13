@@ -39,7 +39,7 @@ export default function JournalCard({ journal }: JournalCardProps) {
               {title}
             </h3>
             {excerpt && (
-              <p className="text-neutral-200 text-sm line-clamp-3 leading-relaxed flex-grow font-manrope">
+              <p className="text-neutral-200 text-sm line-clamp-3 leading-relaxed flex-grow">
                 {excerpt}
               </p>
             )}

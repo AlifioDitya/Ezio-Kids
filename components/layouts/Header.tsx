@@ -78,17 +78,6 @@ export default function Header({
       };
     }
 
-    if (item.label === "Collar Types") {
-      return {
-        ...item,
-        children: navData.collarTypes.map((c) => ({
-          label: c.name,
-          href: `/collections/collar/${c.slug}`,
-          image: c.image,
-        })),
-      };
-    }
-
     return item;
   });
 

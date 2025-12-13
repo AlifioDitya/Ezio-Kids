@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <main className="overflow-x-hidden bg-white">
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-row gap-8 py-6">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-row gap-8 py-6 mt-14">
         <SidebarSkeleton />
         <section className="flex flex-col flex-1">
           <div className="h-8 w-64 rounded bg-gray-200 animate-pulse mb-6" />

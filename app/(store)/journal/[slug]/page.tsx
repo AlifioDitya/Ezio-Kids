@@ -123,7 +123,7 @@ export default async function JournalSlugPage({
               <h1 className="text-4xl md:text-6xl font-bebas tracking-wider drop-shadow-md">
                 {journal.title}
               </h1>
-              <div className="flex items-center justify-center space-x-2 font-manrope text-sm md:text-base font-medium uppercase tracking-wider opacity-90">
+              <div className="flex items-center justify-center space-x-2 text-sm md:text-base font-medium uppercase tracking-wider opacity-90">
                 <span>
                   {format(new Date(journal.publishedAt), "MMMM d, yyyy")}
                 </span>
@@ -145,7 +145,7 @@ export default async function JournalSlugPage({
             <p>Back to Journal</p>
           </Link>
 
-          <div className="prose prose-lg max-w-none font-manrope leading-relaxed">
+          <div className="prose prose-lg max-w-none leading-relaxed">
             {processedContent && (
               <PortableText
                 value={processedContent}
@@ -162,12 +162,12 @@ export default async function JournalSlugPage({
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="text-xl font-bold font-manrope text-blue-main mb-3 mt-6">
+                      <h3 className="text-xl font-bold text-blue-main mb-3 mt-6">
                         {children}
                       </h3>
                     ),
                     h4: ({ children }) => (
-                      <h4 className="text-lg font-bold font-manrope text-blue-main mb-2 mt-6">
+                      <h4 className="text-lg font-bold text-blue-main mb-2 mt-6">
                         {children}
                       </h4>
                     ),

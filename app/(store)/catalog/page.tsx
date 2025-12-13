@@ -91,7 +91,7 @@ export default async function CatalogPage(props: {
                 {catalogPage.bannerTitle || titleBlock.h1}
               </h1>
               {catalogPage.excerpt && (
-                <p className="text-lg md:text-xl font-manrope font-medium text-gray-100 max-w-2xl leading-relaxed drop-shadow-md">
+                <p className="text-lg md:text-xl font-medium text-gray-100 max-w-2xl leading-relaxed drop-shadow-md">
                   {catalogPage.excerpt}
                 </p>
               )}
