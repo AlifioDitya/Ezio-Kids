@@ -13,10 +13,6 @@ export const NAV_LINKS: NavItem[] = [
     label: "Fabrics",
     children: [],
   },
-  {
-    label: "Collar Types",
-    children: [],
-  },
   { label: "Journal", href: "/journal" },
   { label: "About us", href: "/about" },
 ];

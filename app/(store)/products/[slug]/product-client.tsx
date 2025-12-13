@@ -573,39 +573,6 @@ export default function ProductClient({ product }: Props) {
               </AccordionItem>
             )}
 
-            {/* Collar Type */}
-            {product.collarType && (
-              <AccordionItem value="collarType">
-                <AccordionTrigger>Collar Type</AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col sm:flex-row gap-4 pb-4">
-                    {product.collarType.image && (
-                      <div className="relative max-w-40 w-full h-fit rounded-md overflow-hidden bg-gray-100 aspect-square">
-                        <Image
-                          src={imageUrl(product.collarType.image)?.url() ?? ""}
-                          alt={product.collarType.name ?? "Collar Type image"}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="space-y-2 mt-3 sm:mt-0 sm:max-w-3/4 w-full">
-                      {product.collarType.name && (
-                        <h4 className="font-medium text-sm">
-                          {product.collarType.name}
-                        </h4>
-                      )}
-                      {product.collarType.description && (
-                        <p className="text-gray-600">
-                          {product.collarType.description}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            )}
-
             {/* Features */}
             {product.features && product.features.length > 0 && (
               <AccordionItem value="features">
