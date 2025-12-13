@@ -152,7 +152,7 @@ export default async function FabricsPage() {
                         Weight
                       </span>
                       <span className="block text-zinc-800 font-medium">
-                        {fabric.weight}
+                        {fabric.weight} gsm
                       </span>
                     </div>
                   )}

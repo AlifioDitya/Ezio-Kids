@@ -47,6 +47,76 @@ type Props = {
 const FALLBACK_PANEL_W = 400;
 const EASE = "easeInOut";
 
+// Helper for composite swatch icon
+const SwatchIcon = ({
+  images,
+  className,
+}: {
+  images: string[];
+  className?: string;
+}) => {
+  const count = images.length;
+  // If no images, we can either return nothing or a placeholder.
+  // User said "just icon". Let's assume a default grid placeholder if provided array is empty.
+  if (count === 0) {
+    return (
+      <div
+        className={`flex items-center justify-center bg-gray-100 text-gray-400 ${className}`}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-1/2 h-1/2"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2" />
+          <path d="M3 9h18" />
+          <path d="M9 21V9" />
+        </svg>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`relative overflow-hidden bg-gray-100 shrink-0 ${className}`}
+    >
+      {count === 1 && (
+        <Image src={images[0]} alt="" fill className="object-cover" />
+      )}
+      {count === 2 && (
+        <>
+          <div className="absolute left-0 top-0 bottom-0 w-1/2">
+            <Image src={images[0]} alt="" fill className="object-cover" />
+          </div>
+          <div className="absolute right-0 top-0 bottom-0 w-1/2">
+            <Image src={images[1]} alt="" fill className="object-cover" />
+          </div>
+        </>
+      )}
+      {count >= 3 && (
+        <>
+          <div className="absolute left-0 top-0 bottom-0 w-1/2">
+            <Image src={images[0]} alt="" fill className="object-cover" />
+          </div>
+          <div className="absolute right-0 top-0 bottom-0 w-1/2 flex flex-col">
+            <div className="relative h-1/2 w-full">
+              <Image src={images[1]} alt="" fill className="object-cover" />
+            </div>
+            <div className="relative h-1/2 w-full">
+              <Image src={images[2]} alt="" fill className="object-cover" />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 export default function SideMenu({ open, onClose, data }: Props) {
   const router = useRouter();
 
@@ -392,7 +462,12 @@ export default function SideMenu({ open, onClose, data }: Props) {
                                     onMouseLeave={() => setChildHover(null)}
                                   >
                                     <div className="flex items-center gap-4">
-                                      {c.image && (
+                                      {c.images ? (
+                                        <SwatchIcon
+                                          images={c.images}
+                                          className="w-12 h-12 rounded-full"
+                                        />
+                                      ) : c.image ? (
                                         <Image
                                           src={c.image}
                                           alt=""
@@ -400,7 +475,7 @@ export default function SideMenu({ open, onClose, data }: Props) {
                                           width={48}
                                           height={48}
                                         />
-                                      )}
+                                      ) : null}
                                       <span className={labelUnderline}>
                                         {c.label}
                                       </span>

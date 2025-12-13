@@ -4,6 +4,7 @@ export type NavItem = {
   label: string;
   href?: string;
   image?: string | null;
+  images?: string[];
   children?: NavItem[];
 };
 

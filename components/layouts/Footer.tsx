@@ -13,17 +13,12 @@ interface FooterSection {
 const footerSections: FooterSection[] = [
   {
     title: "Shop",
-    links: [
-      { label: "All Products", to: "/catalog" },
-      { label: "Classic Collars", to: "/collections/classic" },
-      { label: "Cuban Collars", to: "/collections/cuban" },
-      { label: "Band Collars", to: "/collections/band" },
-    ],
+    links: [{ label: "Catalog", to: "/catalog" }],
   },
   {
     title: "About Us",
     links: [
-      { label: "Our Story", to: "/about-us" },
+      { label: "Our Story", to: "/about" },
       { label: "Our Fabrics", to: "/fabrics" },
       { label: "Journal", to: "/journal" },
     ],

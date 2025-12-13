@@ -68,13 +68,32 @@ export default function Header({
   // Merge dynamic data into NAV_LINKS
   const dynamicLinks = NAV_LINKS.map((item) => {
     if (item.label === "Fabrics") {
+      const fabricChildren: (typeof item.children extends
+        | (infer U)[]
+        | undefined
+        ? U
+        : never)[] = navData.fabrics.map((f) => ({
+        label: f.name,
+        href: `/collections/fabric/${f.slug}`,
+        image: f.image,
+      }));
+
+      // Create "All Fabrics" item with composite images
+      const allFabricsImages = navData.fabrics
+        .map((f) => f.image)
+        .filter((img): img is string => !!img)
+        .slice(0, 3);
+
+      // Always add "All Fabrics" at the top
+      fabricChildren.unshift({
+        label: "All Fabrics",
+        href: "/fabrics",
+        images: allFabricsImages,
+      });
+
       return {
         ...item,
-        children: navData.fabrics.map((f) => ({
-          label: f.name,
-          href: `/collections/fabric/${f.slug}`,
-          image: f.image,
-        })),
+        children: fabricChildren,
       };
     }
 
