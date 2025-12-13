@@ -21,6 +21,12 @@ export const fabricType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
       name: "image",
       title: "Avatar Image",
       description: "Square aspect ratio recommended (e.g., 1080x1080)",
@@ -52,13 +58,6 @@ export const fabricType = defineType({
       description: "Link to a journal article explaining this fabric",
       type: "reference",
       to: [{ type: "journal" }],
-    }),
-    defineField({
-      name: "description",
-      title: "Description (Hidden)",
-      type: "text",
-      rows: 3,
-      hidden: true, // Hiding as we are using excerpt now, but keeping for backward formatting if needed or deprecating
     }),
     defineField({
       name: "weight",

@@ -317,7 +317,12 @@ export default function ProductClient({ product }: Props) {
         </div>
 
         {/* Desktop: 2-column image grid */}
-        <div className="hidden md:grid md:grid-cols-2 gap-4 h-fit">
+        <div
+          className={cn(
+            "hidden md:grid gap-4 h-fit",
+            finalImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
+          )}
+        >
           {finalImages.map((url, idx) => (
             <div
               key={url + idx}
@@ -549,26 +554,24 @@ export default function ProductClient({ product }: Props) {
                           {product.fabric.weight}gsm
                         </p>
                       )}
-                      {product.fabric.properties &&
-                        product.fabric.properties.length > 0 && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                            {product.fabric.properties.map((prop, idx) => (
-                              <div
-                                key={idx}
-                                className="bg-gray-50 p-2 rounded text-sm"
-                              >
-                                <span className="font-medium text-gray-900">
-                                  {prop.key}:
-                                </span>{" "}
-                                <span className="text-gray-600">
-                                  {prop.value}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
                     </div>
                   </div>
+                  {product.fabric.properties &&
+                    product.fabric.properties.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                        {product.fabric.properties.map((prop, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-gray-50 p-2 rounded text-sm"
+                          >
+                            <span className="font-medium text-gray-900">
+                              {prop.key}:
+                            </span>{" "}
+                            <span className="text-gray-600">{prop.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                 </AccordionContent>
               </AccordionItem>
             )}

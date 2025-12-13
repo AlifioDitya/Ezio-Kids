@@ -25,7 +25,7 @@ export default async function JournalPage() {
   });
 
   return (
-    <div className="bg-neutral-50 min-h-screen py-12">
+    <div className="bg-neutral-50 min-h-screen py-12 pb-24">
       <div className="container mx-auto px-4 max-w-7xl">
         <header className="mb-12 text-center max-w-2xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bebas  mb-4 tracking-wide">
