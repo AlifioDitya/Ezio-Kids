@@ -571,6 +571,19 @@ export default function SideMenu({ open, onClose, data }: Props) {
                             );
                           })}
                         </motion.ul>
+
+                        {/* Footer Link */}
+                        <div className="mt-auto pb-8 border-t pt-6">
+                          <MenuLink
+                            href="/contact"
+                            onNavigate={queueNav}
+                            className="text-base ml-3 font-medium text-gray-900 block"
+                          >
+                            <span className={labelUnderline}>
+                              Contacts & Store Location
+                            </span>
+                          </MenuLink>
+                        </div>
                       </nav>
                     </motion.div>
                   )}

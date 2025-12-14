@@ -153,7 +153,10 @@ export default function Header({
           </div>
 
           {/* RIGHT: Utilities */}
-          <div className="flex justify-end items-center space-x-4">
+          <div className="flex justify-end items-center space-x-5">
+            <Link href="/contact" className={linkClass}>
+              CONTACT US
+            </Link>
             <SearchOpenButton className={iconClass} />
             {/* Add Cart/User icons here if needed in future */}
           </div>
