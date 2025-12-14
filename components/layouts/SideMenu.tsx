@@ -643,14 +643,19 @@ export default function SideMenu({ open, onClose, data }: Props) {
                                   onMouseLeave={() => setChildHover(null)}
                                 >
                                   <div className="flex items-center gap-3">
-                                    {c.image && (
+                                    {c.images ? (
+                                      <SwatchIcon
+                                        images={c.images}
+                                        className="h-10 w-10 min-w-10 rounded-full"
+                                      />
+                                    ) : c.image ? (
                                       /* eslint-disable-next-line @next/next/no-img-element */
                                       <img
                                         src={c.image}
                                         alt=""
                                         className="h-10 w-10 min-w-10 rounded-full object-cover bg-gray-100"
                                       />
-                                    )}
+                                    ) : null}
                                     <span className={labelUnderline}>
                                       {c.label}
                                     </span>
