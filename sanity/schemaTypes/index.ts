@@ -6,6 +6,7 @@ import salesType from "./order/salesType";
 import { blockContentType } from "./other/blockContentType";
 import { aboutPageType } from "./pages/aboutPageType";
 import { catalogPageType } from "./pages/catalogPageType";
+import { contactPageType } from "./pages/contactPage";
 import landingPageType from "./pages/landingPageType";
 import { categoryType } from "./product/categoryType";
 import { collarTypeType } from "./product/collarTypeType";
@@ -37,5 +38,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     journalType,
     catalogPageType,
     aboutPageType,
+    contactPageType,
   ],
 };

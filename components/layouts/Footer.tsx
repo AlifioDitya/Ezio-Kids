@@ -1,5 +1,7 @@
+import { defineQuery, PortableText } from "next-sanity";
 import Link from "next/link";
-import { useMemo } from "react";
+import { FaInstagram } from "react-icons/fa";
+import { sanityFetch } from "../../sanity/lib/live";
 
 interface FooterLink {
   label: string;
@@ -41,8 +43,17 @@ const footerSections: FooterSection[] = [
   },
 ];
 
-export default function Footer() {
-  const currentYear = useMemo(() => new Date().getFullYear(), []);
+export default async function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  const CONTACT_QUERY = defineQuery(`
+    *[_type == "contactPage" && _id == "contactPageSingleton"][0]{
+      address,
+      instagram
+    }
+  `);
+
+  const { data: contactData } = await sanityFetch({ query: CONTACT_QUERY });
 
   return (
     <footer className="bg-neutral-800 text-white border-t border-neutral-700">
@@ -57,11 +68,26 @@ export default function Footer() {
             <p className="mt-2 text-gray-400 text-sm lg:text-base">
               Classic essentials made for the modern little gentleman.
             </p>
+
+            {/* Socials / Contact Info */}
+            {contactData?.instagram && (
+              <div className="mt-6">
+                <a
+                  href={contactData.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-gray-300 hover:text-white transition"
+                >
+                  <FaInstagram size={20} />
+                  <span>Follow us on Instagram</span>
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Menus (right on md+): grid of 3 columns */}
           <div className="md:w-2/3">
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {footerSections.map((sec) => (
                 <nav
                   key={sec.title}
@@ -83,6 +109,16 @@ export default function Footer() {
                   </ul>
                 </nav>
               ))}
+
+              {/* Dynamic Visit Us Section */}
+              {contactData?.address && (
+                <div className="space-y-2 text-sm">
+                  <h3 className="font-semibold text-base">Visit Us</h3>
+                  <div className="text-gray-400 text-xs leading-relaxed prose prose-invert prose-sm">
+                    <PortableText value={contactData.address} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

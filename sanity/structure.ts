@@ -1,14 +1,11 @@
 import {
   FaBook,
   FaBoxes,
-  FaClipboardList,
   FaFileAlt,
   FaHome,
   FaList,
   FaPaintBrush,
-  FaPercent,
   FaRulerHorizontal,
-  FaShoppingCart,
   FaStar,
   FaTag,
   FaThLarge,
@@ -66,25 +63,6 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ——— COMMERCE SECTION ———
-      S.listItem()
-        .title("Commerce")
-        .icon(FaShoppingCart)
-        .child(
-          S.list()
-            .title("Commerce")
-            .items([
-              S.documentTypeListItem("order")
-                .title("Orders")
-                .icon(FaClipboardList),
-              S.documentTypeListItem("sale")
-                .title("Sales / Discounts")
-                .icon(FaPercent),
-            ])
-        ),
-
-      S.divider(),
-
       // ——— PAGES SECTION ———
       S.listItem()
         .title("Pages")
@@ -93,6 +71,15 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title("Pages")
             .items([
+              S.listItem()
+                .title("Landing Page")
+                .icon(FaHome)
+                .schemaType("landingPage")
+                .child(
+                  S.document()
+                    .schemaType("landingPage")
+                    .documentId("landingPageSingleton")
+                ),
               S.listItem()
                 .title("Catalog Page")
                 .icon(FaBoxes)
@@ -112,13 +99,13 @@ export const structure: StructureResolver = (S) =>
                     .documentId("aboutPageSingleton")
                 ),
               S.listItem()
-                .title("Landing Page")
-                .icon(FaHome)
-                .schemaType("landingPage")
+                .title("Contact Page")
+                .icon(FaFileAlt)
+                .schemaType("contactPage")
                 .child(
                   S.document()
-                    .schemaType("landingPage")
-                    .documentId("landingPageSingleton")
+                    .schemaType("contactPage")
+                    .documentId("contactPageSingleton")
                 ),
               S.documentTypeListItem("journal").title("Journal").icon(FaBook),
             ])
