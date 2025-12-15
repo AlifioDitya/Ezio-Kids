@@ -133,7 +133,7 @@ export default function FilterSheetContent({
 
           {/* Size */}
           <div>
-            <p className="mb-3 text-xs font-semibold text-gray-800">Size</p>
+            <p className="mb-4 text-xs font-semibold text-gray-800">Size</p>
             <SizeFilter
               sizes={sizes}
               selectedSizes={selectedSizes}

@@ -343,7 +343,7 @@ export default function FilterSidebarClient({
       {/* Size */}
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="size">
-          <AccordionTrigger className="font-semibold text-xs">
+          <AccordionTrigger className="font-semibold text-xs mb-1">
             Size
           </AccordionTrigger>
           <AccordionContent>

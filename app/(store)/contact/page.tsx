@@ -55,7 +55,7 @@ export default async function ContactPage() {
       <div className="max-w-7xl mx-auto px-6 pb-24">
         {/* Landscape Store Image */}
         {data.storeImage && (
-          <div className="relative aspect-[21/9] w-full overflow-hidden rounded-sm bg-gray-100 shadow-md mb-16 md:mb-24">
+          <div className="relative aspect-[18/9] overflow-hidden rounded-sm bg-gray-100 shadow-md mb-16 md:mb-24">
             <Image
               src={urlFor(data.storeImage).url()}
               alt="Ezio Kids Store"

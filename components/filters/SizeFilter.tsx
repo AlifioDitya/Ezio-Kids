@@ -55,11 +55,11 @@ export function SizeFilter({
   );
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {groupsToRender.map((groupKey) => {
         const group = grouped[groupKey]!;
         return (
-          <div key={groupKey} className="">
+          <div key={groupKey} className="flex flex-col">
             {groupsToRender.length > 1 && (
               <p className="text-xs font-semibold text-gray-500 mb-2">
                 {ageGroupLabels[groupKey]}
