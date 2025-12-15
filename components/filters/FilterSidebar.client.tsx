@@ -244,7 +244,7 @@ export default function FilterSidebarClient({
   const enableSort = false; // Change later if we need sorting
 
   return (
-    <aside className="hidden sm:flex w-48 gap-1 flex-col">
+    <aside className="hidden sm:flex w-48 gap-1 flex-col scrollbar-hide max-h-[calc(100vh-4rem)] overflow-y-auto">
       {/* Sort */}
       <div className="flex flex-col gap-2 w-full">
         {enableSort && (
