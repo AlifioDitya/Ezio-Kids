@@ -317,38 +317,40 @@ export default function SearchDrawer() {
               )}
             </div>
 
-            <SearchFilter
-              sizes={facets.sizes}
-              categories={facets.categories}
-              fabrics={facets.fabrics}
-              collarTypes={facets.collarTypes}
-              tags={facets.tags}
-              selectedSizes={selectedSizes}
-              selectedCategories={selectedCategories}
-              selectedFabrics={selectedFabrics}
-              selectedCollars={selectedCollars}
-              selectedTags={selectedTags}
-              selectedTrueColors={selectedTrueColors}
-              selectedSleeves={selectedSleeves}
-              onToggleSize={(v) => setSelectedSizes(toggle(selectedSizes, v))}
-              onToggleCategory={(v) =>
-                setSelectedCategories(toggle(selectedCategories, v))
-              }
-              onToggleFabric={(v) =>
-                setSelectedFabrics(toggle(selectedFabrics, v))
-              }
-              onToggleCollar={(v) =>
-                setSelectedCollars(toggle(selectedCollars, v))
-              }
-              onToggleTag={(v) => setSelectedTags(toggle(selectedTags, v))}
-              onToggleTrueColor={(v) =>
-                setSelectedTrueColors(toggle(selectedTrueColors, v))
-              }
-              onToggleSleeve={(v) =>
-                setSelectedSleeves(toggle(selectedSleeves, v))
-              }
-              onClearAll={clearFilters}
-            />
+            {res && (
+              <SearchFilter
+                sizes={facets.sizes}
+                categories={facets.categories}
+                fabrics={facets.fabrics}
+                collarTypes={facets.collarTypes}
+                tags={facets.tags}
+                selectedSizes={selectedSizes}
+                selectedCategories={selectedCategories}
+                selectedFabrics={selectedFabrics}
+                selectedCollars={selectedCollars}
+                selectedTags={selectedTags}
+                selectedTrueColors={selectedTrueColors}
+                selectedSleeves={selectedSleeves}
+                onToggleSize={(v) => setSelectedSizes(toggle(selectedSizes, v))}
+                onToggleCategory={(v) =>
+                  setSelectedCategories(toggle(selectedCategories, v))
+                }
+                onToggleFabric={(v) =>
+                  setSelectedFabrics(toggle(selectedFabrics, v))
+                }
+                onToggleCollar={(v) =>
+                  setSelectedCollars(toggle(selectedCollars, v))
+                }
+                onToggleTag={(v) => setSelectedTags(toggle(selectedTags, v))}
+                onToggleTrueColor={(v) =>
+                  setSelectedTrueColors(toggle(selectedTrueColors, v))
+                }
+                onToggleSleeve={(v) =>
+                  setSelectedSleeves(toggle(selectedSleeves, v))
+                }
+                onClearAll={clearFilters}
+              />
+            )}
 
             {/* Desktop Clear all */}
             <button
