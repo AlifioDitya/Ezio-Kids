@@ -2,6 +2,7 @@
 "use client";
 
 import SwipeImageStage from "@/components/common/SwipeImageStage";
+import FullScreenGallery from "@/components/product/FullScreenGallery";
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { imageUrl } from "@/lib/imageUrl";
 import { cn } from "@/lib/utils";
 import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
+import { AnimatePresence } from "framer-motion";
 import { PortableText } from "next-sanity";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -153,6 +155,14 @@ export default function ProductClient({ product, whatsappNumber }: Props) {
       return getFirstAvailableSize(initialColorId);
     }
   );
+
+  const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
+  const [initialGalleryIndex, setInitialGalleryIndex] = React.useState(0);
+
+  const handleOpenGallery = (index: number) => {
+    setInitialGalleryIndex(index);
+    setIsGalleryOpen(true);
+  };
 
   // 2. State Sync with URL
   // ----------------------
@@ -310,6 +320,7 @@ export default function ProductClient({ product, whatsappNumber }: Props) {
               alt={product.name ?? "Product Image"}
               aspectClass="aspect-[3/4]"
               showPager
+              onImageClick={handleOpenGallery}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-gray-500">
@@ -328,7 +339,8 @@ export default function ProductClient({ product, whatsappNumber }: Props) {
           {finalImages.map((url, idx) => (
             <div
               key={url + idx}
-              className="relative w-full aspect-[3/4] overflow-hidden rounded-lg bg-gray-50"
+              className="relative w-full aspect-[3/4] overflow-hidden rounded-lg bg-gray-50 cursor-pointer"
+              onClick={() => handleOpenGallery(idx)}
             >
               <Image
                 src={url}
@@ -689,6 +701,16 @@ export default function ProductClient({ product, whatsappNumber }: Props) {
           </Accordion>
         </div>
       </section>
+      <AnimatePresence>
+        {isGalleryOpen && (
+          <FullScreenGallery
+            images={finalImages}
+            alt={product.name ?? "Product Image"}
+            initialIndex={initialGalleryIndex}
+            onClose={() => setIsGalleryOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
