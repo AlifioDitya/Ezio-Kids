@@ -18,14 +18,16 @@ import { PortableText } from "next-sanity";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
+import { BsInfoCircle } from "react-icons/bs";
 import { FaWhatsapp } from "react-icons/fa";
 import { HiChevronLeft } from "react-icons/hi2";
 
 type Props = {
   product: PDPProduct;
+  whatsappNumber?: string;
 };
 
-export default function ProductClient({ product }: Props) {
+export default function ProductClient({ product, whatsappNumber }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -298,7 +300,7 @@ export default function ProductClient({ product }: Props) {
         <div className="md:hidden relative aspect-[3/4] w-full bg-[#F2F2F2] rounded-lg overflow-hidden">
           <button
             onClick={() => window.history.back()}
-            className="absolute sm:hidden aspect-square top-4 left-3 z-50 p-1 rounded-full bg-neutral-100 shadow flex justify-center items-center"
+            className="absolute sm:hidden aspect-square top-4 left-3 z-40 p-1 rounded-full bg-neutral-100 shadow flex justify-center items-center"
           >
             <HiChevronLeft className="w-4 h-4 mr-0.5" />
           </button>
@@ -374,7 +376,7 @@ export default function ProductClient({ product }: Props) {
 
           {/* Description */}
           <p className="mb-2">
-            {product.category?.name} design with {product.fabric?.name}
+            {product.category?.name} design with {product.fabric?.name} fabric
           </p>
         </div>
 
@@ -463,50 +465,64 @@ export default function ProductClient({ product }: Props) {
 
         <Separator />
 
-        {/* Contact Us CTA */}
-        {/* WhatsApp CTA */}
-        {(() => {
-          const isNotAvailable = !activeVariant;
-
-          if (isNotAvailable) {
-            return (
-              <Button
-                disabled
-                className="w-full h-11 text-base font-semibold bg-gray-200 text-gray-500 cursor-not-allowed"
-              >
-                Product not available in this variant
-              </Button>
-            );
-          }
-
-          const colorName =
-            colorOptions.find((c) => c?._id === selectedColorId)?.name ||
-            "Default Color";
-          const sizeLabel =
-            sizeOptions.find((s) => s?._id === selectedSizeId)?.label ||
-            "Default Size";
-
-          const message = `Halo, Saya tertarik dengan produk ${product.name}, warna ${colorName} ukuran ${sizeLabel}`;
-          const whatsappUrl = `https://wa.me/6281310899214?text=${encodeURIComponent(
-            message
-          )}`;
-
-          return (
-            <div className="flex items-center gap-3">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1"
-              >
-                <Button className="w-full h-11 text-white text-base font-semibold bg-green-500 hover:bg-green-600 gap-2">
-                  <FaWhatsapp className="w-5 h-5" />
-                  Contact Us About This Product
-                </Button>
-              </a>
+        <div className="flex flex-col gap-4">
+          {/* MOQ Display */}
+          {product.moq && product.moq > 1 && (
+            <div className="bg-transparent flex gap-2 py-1 mt-1 items-center rounded w-fit">
+              <BsInfoCircle className="inline-block text-slate-700 text-sm" />
+              <p className="text-sm font-medium text-slate-700">
+                Minimum Order Quantity: {product.moq} pcs
+              </p>
             </div>
-          );
-        })()}
+          )}
+
+          {/* Contact Us CTA */}
+          {/* WhatsApp CTA */}
+          {(() => {
+            const isNotAvailable = !activeVariant;
+
+            if (isNotAvailable) {
+              return (
+                <Button
+                  disabled
+                  className="w-full h-12 text-base font-semibold bg-gray-200 text-gray-500 cursor-not-allowed"
+                >
+                  Product not available in this variant
+                </Button>
+              );
+            }
+
+            const colorName =
+              colorOptions.find((c) => c?._id === selectedColorId)?.name ||
+              "Default Color";
+            const sizeLabel =
+              sizeOptions.find((s) => s?._id === selectedSizeId)?.label ||
+              "Default Size";
+
+            const message = `Halo, Saya tertarik dengan produk ${product.name}, warna ${colorName} ukuran ${sizeLabel}`;
+            // Fallback to existing number if not provided in Sanity
+            const phone = whatsappNumber || "6281310899214";
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+              message
+            )}`;
+
+            return (
+              <div className="flex items-center gap-3">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1"
+                >
+                  <Button className="w-full h-12 text-white text-base font-semibold bg-green-500 hover:bg-green-600 gap-2">
+                    <FaWhatsapp className="w-5 h-5" />
+                    Contact Us About This Product
+                  </Button>
+                </a>
+              </div>
+            );
+          })()}
+        </div>
 
         {/* Description */}
         {product.description && (

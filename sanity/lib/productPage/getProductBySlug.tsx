@@ -37,6 +37,7 @@ export type PDPProduct = {
   }[];
   arrivalDate?: string;
   price?: number;
+  moq?: number;
   mainImage?: SanityImageSource & { alt?: string };
   additionalImages?: (SanityImageSource & { alt?: string })[];
   category?: { _id: string; name?: string; slug?: string } | null;
@@ -92,6 +93,7 @@ export async function getProductBySlug(slug: string) {
       composition,
       arrivalDate,
       price,
+      moq,
       mainImage,
       additionalImages,
       "category": category->{

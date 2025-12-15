@@ -26,6 +26,13 @@ export const catalogPageType = defineType({
       type: "text",
       rows: 3,
     }),
+    defineField({
+      name: "whatsappNumber",
+      title: "WhatsApp Number",
+      description:
+        "Phone number for the 'Contact Us' button (e.g., 628123456789). Do not include '+' or dashes.",
+      type: "string",
+    }),
   ],
   preview: {
     select: {

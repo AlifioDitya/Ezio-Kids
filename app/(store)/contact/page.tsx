@@ -155,7 +155,7 @@ export default async function ContactPage() {
                       rel="noopener noreferrer"
                       className="text-lg hover:underline underline-offset-4"
                     >
-                      @eziokids
+                      @eziokids.id
                     </a>
                   </div>
                 </div>

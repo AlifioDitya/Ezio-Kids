@@ -198,6 +198,13 @@ export default defineType({
       type: "number",
       validation: (Rule) => Rule.required().min(0),
     }),
+    defineField({
+      name: "moq",
+      title: "Minimum Order Quantity (MOQ)",
+      description: "Minimum quantity required to order (optional)",
+      type: "number",
+      validation: (Rule) => Rule.min(1),
+    }),
 
     // — VARIANTS: SIZE × COLOR → STOCK —
     defineField({

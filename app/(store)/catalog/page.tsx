@@ -78,7 +78,7 @@ export default async function CatalogPage(props: {
       {catalogPage?.bannerImage && (
         <div className="relative h-[60svh] md:h-[70svh] w-full bg-gray-900 mb-8 md:mb-10">
           <Image
-            src={urlFor(catalogPage.bannerImage).width(1920).quality(90).url()}
+            src={urlFor(catalogPage.bannerImage).width(2160).quality(90).url()}
             alt={catalogPage.bannerTitle || titleBlock.h1}
             fill
             priority
