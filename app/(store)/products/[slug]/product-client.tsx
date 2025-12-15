@@ -18,6 +18,7 @@ import type { PDPProduct } from "@/sanity/lib/productPage/getProductBySlug";
 import { AnimatePresence } from "framer-motion";
 import { PortableText } from "next-sanity";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { BsInfoCircle } from "react-icons/bs";
@@ -443,9 +444,12 @@ export default function ProductClient({ product, whatsappNumber }: Props) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-gray-800">Size</p>
-              <button className="text-sm underline text-gray-600">
+              <Link
+                href="/size-guide"
+                className="text-sm underline text-gray-600"
+              >
                 Size Guide
-              </button>
+              </Link>
             </div>
             <div className="flex flex-wrap gap-2">
               {sizeOptions.map((s) => {

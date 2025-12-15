@@ -30,7 +30,7 @@ const footerSections: FooterSection[] = [
     links: [
       { label: "Contact Us", to: "/contact" },
       { label: "FAQ", to: "/faq" },
-      { label: "Sizing Chart", to: "/sizing" },
+      { label: "Sizing Chart", to: "/size-guide" },
     ],
   },
   {
