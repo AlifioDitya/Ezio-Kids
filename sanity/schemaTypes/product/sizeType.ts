@@ -42,6 +42,20 @@ export default defineType({
       options: { source: "label", maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: "chestWidth",
+      title: "Chest Width (Lebar Dada)",
+      type: "number",
+      description: "Measurement in cm",
+      validation: (Rule) => Rule.min(0),
+    }),
+    defineField({
+      name: "torsoLength",
+      title: "Torso Length (Panjang Badan)",
+      type: "number",
+      description: "Measurement in cm",
+      validation: (Rule) => Rule.min(0),
+    }),
   ],
   preview: {
     select: {
