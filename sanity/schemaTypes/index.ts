@@ -5,9 +5,13 @@ import orderType from "./order/orderType";
 import salesType from "./order/salesType";
 import { blockContentType } from "./other/blockContentType";
 import { aboutPageType } from "./pages/aboutPageType";
+import { accessibilityPageType } from "./pages/accessibilityPage";
 import { catalogPageType } from "./pages/catalogPageType";
 import { contactPageType } from "./pages/contactPage";
+import { faqPageType } from "./pages/faqPage";
 import landingPageType from "./pages/landingPageType";
+import { privacyPageType } from "./pages/privacyPage";
+import { termsPageType } from "./pages/termsPage";
 import { categoryType } from "./product/categoryType";
 import { collarTypeType } from "./product/collarTypeType";
 import { collectionType } from "./product/collectionType";
@@ -39,5 +43,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     catalogPageType,
     aboutPageType,
     contactPageType,
+    termsPageType,
+    privacyPageType,
+    accessibilityPageType,
+    faqPageType,
   ],
 };

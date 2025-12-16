@@ -43,7 +43,7 @@ export default async function FabricsPage() {
   return (
     <main className="bg-neutral-50 min-h-screen pb-20">
       {/* Header */}
-      <section className="pt-32 pb-16 px-6 bg-white">
+      <section className="pt-14 pb-16 px-6 bg-white">
         <div className="container mx-auto max-w-7xl">
           <span className="text-zinc-500 font-bold tracking-wider uppercase text-sm mb-3 block">
             Our Material Collection

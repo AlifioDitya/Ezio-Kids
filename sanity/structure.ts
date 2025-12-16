@@ -2,14 +2,18 @@ import {
   FaBook,
   FaBoxes,
   FaFileAlt,
+  FaFileContract,
   FaHome,
   FaList,
   FaPaintBrush,
+  FaQuestionCircle,
   FaRulerHorizontal,
   FaStar,
   FaTag,
   FaThLarge,
   FaTshirt,
+  FaUniversalAccess,
+  FaUserShield,
 } from "react-icons/fa";
 import { GiRolledCloth } from "react-icons/gi";
 import { IoShirtOutline } from "react-icons/io5";
@@ -106,6 +110,42 @@ export const structure: StructureResolver = (S) =>
                   S.document()
                     .schemaType("contactPage")
                     .documentId("contactPageSingleton")
+                ),
+              S.listItem()
+                .title("Terms & Conditions")
+                .icon(FaFileContract)
+                .schemaType("termsPage")
+                .child(
+                  S.document()
+                    .schemaType("termsPage")
+                    .documentId("termsPageSingleton")
+                ),
+              S.listItem()
+                .title("Privacy Policy")
+                .icon(FaUserShield)
+                .schemaType("privacyPage")
+                .child(
+                  S.document()
+                    .schemaType("privacyPage")
+                    .documentId("privacyPageSingleton")
+                ),
+              S.listItem()
+                .title("Accessibility Statement")
+                .icon(FaUniversalAccess)
+                .schemaType("accessibilityPage")
+                .child(
+                  S.document()
+                    .schemaType("accessibilityPage")
+                    .documentId("accessibilityPageSingleton")
+                ),
+              S.listItem()
+                .title("FAQ")
+                .icon(FaQuestionCircle)
+                .schemaType("faqPage")
+                .child(
+                  S.document()
+                    .schemaType("faqPage")
+                    .documentId("faqPageSingleton")
                 ),
               S.documentTypeListItem("journal").title("Journal").icon(FaBook),
             ])
