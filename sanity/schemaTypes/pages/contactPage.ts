@@ -76,7 +76,21 @@ export const contactPageType = defineType({
       options: {
         hotspot: true,
       },
-      description: "A static image of the map location.",
+      description:
+        "A static image of the map location. Used as fallback if no interactive map data is provided.",
+    }),
+    defineField({
+      name: "location",
+      title: "Map Location (Coordinates)",
+      type: "geopoint",
+      description: "Latitude and Longitude for the interactive map.",
+    }),
+    defineField({
+      name: "googleMapsEmbedSrc",
+      title: "Google Maps Embed SRC",
+      type: "url",
+      description:
+        "The 'src' URL from the Google Maps Embed code (starts with https://www.google.com/maps/embed...)",
     }),
     defineField({
       name: "seo",

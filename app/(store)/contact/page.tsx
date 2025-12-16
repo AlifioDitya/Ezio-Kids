@@ -1,3 +1,4 @@
+import Map from "@/components/ui/Map";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { defineQuery, PortableText } from "next-sanity";
@@ -26,7 +27,9 @@ export default async function ContactPage() {
         platform,
         url
       },
-      mapImage
+      mapImage,
+      location,
+      googleMapsEmbedSrc
     }
   `);
 
@@ -55,7 +58,7 @@ export default async function ContactPage() {
       <div className="max-w-7xl mx-auto px-6 pb-24">
         {/* Landscape Store Image */}
         {data.storeImage && (
-          <div className="relative aspect-[18/9] overflow-hidden rounded-sm bg-gray-100 shadow-md mb-16 md:mb-24">
+          <div className="relative aspect-[18/9] overflow-hidden rounded-sm bg-gray-100 mb-16 md:mb-24">
             <Image
               src={urlFor(data.storeImage).url()}
               alt="Ezio Kids Store"
@@ -80,18 +83,26 @@ export default async function ContactPage() {
               </div>
             </div>
 
-            {/* Map Snapshot */}
-            {data.mapImage && (
-              <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200 shadow-sm">
-                <Image
-                  src={urlFor(data.mapImage).url()}
-                  alt="Location Map"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors pointer-events-none" />
-              </div>
-            )}
+            {/* Map Component */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200">
+              <Map
+                location={data.location}
+                googleMapsEmbedSrc={data.googleMapsEmbedSrc}
+                fallbackImage={
+                  data.mapImage ? (
+                    <>
+                      <Image
+                        src={urlFor(data.mapImage).url()}
+                        alt="Location Map"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors pointer-events-none" />
+                    </>
+                  ) : null
+                }
+              />
+            </div>
           </div>
 
           {/* RIGHT COLUMN: Contact Methods */}
